@@ -1,0 +1,20 @@
+<svg fill="#290ff0" width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" stroke="#290ff0"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g data-name="Layer 2"> <g data-name="navigation-2"> <rect width="24" height="24" opacity="0"></rect> <path d="M13.67 22h-.06a1 1 0 0 1-.92-.8l-1.54-7.57a1 1 0 0 0-.78-.78L2.8 11.31a1 1 0 0 1-.12-1.93l16-5.33A1 1 0 0 1 20 5.32l-5.33 16a1 1 0 0 1-1 .68z"></path> </g> </g> </g></svg>
+
+
+<!-- <svg fill="#463be2" height="24px" width="24px" version="1.1" id="Layer_1" 
+xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+ viewBox="0 0 391.411 391.411" xml:space="preserve" stroke="#7d7373"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+ <g id="SVGRepo_iconCarrier" fill="#463be2"> <g> <g> <g> <path d="M389.251,3.033c-2.4-2.4-5.6-2.8-8.8-1.6l-375.6,153.6c-3.2,1.2-5.2,4.4-4.8,7.6c0,3.2,2.4,6.4,5.6,7.2l162.8,52.4 l52.4,162.8c1.2,3.2,4,5.6,7.2,5.6h0.4c3.2,0,6-2,7.2-4.8l154.8-374.4C392.051,8.633,391.651,5.033,389.251,3.033z M229.651,359.833l-47.2-146c-0.8-2.4-2.8-4.4-5.2-5.2l-146-47.2l316.8-129.6l-119.2,119.2c-3.2,3.2-3.2,8,0,11.2 c1.6,1.6,3.6,2.4,5.6,2.4s4-0.8,5.6-2.4l121.6-121.6L229.651,359.833z"></path> <path d="M203.251,176.633l-8.4,8.4c-3.2,3.2-3.2,8,0,11.2c1.6,1.6,3.6,2.4,5.6,2.4s4-0.8,5.6-2.4l8.4-8.4c3.2-3.2,3.2-8,0-11.2 C211.251,173.433,206.451,173.433,203.251,176.633z"></path> </g> </g> </g> </g></svg> -->
+
+<!-- <svg fill="#246bb7" height="24px" width="24px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+    xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 50 50" enable-background="new 0 0 50 50"
+    xml:space="preserve" stroke="#246bb7" stroke-width="5">
+    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#CCCCCC" stroke-width="0.2">
+    </g>
+    <g id="SVGRepo_iconCarrier">
+        <path
+            d="M24.292,25.828l1.948,13.879c0.062,0.442,0.409,0.79,0.852,0.852c0.047,0.007,0.093,0.01,0.139,0.01 c0.392,0,0.752-0.229,0.914-0.594l13.321-30c0.168-0.379,0.086-0.821-0.207-1.113c-0.293-0.293-0.735-0.373-1.113-0.207l-30,13.321 c-0.407,0.182-0.646,0.61-0.584,1.053c0.062,0.442,0.409,0.79,0.852,0.852L24.292,25.828z M38.584,11.536L27.735,35.968 l-1.567-11.164c-0.062-0.442-0.409-0.79-0.852-0.852l-11.164-1.567L38.584,11.536z">
+        </path>
+    </g>
+</svg> -->
