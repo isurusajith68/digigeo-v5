@@ -1,9 +1,14 @@
 // components/Accordion.js
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { FaChevronDown, FaChevronLeft, FaChevronUp } from "react-icons/fa";
 import { VscEye, VscEyeClosed } from "react-icons/vsc";
 
-const LayerVisibleDiv = ({ title, children, onClick, eyeState  }) => {
+const LayerVisibleVisibilityStateDiv = ({ title, children, onClick, eyeState, visibilityState }) => {
+  
+  useEffect(()=>{
+    console.log("visibilityState",visibilityState)
+
+  },[visibilityState])
   return (
     <div>
       <div
@@ -17,9 +22,9 @@ const LayerVisibleDiv = ({ title, children, onClick, eyeState  }) => {
             {isOpen ? <FaChevronDown /> : <FaChevronLeft />}
           </span> */}
           <span className="">
-            {eyeState && (
-              <VscEye className="cursor-pointer hover:scale-125" onClick={onClick} />
-            )}
+            {eyeState &&  (<VscEye className={`${visibilityState ? "bg-red-800": ""} cursor-pointer hover:scale-125`} onClick={onClick} />) }
+            {/* {eyeState && visibilityState ? (<VscEye className="cursor-pointer hover:scale-125" onClick={onClick} />) : (<VscEye className="bg-red-800 cursor-pointer hover:scale-125" onClick={onClick} />) } */}
+            
             {!eyeState && (
               <VscEyeClosed className="cursor-pointer hover:scale-125" onClick={onClick} />
             )}
@@ -30,4 +35,4 @@ const LayerVisibleDiv = ({ title, children, onClick, eyeState  }) => {
   );
 };
 
-export default LayerVisibleDiv;
+export default LayerVisibleVisibilityStateDiv;

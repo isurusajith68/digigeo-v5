@@ -109,7 +109,8 @@ const AreaTreeView = ({ syncPropFeatues }) => {
   return (
       // <TreeView data={treeViewData} />
       
-       <div className="max-h-[150px]">
+       <div className="">
+       {/* <div className="max-h-[150px]"> */}
           {treeViewData?.map((node) => (
           
             <AreaCompanyNode key={node.label}  comapanyName={node.label}   propertyNodes={node.children} />  

@@ -11,7 +11,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { useRouter, useSearchParams } from "next/navigation";
 import Accordion from "../../common-comp/accordion";
 import AccordionItemWithEye from "../../common-comp/accordion-eye";
+import AccordionItemWithEyeWithLock from "../../common-comp/accordion-eye-with-lock";
 import LayerVisibleDiv from "../../common-comp/layer-visible-eye";
+import LayerVisibleLockDiv from "../../common-comp/layer-visible-eye-with-lock";
 import { AiFillAppstore } from "react-icons/ai";
 import {
   setareaAreaBoundaryLayerVisible,
@@ -25,15 +27,18 @@ import {
   setareaFpropLayerVisible,
   setareaSyncClaimLinkLayerVisible,
   setareaSyncPropLayerVisible,
+  setareaSyncPropLayerAlwaysVisible,
+  setareaAssetLayerAlwaysVisible,
 } from "@/store/area-map/area-map-slice";
 import Image from "next/image";
+import LayerVisibleVisibilityStateDiv from './../../common-comp/layer-visible-eye-visibility-state';
 
 const AreaBottomSideComp = () => {
   let pathname = "";
   const dispatch = useDispatch();
 
-  const [property_claimLinkGroupVisible, setproperty_claimLinkGroupVisible] =
-    useState(true);
+  const [property_claimLinkGroupVisible, setproperty_claimLinkGroupVisible] =  useState(true);
+  const [claimsVisibilityState, setclaimsVisibilityState] =  useState(true);
 
   const router = useRouter();
   try {
@@ -72,8 +77,14 @@ const AreaBottomSideComp = () => {
   const areaAssetLayerVisible = useSelector(
     (state) => state.areaMapReducer.areaAssetLayerVisible
   );
+  const areaAssetLayerAlwaysVisible = useSelector(
+    (state) => state.areaMapReducer.areaAssetLayerAlwaysVisible
+  );
   const areaSyncPropLayerVisible = useSelector(
     (state) => state.areaMapReducer.areaSyncPropLayerVisible
+  );
+  const areaSyncPropLayerAlwaysVisible = useSelector(
+    (state) => state.areaMapReducer.areaSyncPropLayerAlwaysVisible
   );
   const areaSyncClaimLinkLayerVisible = useSelector(
     (state) => state.areaMapReducer.areaSyncClaimLinkLayerVisible
@@ -91,8 +102,14 @@ const AreaBottomSideComp = () => {
   const setareaAssetLayerVisibility = (e) => {
     dispatch(setareaAssetLayerVisible(!areaAssetLayerVisible));
   };
+  const setareaAssetLayerAlwaysVisibility = (e) => {
+    dispatch(setareaAssetLayerAlwaysVisible(!areaAssetLayerAlwaysVisible));
+  };
   const setareaSyncPropLayerVisibility = (e) => {
     dispatch(setareaSyncPropLayerVisible(!areaSyncPropLayerVisible));
+  };
+  const setareaSyncPropLayerAlwaysVisibility = (e) => {
+    dispatch(setareaSyncPropLayerAlwaysVisible(!areaSyncPropLayerAlwaysVisible));
   };
   const setareaSyncClaimLinkLayerVisibility = (e) => {
     dispatch(setareaSyncClaimLinkLayerVisible(!areaSyncClaimLinkLayerVisible));
@@ -103,6 +120,8 @@ const AreaBottomSideComp = () => {
   const setareaAreaBoundaryLayerVisibility = (e) => {
     dispatch(setareaAreaBoundaryLayerVisible(!areaAreaBoundaryLayerVisible));
   };
+
+  
 
   //asset visibility redux states
   const areaAssetOpMineVisible = useSelector(
@@ -137,6 +156,23 @@ const AreaBottomSideComp = () => {
   const setareaAssetOccurrenceVisibility = (e) => {
     dispatch(setareaAssetOccurrenceVisible(!areaAssetOccurrenceVisible));
   };
+
+  //layer visibility
+
+  // mapViewScaleReducer.mapViewScales
+  const mapViewScaleReducer = useSelector((state) => state.mapViewScaleReducer);
+  
+  const areaCurrentScale = useSelector(
+    (state) => state.areaMapReducer.areaCurrentScale
+  );
+
+  useEffect(()=>{
+    console.log("areaCurrentScale-bc",areaCurrentScale)
+    mapViewScaleReducer.mapViewScales?.[0]?.claimscale > areaCurrentScale ?  setclaimsVisibilityState(true): setclaimsVisibilityState(false)
+    
+    console.log("areaCurrentScale-mapViewScaleReducer ",mapViewScaleReducer.mapViewScales?.[0]?.claimscale)
+
+  },[areaCurrentScale])
 
   useEffect(() => {
     if (areaSyncPropLayerVisible && areaSyncClaimLinkLayerVisible) {
@@ -188,10 +224,12 @@ const AreaBottomSideComp = () => {
       <div className="overflow-y-auto max-h-[53vh]">
         <Accordion>
           <div className="flex flex-col gap-1">
-            <AccordionItemWithEye
+            <AccordionItemWithEyeWithLock
               title="Assets"
               onClick={setareaAssetLayerVisibility}
               eyeState={areaAssetLayerVisible}
+              onLockClick={setareaAssetLayerAlwaysVisibility}
+              lockState={areaAssetLayerAlwaysVisible}
             >
               <div className="flex flex-col gap-1">
                 <LayerVisibleDiv
@@ -255,17 +293,19 @@ const AreaBottomSideComp = () => {
                   />
                 </LayerVisibleDiv>
               </div>
-            </AccordionItemWithEye>
+            </AccordionItemWithEyeWithLock>
             <AccordionItemWithEye
               title="Properties"
               onClick={setPropertiesGroupEye}
               eyeState={property_claimLinkGroupVisible}
             >
               <div className="flex flex-col gap-1">
-                <LayerVisibleDiv
+                <LayerVisibleLockDiv
                   title="Property Points"
                   onClick={setareaSyncPropLayerVisibility}
                   eyeState={areaSyncPropLayerVisible}
+                  onLockClick={setareaSyncPropLayerAlwaysVisibility}
+                  lockState={areaSyncPropLayerAlwaysVisible}
                 >
                   <Image
                     src="./sync-prop.svg"
@@ -273,7 +313,7 @@ const AreaBottomSideComp = () => {
                     height={10}
                     alt="prop"
                   />
-                </LayerVisibleDiv>
+                </LayerVisibleLockDiv>
                 <LayerVisibleDiv
                   onClick={setareaSyncClaimLinkLayerVisibility}
                   title="Property Outlines"
@@ -294,10 +334,11 @@ const AreaBottomSideComp = () => {
               eyeState={areaClaimLayerVisible}
             >
               <div className="flex flex-col gap-1">
-                <LayerVisibleDiv
-                  title="Claims"
+                <LayerVisibleVisibilityStateDiv
+                  title="Claims1"
                   onClick={setareaClaimLayerVisibility}
                   eyeState={areaClaimLayerVisible}
+                  visibilityState={claimsVisibilityState}
                 >
                   <Image
                     src="./claims-layer.svg"
@@ -305,7 +346,7 @@ const AreaBottomSideComp = () => {
                     height={10}
                     alt="prop"
                   />
-                </LayerVisibleDiv>
+                </LayerVisibleVisibilityStateDiv>
                 <LayerVisibleDiv
                   title="Mining Areas"
                   onClick={setareaAreaBoundaryLayerVisibility}

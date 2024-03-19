@@ -1457,7 +1457,7 @@ export const PropertiesMap = () => {
                 : "bg-blue-700 text-white"
             }  w-22`}
           >
-            Satelite
+            Satellite
           </Button>
           <Button
             onClick={() => setLyrs("p")}
@@ -1534,7 +1534,12 @@ export const PropertiesMap = () => {
         <Map
           ref={mapRef}
           style={{
-            width: isSideNavOpen ? "85vw" : "100vw",
+            width: isSideNavOpen
+              ? isPropertiesSideNavOpen
+                ? "65vw"
+                : "83vw"
+              : "100vw",
+            //  width: isSideNavOpen ? (isCompanySideNavOpen ? "65vw" : "83vw") : "100vw",
             height: "90vh",
           }}
           controls={[]}

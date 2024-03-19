@@ -2,18 +2,19 @@
 import React, { useState } from "react";
 import { FaChevronDown, FaChevronLeft, FaChevronUp } from "react-icons/fa";
 import { VscEye, VscEyeClosed } from "react-icons/vsc";
+import { FaLock, FaLockOpen } from "react-icons/fa6";
 
-const AccordionItemWithEye = ({ title, children, onClick, eyeState }) => {
+const AccordionItemWithEyeWithLock = ({ title, children, onClick, eyeState,onLockClick,lockState }) => {
   const [isOpen, setIsOpen] = useState(true);
-
+  
   const toggleAccordion = () => {
     setIsOpen(!isOpen);
   };
-
+  
   const eyeClickHandler = () => {
-    onClick();
+    onLockClick();
   };
-
+  
   return (
     <div className="grow-[2]">
       <div
@@ -25,13 +26,25 @@ const AccordionItemWithEye = ({ title, children, onClick, eyeState }) => {
           <span onClick={toggleAccordion} className="cursor-pointer">
             {isOpen ? <FaChevronDown /> : <FaChevronLeft />}
           </span>
+          <span>
+             {lockState && (
+              <FaLock className="bg-red-600 cursor-pointer hover:scale-125" onClick={eyeClickHandler} />
+            )}
+            {!lockState && (
+              <FaLockOpen
+                className=" bg-red-600 cursor-pointer hover:scale-125"
+                onClick={eyeClickHandler}
+              />
+            )}
+          </span>
+
           <span className="">
             {eyeState && (
-              <VscEye className="cursor-pointer hover:scale-125" onClick={eyeClickHandler} />
+              <VscEye className="bg-red-600 cursor-pointer hover:scale-125" onClick={eyeClickHandler} />
             )}
             {!eyeState && (
               <VscEyeClosed
-                className="cursor-pointer hover:scale-125"
+                className="bg-red-600 cursor-pointer hover:scale-125"
                 onClick={eyeClickHandler}
               />
             )}
@@ -43,4 +56,4 @@ const AccordionItemWithEye = ({ title, children, onClick, eyeState }) => {
   );
 };
 
-export default AccordionItemWithEye;
+export default AccordionItemWithEyeWithLock;

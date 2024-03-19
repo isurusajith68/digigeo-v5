@@ -600,7 +600,7 @@ const AreaMap2 = () => {
                 : "bg-blue-700 text-white"
             } `}
           >
-            Satelite
+            Satellite
           </Button>
           <Button
             onClick={() => setLyrs("p")}

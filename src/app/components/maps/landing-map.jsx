@@ -1679,7 +1679,7 @@ export const LandingMap = () => {
   };
 
   return (
-    <div className="flex">
+    <div className="flex  border-4 border-red-400">
       <LandingMapSideNavbar />
       <div className="relative">
         <div className="w-12 absolute left-0 top-0 z-50  ">
@@ -1745,7 +1745,7 @@ export const LandingMap = () => {
                 : "bg-blue-700 text-white"
             }  w-22`}
           >
-            Satelite
+            Satellite
           </Button>
           <Button
             onClick={() => setLyrs("p")}
@@ -1832,7 +1832,12 @@ export const LandingMap = () => {
         <Map
           ref={mapRef}
           style={{
-            width: isSideNavOpen ? "85vw" : "100vw",
+            width: isSideNavOpen
+              ? isLandingMapSideNavOpen
+                ? "65vw"
+                : "83vw"
+              : "100vw",
+            // width: isSideNavOpen ? "75vw" : "90vw",
             // width: `${isLandingMapSideNavOpen ? "75vw" : "100vw"}`,
             height: "90vh",
           }}

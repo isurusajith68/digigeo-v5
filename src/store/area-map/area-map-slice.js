@@ -26,7 +26,10 @@ const initialState = {
   clickassetObject: undefined,
   clicksyncPropertyObject: undefined,
   navigatedFPropId: 0,
-  popupFcompanyId:0,
+  popupFcompanyId: 0,
+  areaSyncPropLayerAlwaysVisible: false,
+  areaAssetLayerAlwaysVisible: false,
+  areaCurrentScale: 5,
 };
 
 const areaMapSlice = createSlice({
@@ -114,6 +117,16 @@ const areaMapSlice = createSlice({
     setpopupFcompanyId: (state, action) => {
       state.popupFcompanyId = action.payload;
     },
+    setareaSyncPropLayerAlwaysVisible: (state, action) => {
+      state.areaSyncPropLayerAlwaysVisible = action.payload;
+    },
+    setareaAssetLayerAlwaysVisible: (state, action) => {
+      state.areaAssetLayerAlwaysVisible = action.payload;
+    },
+    setareaCurrentScale: (state, action) => {
+      console.log("areaCurrentScale-action.payload",action.payload)
+      state.areaCurrentScale = action.payload;
+    },
   },
 });
 
@@ -143,7 +156,10 @@ export const {
   setclickassetObject,
   setclicksyncPropertyObject,
   setnavigatedFPropId,
-  setpopupFcompanyId
+  setpopupFcompanyId,
+  setareaSyncPropLayerAlwaysVisible,
+  setareaAssetLayerAlwaysVisible,
+  setareaCurrentScale,
 
 } = areaMapSlice.actions;
 

@@ -23,6 +23,7 @@ import {
   setclickclaimObject,
   setclickfPropertyObject,
   setclicksyncPropertyObject,
+  setareaCurrentScale
 } from "../../../store/area-map/area-map-slice";
 import GeoJSON from "ol/format/GeoJSON";
 
@@ -337,6 +338,12 @@ export const AreaMap = () => {
   const navigatedFPropId = useSelector(
     (state) => state.areaMapReducer.navigatedFPropId
   );
+    const areaSyncPropLayerAlwaysVisible = useSelector(
+    (state) => state.areaMapReducer.areaSyncPropLayerAlwaysVisible
+  );
+ const areaAssetLayerAlwaysVisible = useSelector(
+    (state) => state.areaMapReducer.areaAssetLayerAlwaysVisible
+  );
 
   //
   const [coordinates, setCoordinates] = useState(undefined);
@@ -575,6 +582,9 @@ export const AreaMap = () => {
   const onViewChange = useCallback((e) => {
     const scale = mapRatioScale({ map: mapRef.current });
     setmapScale(scale.toLocaleString());
+     dispatch(setareaCurrentScale(scale ));
+     
+     console.log("areaCurrentScale-map",scale)
   });
 
   useEffect(() => {
@@ -1466,7 +1476,7 @@ export const AreaMap = () => {
         </div>
         <ButtonGroup
           variant="faded"
-          className="absolute left-0 bottom-1 z-50  "
+          className="fixed  bottom-1 z-50  "
           color="primary"
         >
           <Button
@@ -1487,7 +1497,7 @@ export const AreaMap = () => {
                 : "bg-blue-700 text-white"
             }  w-22`}
           >
-            Satelite
+            Satellite
           </Button>
           <Button
             onClick={() => setLyrs("p")}
@@ -1565,7 +1575,12 @@ export const AreaMap = () => {
         <Map
           ref={mapRef}
           style={{
-            width: isSideNavOpen ? "85vw" : "100vw",
+            width: isSideNavOpen
+              ? isAreaSideNavOpen
+                ? "65vw"
+                : "83vw"
+              : "100vw",
+            // width: isSideNavOpen ? (isLandingMapSideNavOpen ? "65vw" : "83vw") : "100vw",
             // width: `${isAreaSideNavOpen ? "75vw" : "100vw"}`,
             height: "90vh",
           }}
@@ -1645,15 +1660,15 @@ export const AreaMap = () => {
             ref={assetLayerRef}
             style={areaMapAssetVectorLayerStyleFunction}
             minResolution={0}
-            maxResolution={150}
+             maxResolution={areaAssetLayerAlwaysVisible ? 40075016 : 150}  
           >
             <olSourceVector ref={assetSourceRef}></olSourceVector>
           </olLayerVector>
           <olLayerVector
             ref={syncPropVectorLayerRef}
             style={styleFunctionSyncProperties}
-            // minResolution={0}
-            // maxResolution={150}
+            minResolution={0}
+            maxResolution={areaSyncPropLayerAlwaysVisible ? 40075016 : 150}  
           >
             <olSourceVector ref={syncPropSourceRef}></olSourceVector>
           </olLayerVector>
