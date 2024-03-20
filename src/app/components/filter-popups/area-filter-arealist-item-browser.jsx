@@ -7,7 +7,7 @@ import {Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, RadioGr
 import Image from "next/image";
  
 //propno, prop_name, prop_alias,area, state_prov, country, region, propertyid 
-const AreaFilterAreaListItemBrowser = ({areaList, countryHandler, areaHandler ,searchAction}) => {
+const AreaFilterAreaListItemBrowser = ({areaList, countryHandler, areaHandler ,searchAction,areaIdHandler}) => {
      const [currentPage, setCurrentPage] =  useState(1);
    // const [groupedAreaList, setgroupedAreaList] =  useState({});
      const [groupedAreaList, setgroupedAreaList] =  useState([]);
@@ -18,6 +18,7 @@ const AreaFilterAreaListItemBrowser = ({areaList, countryHandler, areaHandler ,s
       const [selectedValue, setselectedValue] = useState(0);
 
   useEffect(() => {
+    console.log("areaList",areaList)
        if (areaList?.length==0) {
          
        }
@@ -62,7 +63,8 @@ const AreaFilterAreaListItemBrowser = ({areaList, countryHandler, areaHandler ,s
       if(a){
         countryHandler(a.country)
         areaHandler(a.area_name)
-       
+        areaIdHandler(a.gid)
+        
         //console.log("poi",areaList.filter(f => f.area_name == a.area_name))
       
        // setfilteredAreaList(areaList.filter(f => f.area_name == a.area_name))

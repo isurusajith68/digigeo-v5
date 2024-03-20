@@ -2,6 +2,8 @@
 import React, { useState } from "react";
 import { FaChevronDown, FaChevronLeft, FaChevronUp } from "react-icons/fa";
 import { VscEye, VscEyeClosed } from "react-icons/vsc";
+import { TbEye } from "react-icons/tb";
+import { TbEyeOff } from "react-icons/tb";
 
 const AccordionItemWithEye = ({ title, children, onClick, eyeState }) => {
   const [isOpen, setIsOpen] = useState(true);
@@ -27,10 +29,10 @@ const AccordionItemWithEye = ({ title, children, onClick, eyeState }) => {
           </span>
           <span className="">
             {eyeState && (
-              <VscEye className="cursor-pointer hover:scale-125" onClick={eyeClickHandler} />
+              <TbEye className="cursor-pointer hover:scale-125" onClick={eyeClickHandler} />
             )}
             {!eyeState && (
-              <VscEyeClosed
+              <TbEyeOff
                 className="cursor-pointer hover:scale-125"
                 onClick={eyeClickHandler}
               />

@@ -1,13 +1,21 @@
+"use client"
 // components/Accordion.js
-import React, { useState } from "react";
+import  { useState,useEffect } from "react";
 import { FaChevronDown, FaChevronLeft, FaChevronUp } from "react-icons/fa";
 import { VscEye, VscEyeClosed } from "react-icons/vsc";
 import Image from 'next/image'
 import { FaLock,FaLockOpen  } from "react-icons/fa6";
 import { TbEye } from "react-icons/tb";
 import { TbEyeOff } from "react-icons/tb";
+import { TbEyePause } from "react-icons/tb";
 
-const LayerVisibleLockDiv = ({ title, children, onClick, eyeState,onLockClick,lockState }) => {
+const LayerVisibleLockVisibilityDiv = ({ title, children, onClick, eyeState, onLockClick, lockState, visibilityState }) => {
+  
+  useEffect(( )=>
+  {
+    console.log("lockState", lockState)
+  }, [lockState])
+
   return (
     <div>
       <div
@@ -22,13 +30,19 @@ const LayerVisibleLockDiv = ({ title, children, onClick, eyeState,onLockClick,lo
           </span> */}
           {/* lock-open-closw */}
            <span className="">
-            {!lockState && eyeState && (
+            {!lockState &&  eyeState && visibilityState && (
               <TbEye
                 className="cursor-pointer hover:scale-125"
                 onClick={onClick}
               />
             )}
-            {!lockState &&  !eyeState && (
+            {!lockState && eyeState && !visibilityState && (
+              <TbEyePause
+                className="cursor-pointer hover:scale-125"
+                onClick={onClick}
+              />
+            )}
+            {!lockState && !eyeState && (
               <TbEyeOff
                 className="cursor-pointer hover:scale-125"
                 onClick={onClick}
@@ -38,10 +52,8 @@ const LayerVisibleLockDiv = ({ title, children, onClick, eyeState,onLockClick,lo
           <span className="">
             {lockState && (
               <div className="flex">
-              <FaLock onClick={onLockClick}
-                    className="  cursor-pointer hover:scale-125"/>
-             
-            </div>
+                <FaLock onClick={onLockClick} className="  cursor-pointer hover:scale-125"/>
+              </div>
             )}
             {!lockState && (
               <div className="flex">
@@ -59,4 +71,4 @@ const LayerVisibleLockDiv = ({ title, children, onClick, eyeState,onLockClick,lo
   );
 };
 
-export default LayerVisibleLockDiv;
+export default LayerVisibleLockVisibilityDiv;

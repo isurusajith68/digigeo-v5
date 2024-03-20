@@ -30,6 +30,8 @@ const initialState = {
   areaSyncPropLayerAlwaysVisible: false,
   areaAssetLayerAlwaysVisible: false,
   areaCurrentScale: 5,
+  areaSelectedAreaId: 0,
+  areaMapViesScales: {},
 };
 
 const areaMapSlice = createSlice({
@@ -124,12 +126,21 @@ const areaMapSlice = createSlice({
       state.areaAssetLayerAlwaysVisible = action.payload;
     },
     setareaCurrentScale: (state, action) => {
-      console.log("areaCurrentScale-action.payload",action.payload)
+     
       state.areaCurrentScale = action.payload;
+    },
+    setareaSelectedAreaId: (state, action) => {
+     
+      state.areaSelectedAreaId = action.payload;
+    },
+    setareaMapViesScales: (state, action) => {
+     
+      state.areaMapViesScales = action.payload;
     },
   },
 });
 
+ 
 export const {
   setAreaCountry,
   setAreaMiningArea,
@@ -160,6 +171,8 @@ export const {
   setareaSyncPropLayerAlwaysVisible,
   setareaAssetLayerAlwaysVisible,
   setareaCurrentScale,
+  setareaSelectedAreaId,
+  setareaMapViesScales,
 
 } = areaMapSlice.actions;
 

@@ -13,6 +13,8 @@ import {
   setAreaMiningArea,
   setAreaZoomMode,
   setIsAreaSideNavOpen,
+  setareaSelectedAreaId,
+  setareaMapViesScales,
 } from "../../../store/area-map/area-map-slice";
 
 import { Autocomplete, AutocompleteItem } from "@nextui-org/react";
@@ -35,6 +37,7 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setitemsPerPage] = useState(10);
   const [searchQuery, setsearchQuery] = useState("");
+  const [mapViewScale, setmapViewScale] = useState({});
 
   const selectedMap = useSelector(
     (state) => state.mapSelectorReducer.selectedMap
@@ -54,6 +57,7 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
 
   const areaName = useSelector((state) => state.areaMapReducer.areaMiningArea);
   const areaCountry = useSelector((state) => state.areaMapReducer.areaCountry);
+ const mapViewScaleReducer = useSelector((state) => state.mapViewScaleReducer);
 
   const customStyles = {
     overlay: {
@@ -261,7 +265,7 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
       const res = await fetch(
         `https://atlas.ceyinfo.cloud/matlas/allarealist`,
         {
-          cache: "force-cache",
+          cache: "no-store",
         }
       );
       const d = await res.json();
@@ -302,6 +306,19 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
     dispatch(setAreaCountry(""));
     dispatch(setAreaMiningArea(""));
   };
+
+  const areaIdHandler=(areaid)=>{
+    dispatch(setareaSelectedAreaId(areaid));
+    const mapViewScale1 =  mapViewScaleReducer.mapViewScales.find(a=> a.area_id==areaid)
+    setmapViewScale(mapViewScale1);
+    
+
+  }
+
+  useEffect(()=>{
+    dispatch(setareaMapViesScales(mapViewScale));
+      console.log("mapViewScale",mapViewScale)
+  },[mapViewScale])
   return (
     <div>
       <Modal
@@ -406,7 +423,7 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
                           >
                             {areaObj.area_name}
                           </AutocompleteItem>
-                        ))} */}
+                        ))} */} 
               </Autocomplete>
             </div>
           </div>
@@ -415,6 +432,7 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
             countryHandler={setCountry}
             areaHandler={setMiningArea}
             searchAction={searchAction}
+            areaIdHandler={areaIdHandler}
           />
           <section className="flex items-center justify-between mt-3 bottom-8 border-t-2 border-gray-300 w-full">
             <div className="mt-2">

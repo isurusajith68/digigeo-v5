@@ -32,6 +32,7 @@ import {
 } from "@/store/area-map/area-map-slice";
 import Image from "next/image";
 import LayerVisibleVisibilityStateDiv from './../../common-comp/layer-visible-eye-visibility-state';
+import LayerVisibleLockVisibilityDiv from './../../common-comp/layer-visible-eye-with-lock-with-visibility';
 
 const AreaBottomSideComp = () => {
   let pathname = "";
@@ -39,6 +40,7 @@ const AreaBottomSideComp = () => {
 
   const [property_claimLinkGroupVisible, setproperty_claimLinkGroupVisible] =  useState(true);
   const [claimsVisibilityState, setclaimsVisibilityState] =  useState(true);
+  const [propertyVisibilityState, setpropertyVisibilityState] =  useState(true);
 
   const router = useRouter();
   try {
@@ -160,17 +162,23 @@ const AreaBottomSideComp = () => {
   //layer visibility
 
   // mapViewScaleReducer.mapViewScales
-  const mapViewScaleReducer = useSelector((state) => state.mapViewScaleReducer);
+  // const mapViewScaleReducer = useSelector((state) => state.mapViewScaleReducer);
   
   const areaCurrentScale = useSelector(
     (state) => state.areaMapReducer.areaCurrentScale
   );
+  const areaMapViesScales = useSelector(
+    (state) => state.areaMapReducer.areaMapViesScales
+  );
 
   useEffect(()=>{
     console.log("areaCurrentScale-bc",areaCurrentScale)
-    mapViewScaleReducer.mapViewScales?.[0]?.claimscale > areaCurrentScale ?  setclaimsVisibilityState(true): setclaimsVisibilityState(false)
+    // mapViewScaleReducer.mapViewScales?.[0]?.claimscale > areaCurrentScale ?  setclaimsVisibilityState(true): setclaimsVisibilityState(false)
+    areaMapViesScales.claimscale > areaCurrentScale ?  setclaimsVisibilityState(true): setclaimsVisibilityState(false)
+    areaMapViesScales.proplayerscale > areaCurrentScale ?  setpropertyVisibilityState(true): setpropertyVisibilityState(false)
+   
     
-    console.log("areaCurrentScale-mapViewScaleReducer ",mapViewScaleReducer.mapViewScales?.[0]?.claimscale)
+   // console.log("areaCurrentScale-mapViewScaleReducer ",mapViewScaleReducer.mapViewScales?.[0]?.claimscale)
 
   },[areaCurrentScale])
 
@@ -300,12 +308,13 @@ const AreaBottomSideComp = () => {
               eyeState={property_claimLinkGroupVisible}
             >
               <div className="flex flex-col gap-1">
-                <LayerVisibleLockDiv
+                <LayerVisibleLockVisibilityDiv
                   title="Property Points"
                   onClick={setareaSyncPropLayerVisibility}
                   eyeState={areaSyncPropLayerVisible}
                   onLockClick={setareaSyncPropLayerAlwaysVisibility}
                   lockState={areaSyncPropLayerAlwaysVisible}
+                  visibilityState={propertyVisibilityState}
                 >
                   <Image
                     src="./sync-prop.svg"
@@ -313,7 +322,7 @@ const AreaBottomSideComp = () => {
                     height={10}
                     alt="prop"
                   />
-                </LayerVisibleLockDiv>
+                </LayerVisibleLockVisibilityDiv>
                 <LayerVisibleDiv
                   onClick={setareaSyncClaimLinkLayerVisibility}
                   title="Property Outlines"
@@ -335,7 +344,7 @@ const AreaBottomSideComp = () => {
             >
               <div className="flex flex-col gap-1">
                 <LayerVisibleVisibilityStateDiv
-                  title="Claims1"
+                  title="Claims"
                   onClick={setareaClaimLayerVisibility}
                   eyeState={areaClaimLayerVisible}
                   visibilityState={claimsVisibilityState}

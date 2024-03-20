@@ -3,6 +3,9 @@ import React, { useState } from "react";
 import { FaChevronDown, FaChevronLeft, FaChevronUp } from "react-icons/fa";
 import { VscEye, VscEyeClosed } from "react-icons/vsc";
 import { FaLock, FaLockOpen } from "react-icons/fa6";
+import { TbEye } from "react-icons/tb";
+import { TbEyeOff } from "react-icons/tb";
+
 
 const AccordionItemWithEyeWithLock = ({ title, children, onClick, eyeState,onLockClick,lockState }) => {
   const [isOpen, setIsOpen] = useState(true);
@@ -26,29 +29,30 @@ const AccordionItemWithEyeWithLock = ({ title, children, onClick, eyeState,onLoc
           <span onClick={toggleAccordion} className="cursor-pointer">
             {isOpen ? <FaChevronDown /> : <FaChevronLeft />}
           </span>
+            <span className="">
+            {eyeState && (
+              <TbEye className="cursor-pointer hover:scale-125" onClick={eyeClickHandler} />
+            )}
+            {!eyeState && (
+              <TbEyeOff
+                className="cursor-pointer hover:scale-125"
+                onClick={eyeClickHandler}
+              />
+            )}
+          </span>
           <span>
              {lockState && (
-              <FaLock className="bg-red-600 cursor-pointer hover:scale-125" onClick={eyeClickHandler} />
+              <FaLock className=" cursor-pointer hover:scale-125" onClick={eyeClickHandler} />
             )}
             {!lockState && (
               <FaLockOpen
-                className=" bg-red-600 cursor-pointer hover:scale-125"
+                className="  cursor-pointer hover:scale-125"
                 onClick={eyeClickHandler}
               />
             )}
           </span>
 
-          <span className="">
-            {eyeState && (
-              <VscEye className="bg-red-600 cursor-pointer hover:scale-125" onClick={eyeClickHandler} />
-            )}
-            {!eyeState && (
-              <VscEyeClosed
-                className="bg-red-600 cursor-pointer hover:scale-125"
-                onClick={eyeClickHandler}
-              />
-            )}
-          </span>
+        
         </div>
       </div>
       {isOpen && <div className="mt-2">{children}</div>}
