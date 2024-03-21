@@ -34,6 +34,10 @@ const initialState = {
   searchParamCommodityList: [],
    navigatedFPropId: 0,
     popupFcompanyId:0,
+     propertySyncPropLayerAlwaysVisible: false,
+  propertyAssetLayerAlwaysVisible: false,
+  propertyCurrentScale: 5,
+  propertyMapViewScales: {},
 };
 
 const propertiesMapSlice = createSlice({
@@ -143,6 +147,21 @@ const propertiesMapSlice = createSlice({
      setpopupFcompanyId: (state, action) => {
       state.popupFcompanyId = action.payload;
     },
+     setpropertySyncPropLayerAlwaysVisible: (state, action) => {
+      state.propertySyncPropLayerAlwaysVisible = action.payload;
+    },
+    setpropertyAssetLayerAlwaysVisible: (state, action) => {
+      state.propertyAssetLayerAlwaysVisible = action.payload;
+    },
+    setpropertyCurrentScale: (state, action) => {
+     
+      state.propertyCurrentScale = action.payload;
+    },
+   
+    setpropertyMapViewScales: (state, action) => {
+     
+      state.propertyMapViesScales = action.payload;
+    },
   },
 });
 
@@ -179,7 +198,11 @@ export const {
   setsearchParamAssetTypeList,
   setsearchParamCommodityList,
   setnavigatedFPropId,
-  setpopupFcompanyId
+  setpopupFcompanyId,
+   setpropertySyncPropLayerAlwaysVisible,
+  setpropertyAssetLayerAlwaysVisible,
+  setpropertyCurrentScale,
+  setpropertyMapViewScales,
 } = propertiesMapSlice.actions;
 
 export default propertiesMapSlice.reducer;

@@ -14,7 +14,7 @@ import {
   setAreaZoomMode,
   setIsAreaSideNavOpen,
   setareaSelectedAreaId,
-  setareaMapViesScales,
+  setareaMapViewScales,
 } from "../../../store/area-map/area-map-slice";
 
 import { Autocomplete, AutocompleteItem } from "@nextui-org/react";
@@ -309,15 +309,22 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
 
   const areaIdHandler=(areaid)=>{
     dispatch(setareaSelectedAreaId(areaid));
-    const mapViewScale1 =  mapViewScaleReducer.mapViewScales.find(a=> a.area_id==areaid)
-    setmapViewScale(mapViewScale1);
-    
+    const mapViewScale1 = mapViewScaleReducer.mapViewScales.find(a => a.area_id == areaid)
+    if(mapViewScale1){
+       console.log("yy-if")
+      setmapViewScale(mapViewScale1)}
+    else{
+      console.log("yy-else")
+       setmapViewScale(mapViewScaleReducer.mapViewScales[0])
+    }
+
+    console.log("yy-mapViewScale1",mapViewScale1)
 
   }
 
   useEffect(()=>{
-    dispatch(setareaMapViesScales(mapViewScale));
-      console.log("mapViewScale",mapViewScale)
+    dispatch(setareaMapViewScales(mapViewScale));
+      // console.log("mapViewScale",mapViewScale)
   },[mapViewScale])
   return (
     <div>

@@ -31,7 +31,7 @@ const initialState = {
   areaAssetLayerAlwaysVisible: false,
   areaCurrentScale: 5,
   areaSelectedAreaId: 0,
-  areaMapViesScales: {},
+  areaMapViewScales: {},
 };
 
 const areaMapSlice = createSlice({
@@ -133,9 +133,9 @@ const areaMapSlice = createSlice({
      
       state.areaSelectedAreaId = action.payload;
     },
-    setareaMapViesScales: (state, action) => {
+    setareaMapViewScales: (state, action) => {
      
-      state.areaMapViesScales = action.payload;
+      state.areaMapViewScales = action.payload;
     },
   },
 });
@@ -172,7 +172,7 @@ export const {
   setareaAssetLayerAlwaysVisible,
   setareaCurrentScale,
   setareaSelectedAreaId,
-  setareaMapViesScales,
+  setareaMapViewScales,
 
 } = areaMapSlice.actions;
 

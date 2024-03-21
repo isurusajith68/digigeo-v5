@@ -33,6 +33,7 @@ import {
 import Image from "next/image";
 import LayerVisibleVisibilityStateDiv from './../../common-comp/layer-visible-eye-visibility-state';
 import LayerVisibleLockVisibilityDiv from './../../common-comp/layer-visible-eye-with-lock-with-visibility';
+import AccordionItemWithEyeWithLockVisibility from './../../common-comp/accordion-eye-with-lock-with-visibilty';
 
 const AreaBottomSideComp = () => {
   let pathname = "";
@@ -41,6 +42,7 @@ const AreaBottomSideComp = () => {
   const [property_claimLinkGroupVisible, setproperty_claimLinkGroupVisible] =  useState(true);
   const [claimsVisibilityState, setclaimsVisibilityState] =  useState(true);
   const [propertyVisibilityState, setpropertyVisibilityState] =  useState(true);
+  const [assetVisibilityState, setassetVisibilityState] =  useState(true);
 
   const router = useRouter();
   try {
@@ -111,7 +113,11 @@ const AreaBottomSideComp = () => {
     dispatch(setareaSyncPropLayerVisible(!areaSyncPropLayerVisible));
   };
   const setareaSyncPropLayerAlwaysVisibility = (e) => {
+
     dispatch(setareaSyncPropLayerAlwaysVisible(!areaSyncPropLayerAlwaysVisible));
+    if(!areaSyncPropLayerAlwaysVisible){
+       dispatch(setareaSyncPropLayerVisible(true));
+    }
   };
   const setareaSyncClaimLinkLayerVisibility = (e) => {
     dispatch(setareaSyncClaimLinkLayerVisible(!areaSyncClaimLinkLayerVisible));
@@ -167,15 +173,16 @@ const AreaBottomSideComp = () => {
   const areaCurrentScale = useSelector(
     (state) => state.areaMapReducer.areaCurrentScale
   );
-  const areaMapViesScales = useSelector(
-    (state) => state.areaMapReducer.areaMapViesScales
+  const areaMapViewScales = useSelector(
+    (state) => state.areaMapReducer.areaMapViewScales
   );
 
   useEffect(()=>{
-    console.log("areaCurrentScale-bc",areaCurrentScale)
+    console.log("xx-areaCurrentScale",areaCurrentScale)
     // mapViewScaleReducer.mapViewScales?.[0]?.claimscale > areaCurrentScale ?  setclaimsVisibilityState(true): setclaimsVisibilityState(false)
-    areaMapViesScales.claimscale > areaCurrentScale ?  setclaimsVisibilityState(true): setclaimsVisibilityState(false)
-    areaMapViesScales.proplayerscale > areaCurrentScale ?  setpropertyVisibilityState(true): setpropertyVisibilityState(false)
+    areaMapViewScales.claimscale > areaCurrentScale ?  setclaimsVisibilityState(true): setclaimsVisibilityState(false)
+    areaMapViewScales.proplayerscale > areaCurrentScale ?  setpropertyVisibilityState(true): setpropertyVisibilityState(false)
+    areaMapViewScales.assetscale > areaCurrentScale ?  setassetVisibilityState(true): setassetVisibilityState(false)
    
     
    // console.log("areaCurrentScale-mapViewScaleReducer ",mapViewScaleReducer.mapViewScales?.[0]?.claimscale)
@@ -232,12 +239,13 @@ const AreaBottomSideComp = () => {
       <div className="overflow-y-auto max-h-[53vh]">
         <Accordion>
           <div className="flex flex-col gap-1">
-            <AccordionItemWithEyeWithLock
+            <AccordionItemWithEyeWithLockVisibility
               title="Assets"
               onClick={setareaAssetLayerVisibility}
               eyeState={areaAssetLayerVisible}
               onLockClick={setareaAssetLayerAlwaysVisibility}
               lockState={areaAssetLayerAlwaysVisible}
+              visibilityState={assetVisibilityState}
             >
               <div className="flex flex-col gap-1">
                 <LayerVisibleDiv
@@ -301,7 +309,7 @@ const AreaBottomSideComp = () => {
                   />
                 </LayerVisibleDiv>
               </div>
-            </AccordionItemWithEyeWithLock>
+            </AccordionItemWithEyeWithLockVisibility>
             <AccordionItemWithEye
               title="Properties"
               onClick={setPropertiesGroupEye}

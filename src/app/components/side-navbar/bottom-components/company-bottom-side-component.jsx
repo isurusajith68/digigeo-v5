@@ -13,7 +13,20 @@ import Accordion from "../../common-comp/accordion";
 import AccordionItemWithEye from "../../common-comp/accordion-eye";
 import LayerVisibleDiv from "../../common-comp/layer-visible-eye";
 import { AiFillAppstore } from "react-icons/ai";
-import { setcompanyAreaBoundaryLayerVisible, setcompanyAssetDepositsVisible, setcompanyAssetHistoricalVisible, setcompanyAssetLayerVisible, setcompanyAssetOccurrenceVisible, setcompanyAssetOpMineVisible, setcompanyAssetZoneVisible, setcompanyClaimLayerVisible, setcompanyFpropLayerVisible, setcompanySyncClaimLinkLayerVisible, setcompanySyncPropLayerVisible } from "@/store/company-map/company-map-slice";
+import { setcompanyAreaBoundaryLayerVisible, 
+  setcompanyAssetDepositsVisible,
+   setcompanyAssetHistoricalVisible, 
+   setcompanyAssetLayerVisible,
+   setcompanyAssetOccurrenceVisible,
+    setcompanyAssetOpMineVisible,
+     setcompanyAssetZoneVisible, 
+     setcompanyClaimLayerVisible, 
+     setcompanyFpropLayerVisible, 
+     setcompanySyncClaimLinkLayerVisible,
+     setcompanySyncPropLayerVisible,
+     setcompanySyncPropLayerAlwaysVisible,
+     setcompanyAssetLayerAlwaysVisible,
+     } from "@/store/company-map/company-map-slice";
 import Image from "next/image";
 
 const CompanyBottomSideComp = () => {
@@ -33,6 +46,8 @@ const CompanyBottomSideComp = () => {
 
   
   const [property_claimLinkGroupVisible, setproperty_claimLinkGroupVisible] = useState(true)
+  const [claimsVisibilityState, setclaimsVisibilityState] =  useState(true);
+  const [propertyVisibilityState, setpropertyVisibilityState] =  useState(true);
 
 
   const isAreaSideNavOpen = useSelector(
@@ -61,6 +76,10 @@ const CompanyBottomSideComp = () => {
   const companyAssetLayerVisible = useSelector(
     (state) => state.companyMapReducer.companyAssetLayerVisible
   );
+    const setareaAssetLayerAlwaysVisibility = (e) => {
+    dispatch(setareaAssetLayerAlwaysVisible(!areaAssetLayerAlwaysVisible));
+  };
+  
   const companySyncPropLayerVisible = useSelector(
     (state) => state.companyMapReducer.companySyncPropLayerVisible
   );

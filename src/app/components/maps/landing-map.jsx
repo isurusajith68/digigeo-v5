@@ -1448,6 +1448,7 @@ export const LandingMap = () => {
   };
 
   const claimLoaderFunc = useCallback((extent, resolution, projection) => {
+    
     const url =
       `https://atlas.ceyinfo.cloud/matlas/view_tbl01_claims_bb` +
       `/${extent.join("/")}`;

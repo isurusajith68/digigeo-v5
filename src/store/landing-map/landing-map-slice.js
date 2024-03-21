@@ -27,6 +27,10 @@ const initialState = {
   clicksyncPropertyObject: undefined,
   navigatedFPropId: 0,
   popupFcompanyId: 0,
+  landingSyncPropLayerAlwaysVisible: false,
+  landingAssetLayerAlwaysVisible: false,
+  landingCurrentScale: 5,
+  landingMapViewScales: {},
 };
 
 const landingMapMapSlice = createSlice({
@@ -114,6 +118,21 @@ const landingMapMapSlice = createSlice({
     setpopupFcompanyId: (state, action) => {
       state.popupFcompanyId = action.payload;
     },
+     setlandingSyncPropLayerAlwaysVisible: (state, action) => {
+      state.landingSyncPropLayerAlwaysVisible = action.payload;
+    },
+    setlandingAssetLayerAlwaysVisible: (state, action) => {
+      state.landingAssetLayerAlwaysVisible = action.payload;
+    },
+    setlandingCurrentScale: (state, action) => {
+     
+      state.landingCurrentScale = action.payload;
+    },
+   
+    setlandingMapViesScales: (state, action) => {
+     
+      state.landingMapViewScales = action.payload;
+    },
   },
 });
 
@@ -144,6 +163,10 @@ export const {
   setclicksyncPropertyObject,
   setnavigatedFPropId,
   setpopupFcompanyId,
+   setlandingSyncPropLayerAlwaysVisible,
+  setlandingAssetLayerAlwaysVisible,
+  setlandingCurrentScale,
+  setlandingMapViewScales,
 } = landingMapMapSlice.actions;
 
 export default landingMapMapSlice.reducer;

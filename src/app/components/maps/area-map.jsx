@@ -308,6 +308,9 @@ function mapRatioScale({ map, toRound = true }) {
   let scale = resolution * inchesPreUnit(unit) * DOTS_PER_INCH;
   return toRound ? Math.round(scale) : scale;
 }
+const getMapResolution = (scale, unit) => {
+  return scale / (inchesPreUnit(unit) * DOTS_PER_INCH);
+};
 
 export const AreaMap = () => {
   let pathname = "";
@@ -345,6 +348,10 @@ export const AreaMap = () => {
     (state) => state.areaMapReducer.areaAssetLayerAlwaysVisible
   );
 
+    const areaMapViewScales = useSelector(
+    (state) => state.areaMapReducer.areaMapViewScales
+  );
+
   //
   const [coordinates, setCoordinates] = useState(undefined);
   const [popup, setPopup] = useState();
@@ -357,6 +364,7 @@ export const AreaMap = () => {
   const [fPropertyObject, setfPropertyObject] = useState();
   const [syncPropertyObject, setsyncPropertyObject] = useState();
   const [claimObject, setclaimObject] = useState();
+   const [mapUnits, setmapUnits] = useState("m");
 
   useEffect(() => {
     if (navigatedFPropertyRef.current) {
@@ -584,7 +592,7 @@ export const AreaMap = () => {
     setmapScale(scale.toLocaleString());
      dispatch(setareaCurrentScale(scale ));
      
-     console.log("areaCurrentScale-map",scale)
+    //  console.log("areaCurrentScale-map",scale)
   });
 
   useEffect(() => {
@@ -759,7 +767,9 @@ export const AreaMap = () => {
     // }
   }, [assetFeatures]);
 
+  //init useeffect
   useEffect(() => {
+    console.log("yy-amap -init") 
     mouseScrollEvent();
   }, []);
 
@@ -949,6 +959,8 @@ export const AreaMap = () => {
   //layer visibility useEffects
   useEffect(() => {
     fPropVectorLayerRef?.current?.setVisible(areaFpropLayerVisible);
+    fPropVectorLayerLabelRef?.current?.setVisible(areaFpropLayerVisible);
+
   }, [areaFpropLayerVisible]);
   useEffect(() => {
     claimLinkVectorLayerRef?.current?.setVisible(areaSyncClaimLinkLayerVisible);
@@ -1201,13 +1213,19 @@ export const AreaMap = () => {
   };
 
   const claimLoaderFunc = useCallback((extent, resolution, projection) => {
+    // console.log("yy-extent1", extent, resolution,areaMapViewScales.claimscale)
+    // if(!areaMapViewScales.claimscale) return
+    // if(getMapResolution( areaMapViewScales.claimscale,mapUnits) < resolution){
+    //   return
+    // }
+    //  console.log("yy-extent2", extent, resolution,areaMapViewScales.claimscale)
     const url =
       `https://atlas.ceyinfo.cloud/matlas/view_tbl01_claims_bb` +
       `/${extent.join("/")}`;
     fetch(url, {
       method: "GET", // *GET, POST, PUT, DELETE, etc.
       mode: "cors", // no-cors, *cors, same-origin
-      cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+      cache: "no-store", // *default, no-cache, reload, force-cache, only-if-cached
       credentials: "same-origin", // include, *same-origin, omit
       headers: {
         "Content-Type": "application/json",
@@ -1430,6 +1448,14 @@ export const AreaMap = () => {
     setmapScale(scale.toLocaleString());
   };
 
+  // useEffect(()=>{
+  //  //console.log("yy-claim res",getMapResolution( areaMapViewScales.claimscale,mapUnits)) 
+   
+  // }, [mapScale])
+  
+ 
+  
+
   return (
     <div className="flex">
       <AreaSideNavbar />
@@ -1639,11 +1665,10 @@ export const AreaMap = () => {
             ref={claimVectorImgLayerRef}
             style={styleFunctionClaim}
             minResolution={0}
-            maxResolution={150}
+            maxResolution={getMapResolution( areaMapViewScales.claimscale,mapUnits) ?? 150}
           >
             <olSourceVector
               ref={claimVectorImgSourceRef}
-              // format={new GeoJSON()}
               strategy={bbox}
               loader={claimLoaderFunc}
             ></olSourceVector>
@@ -1660,7 +1685,7 @@ export const AreaMap = () => {
             ref={assetLayerRef}
             style={areaMapAssetVectorLayerStyleFunction}
             minResolution={0}
-             maxResolution={areaAssetLayerAlwaysVisible ? 40075016 : 150}  
+             maxResolution={areaAssetLayerAlwaysVisible ? 40075016 : getMapResolution( areaMapViewScales.assetscale,mapUnits)??150 }  
           >
             <olSourceVector ref={assetSourceRef}></olSourceVector>
           </olLayerVector>
@@ -1668,7 +1693,7 @@ export const AreaMap = () => {
             ref={syncPropVectorLayerRef}
             style={styleFunctionSyncProperties}
             minResolution={0}
-            maxResolution={areaSyncPropLayerAlwaysVisible ? 40075016 : 150}  
+            maxResolution={areaSyncPropLayerAlwaysVisible ? 40075016 : getMapResolution(areaMapViewScales.proplayerscale,mapUnits) ?? 150}  
           >
             <olSourceVector ref={syncPropSourceRef}></olSourceVector>
           </olLayerVector>

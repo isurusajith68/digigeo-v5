@@ -27,6 +27,10 @@ const initialState = {
   clickassetObject: undefined,
   clicksyncPropertyObject: undefined,
   navigatedFPropId: 0,
+  companySyncPropLayerAlwaysVisible: false,
+  companyAssetLayerAlwaysVisible: false,
+  companyCurrentScale: 5,
+  companyMapViewScales: {},
 };
 
 const companyMapSlice = createSlice({
@@ -114,6 +118,21 @@ const companyMapSlice = createSlice({
     setnavigatedFPropId: (state, action) => {
       state.navigatedFPropId = action.payload;
     },
+    setcompanySyncPropLayerAlwaysVisible: (state, action) => {
+      state.companySyncPropLayerAlwaysVisible = action.payload;
+    },
+    setcompanyAssetLayerAlwaysVisible: (state, action) => {
+      state.companyAssetLayerAlwaysVisible = action.payload;
+    },
+    setcompanyCurrentScale: (state, action) => {
+     
+      state.companyCurrentScale = action.payload;
+    },
+   
+    setcompanyMapViewScales: (state, action) => {
+     
+      state.companyMapViesScales = action.payload;
+    },
   },
 });
 
@@ -143,6 +162,10 @@ export const { setIsCompanySideNavOpen,
   setclickassetObject,
   setclicksyncPropertyObject,
   setnavigatedFPropId,
+   setcompanySyncPropLayerAlwaysVisible,
+  setcompanyAssetLayerAlwaysVisible,
+  setcompanyCurrentScale,
+  setcompanyMapViewScales,
 } = companyMapSlice.actions;
 
 export default companyMapSlice.reducer;
