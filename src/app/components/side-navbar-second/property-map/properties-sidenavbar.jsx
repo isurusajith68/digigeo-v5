@@ -38,6 +38,7 @@ import PropertyTreeView from "./property-tree-view";
 import {Breadcrumbs, BreadcrumbItem} from "@nextui-org/react";
 import PropertyFCompanyPopup from "./property-fcompany-popup";
 import AccordionItemWithOutEye from "../../common-comp/accordion-without-eye";
+import { updateWindowsHistory } from "@/app/utils/helpers/window-history-replace";
 
 
 
@@ -149,7 +150,8 @@ const PropertiesSideNavbar = () => {
     let newUrl;
     newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=false&lyrs=${propertiesLyrs}&z=${propertiesZoomLevel}&c=${propertiesInitialCenter}`;
 
-    window.history.replaceState({}, "", newUrl);
+    // window.history.replaceState({}, "", newUrl);
+     updateWindowsHistory(newUrl);
     dispatch(setIsPropertiesSideNavOpen(false));
   };
 

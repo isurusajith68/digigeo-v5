@@ -18,6 +18,7 @@ import { MdLocationOn } from "react-icons/md";
 import AreaFilter from "../../filter-popups/area-filters";
 import { FaFilter } from "react-icons/fa";
 import { Chip } from "@nextui-org/react";
+import { updateWindowsHistory } from "@/app/utils/helpers/window-history-replace";
 
 const AreaMapButton = ({ onClick }) => {
   let pathname = "";
@@ -71,7 +72,8 @@ const AreaMapButton = ({ onClick }) => {
     } else {
       newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=true&lyrs=${areaLyrs}&z=${areaZoomLevel}&c=${areaInitialCenter}&co=${areaCountry}&ma=${areaState}`;
     }
-    window.history.replaceState({}, "", newUrl);
+    // window.history.replaceState({}, "", newUrl);
+     updateWindowsHistory(newUrl);
     dispatch(setIsAreaSideNavOpen(true));
   };
 

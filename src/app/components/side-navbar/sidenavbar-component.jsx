@@ -48,6 +48,7 @@ import {
 import LandingBottomSideComp from "./bottom-components/landing-bottom-side-component";
 
 import Link from "next/link";
+import { updateWindowsHistory } from "@/app/utils/helpers/window-history-replace";
 
 // } from "../../../store/area-map/area-map-slice";
 
@@ -116,12 +117,13 @@ const SideNavbar = () => {
   );
 
   const selectMapHandler = (selectedValue) => {
+     console.log("yy- hit-sidenavbar-compo1")
     dispatch(setSelectedMap(selectedValue));
     let newUrl;
     if (selectedValue == "area") {
       if (areaState == "") {
         newUrl = `${window.location.pathname}?t=${selectedValue}&sn=${isSideNavOpen}&sn2=${isAreaSideNavOpen}&lyrs=${areaLyrs}&z=${areaZoomLevel}&c=${areaInitialCenter}`;
-        
+        console.log("yy-hit-sidenavbar-compo2")
       } else {
         newUrl = `${window.location.pathname}?t=${selectedValue}&sn=${isSideNavOpen}&sn2=${isAreaSideNavOpen}&lyrs=${areaLyrs}&z=${areaZoomLevel}&c=${areaInitialCenter}&co=${areaCountry}&ma=${areaState}`;
       }
@@ -130,10 +132,11 @@ const SideNavbar = () => {
     } else if (selectedValue == "company") {
       newUrl = `${window.location.pathname}?t=${selectedValue}&sn=${isSideNavOpen}&sn2=${isCompanySideNavOpen}&lyrs=${companyLyrs}&z=${companyZoomLevel}&c=${companyInitialCenter}`;
     } else   {
-      // console.log("hit-sidenavbar-compo")
+       console.log("yy-hit-sidenavbar-compo3")
       newUrl = `${window.location.pathname}?t=${selectedValue}&sn=${isSideNavOpen}&sn2=${isCompanySideNavOpen}&lyrs=${companyLyrs}&z=${companyZoomLevel}&c=${companyInitialCenter}`;
     }
-    window.history.replaceState({}, "", newUrl);
+    // window.history.replaceState({}, "", newUrl);
+     updateWindowsHistory(newUrl);
   };
 
   const resetAllFilters =()=>{

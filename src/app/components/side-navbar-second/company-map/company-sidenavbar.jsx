@@ -41,6 +41,7 @@ import  Image  from 'next/image';
 import CompanyTreeView from "./company-tree-view";
 import CMapFCompanyAddlock from './company-fcompany-popup';
 import AccordionItemWithOutEye from "../../common-comp/accordion-without-eye";
+import { updateWindowsHistory } from "@/app/utils/helpers/window-history-replace";
 
 
 const CompanySideNavbar = () => {
@@ -113,7 +114,8 @@ const CompanySideNavbar = () => {
     let newUrl;
     newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=false&lyrs=${companyLyrs}&z=${companyZoomLevel}&c=${companyInitialCenter}`;
 
-    window.history.replaceState({}, "", newUrl);
+    // window.history.replaceState({}, "", newUrl);
+     updateWindowsHistory(newUrl);
     dispatch(setIsCompanySideNavOpen(false));
   };
 

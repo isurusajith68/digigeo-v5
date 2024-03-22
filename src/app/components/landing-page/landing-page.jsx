@@ -23,6 +23,7 @@ import {
   setAreaMiningArea,
   setAreaZoomMode,
   setIsAreaSideNavOpen,
+  setareaSelectedAreaId,
 } from "../../../store/area-map/area-map-slice";
 // import { setIsPropertiesSideNavOpen } from "@/store/properties-map/properties-map-slice";
 import { setIsPropertiesSideNavOpen } from "../../../store/properties-map/properties-map-slice";
@@ -52,6 +53,7 @@ export const LandingPage = () => {
   const mapCenter = searchParams.get("c");
   const areaName = searchParams.get("ma");
   const areaCountry = searchParams.get("co");
+  const areaid = searchParams.get("aid");
 
   useEffect(() => {
      
@@ -60,7 +62,10 @@ export const LandingPage = () => {
   }, []);
 
   const updateRedux = async () => {
+    console.log("yy-update redux-init")
     if (mapType) {
+       console.log("yy-update redux-init-areaid",areaid)
+      dispatch(setareaSelectedAreaId(areaid));
       dispatch(setAreaZoomMode("custom"));
       dispatch(setSelectedMap(mapType));
       switch (mapType) {
@@ -126,8 +131,8 @@ export const LandingPage = () => {
             dispatch(setPropertiesInitialCenter(tmpMapCenter4));
           break;
       }
-      const newUrl = `${window.location.pathname}?t=${mapType}&sn=${isNavOpen}&sn2=${isSecondNavOpen}&lyrs=${mapLyrs}&z=${mapZoom}&c=${mapCenter}`;
-      window.history.replaceState({}, "", newUrl);
+      // const newUrl = `${window.location.pathname}?t=${mapType}&sn=${isNavOpen}&sn2=${isSecondNavOpen}&lyrs=${mapLyrs}&z=${mapZoom}&c=${mapCenter}`;
+      // window.history.replaceState({}, "", newUrl);
     }
   };
 

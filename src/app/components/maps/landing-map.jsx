@@ -66,6 +66,7 @@ import LandingMapSideNavbar from "../side-navbar-second/landing-map/landing-side
 import { Spinner } from "@nextui-org/react";
 import DialogStartup from "@/app/utils/dialog/dialog-startup";
 import MovingBorder from "@/app/utils/moving-border/moving-border";
+import { updateWindowsHistoryLmap } from "@/app/utils/helpers/window-history-replace";
 
 const fill = new Fill();
 const stroke = new Stroke({
@@ -943,6 +944,8 @@ export const LandingMap = () => {
   // init useeffect
   useEffect(() => {
     // mouseScrollEvent();
+    console.log("yy-lmap -init") 
+
     getSyncPropertiesGeometry();
   }, []);
 
@@ -971,16 +974,13 @@ export const LandingMap = () => {
       });
   }, [fPropVectorLayerRef?.current]);
 
-  useEffect(() => {
-    let newUrl;
-    newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isLandingMapSideNavOpen}&lyrs=${mapLyrs}&z=${zoom}&c=${center}`;
-    // if (areaName == "") {
-    //   newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isLandingMapSideNavOpen}&lyrs=${mapLyrs}&z=${zoom}&c=${center}`;
-    // } else {
-    //   newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isLandingMapSideNavOpen}&lyrs=${mapLyrs}&z=${zoom}&c=${center}&co=${areaCountry}&ma=${areaName}`;
-    // }
-    window.history.replaceState({}, "", newUrl);
-  }, [zoom, center]);
+  // useEffect(() => {
+  //   console.log("yy-lmap-url1")
+  //   let newUrl;
+  //   newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isLandingMapSideNavOpen}&lyrs=${mapLyrs}&z=${zoom}&c=${center}`;
+   
+  //   window.history.replaceState({}, "", newUrl);
+  // }, [zoom, center]);
 
   const mouseScrollEvent = useCallback(
     (event) => {
@@ -1019,7 +1019,7 @@ export const LandingMap = () => {
 
       // console.log("mapRef", mapRef.current?.getZoom());
       const handleMoveEnd = () => {
-        // console.log("map", map);
+         console.log("yy-url lmap00" );
         const tmpZoomLevel = map.getView().getZoom();
         const tmpinitialCenter = map.getView().getCenter();
         dispatch(setAreaZoomLevel(tmpZoomLevel));
@@ -1028,12 +1028,19 @@ export const LandingMap = () => {
         setCenter(tmpinitialCenter);
 
         setCenteredAreaViewScales(tmpinitialCenter);
+
+        //  let newUrl;
+        //   newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isLandingMapSideNavOpen}&lyrs=${mapLyrs}&z=${tmpZoomLevel}&c=${tmpinitialCenter}`;
+        
+          // window.history.replaceState({}, "", newUrl);
+                updateWindowsHistoryLmap(  {isSideNavOpen,lyrs:mapLyrs,zoom:tmpZoomLevel,center:tmpinitialCenter,sidenav2:isLandingMapSideNavOpen});
+
+
         // router.push(
         //   `/?t=${selectedMap}&sn=${isSideNavOpen}&lyrs=${mapLyrs}&z=${tmpZoomLevel}&c=${tmpinitialCenter}`
         // );
         // console.log("tmpinitialCenter", tmpinitialCenter);
         // const newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&lyrs=${mapLyrs}&z=${tmpZoomLevel}&c=${tmpinitialCenter}`;
-        // window.history.replaceState({}, "", newUrl);
       };
       if (mapViewScaleReducer.mapViewScales.length > 0) {
         map?.on("moveend", handleMoveEnd);
@@ -1052,11 +1059,11 @@ export const LandingMap = () => {
   //   const newUrl = `${
   //     window.location.pathname
   //   }?t=${selectedMap}&sn=${!tmpValue}&sn2=${isLandingMapSideNavOpen}&lyrs=${mapLyrs}&z=${landingMapZoomLevel}&c=${landingMapInitialCenter}`;
-  //   window.history.replaceState({}, "", newUrl);
   //   // dispatch(setUrlUpdate());
   // };
 
   const collapsibleBtnHandler = () => {
+     console.log("yy-lmap-url2")
     const tmpValue = String(isSideNavOpen).toLowerCase() === "true";
     dispatch(setIsSideNavOpen(!tmpValue));
     let newUrl;
@@ -1065,24 +1072,31 @@ export const LandingMap = () => {
       window.location.pathname
     }?t=${selectedMap}&sn=${!tmpValue}&sn2=${isLandingMapSideNavOpen}&lyrs=${mapLyrs}&z=${landingMapZoomLevel}&c=${landingMapInitialCenter}`;
 
-    window.history.replaceState({}, "", newUrl);
+    // window.history.replaceState({}, "", newUrl);
+      updateWindowsHistoryLmap(  {isSideNavOpen,lyrs:mapLyrs,zoom:landingMapZoomLevel,center:center,sidenav2:isLandingMapSideNavOpen});
+
+      
     // dispatch(setUrlUpdate());
   };
 
   const setLyrs = (lyrs) => {
+    
     dispatch(setAreaLyrs(lyrs));
     let newUrl;
     newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isLandingMapSideNavOpen}&lyrs=${lyrs}&z=${landingMapZoomLevel}&c=${landingMapInitialCenter}`;
     // if (areaName == "") {
-    //   newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isLandingMapSideNavOpen}&lyrs=${lyrs}&z=${landingMapZoomLevel}&c=${landingMapInitialCenter}`;
+    // newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isLandingMapSideNavOpen}&lyrs=${lyrs}&z=${landingMapZoomLevel}&c=${landingMapInitialCenter}`;
     // } else {
     //   newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isLandingMapSideNavOpen}&lyrs=${lyrs}&z=${landingMapZoomLevel}&c=${landingMapInitialCenter} `;
     // }
-    window.history.replaceState({}, "", newUrl);
+    // window.history.replaceState({}, "", newUrl);
+             updateWindowsHistoryLmap(  {isSideNavOpen,lyrs:lyrs,zoom:landingMapZoomLevel,center:landingMapInitialCenter,sidenav2:isLandingMapSideNavOpen});
   };
   const openAreaNav = () => {
+     console.log("yy-lmap-url4")
     const newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=true&lyrs=${mapLyrs}&z=${landingMapZoomLevel}&c=${landingMapInitialCenter}`;
-    window.history.replaceState({}, "", newUrl);
+    // window.history.replaceState({}, "", newUrl);
+     updateWindowsHistory(newUrl);
     dispatch(setIsAreaSideNavOpen(true));
   };
 

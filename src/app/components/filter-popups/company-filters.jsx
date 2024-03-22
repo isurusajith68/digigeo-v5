@@ -157,7 +157,8 @@ const CompanyFilter = ({ isOpenIn, closePopup }) => {
         dispatch(setcompanyName(company));
     dispatch(setcompanyZoomMode("extent"));
     const newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=true&lyrs=${companyLyrs}&z=${companyZoomLevel}&c=${companyInitialCenter}`;
-    window.history.replaceState({}, "", newUrl);
+    updateWindowsHistory(newUrl);
+    //window.history.replaceState({}, "", newUrl);
     dispatch(setIsCompanySideNavOpen(true));
     dispatch(setcompanyStockcode(stockcode));
     closePopup();

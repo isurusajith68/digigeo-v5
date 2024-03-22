@@ -37,6 +37,7 @@ import AreaTreeView from "./area-tree-view";
 import FeaturedCompanyDetailDiv from "./featured-company-detail-div";
 import GeoJSON from "ol/format/GeoJSON";
 import AreaFCompanyPopup from "./area-fcompany-popup";
+import { updateWindowsHistory } from "@/app/utils/helpers/window-history-replace";
 
 const AreaSideNavbar = () => {
   let pathname = "";
@@ -112,7 +113,8 @@ const AreaSideNavbar = () => {
     } else {
       newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=false&lyrs=${areaLyrs}&z=${areaZoomLevel}&c=${areaInitialCenter}&co=${areaCountry}&ma=${areaName}`;
     }
-    window.history.replaceState({}, "", newUrl);
+    // window.history.replaceState({}, "", newUrl);
+     updateWindowsHistory(newUrl);
     dispatch(setIsAreaSideNavOpen(false));
   };
   const getFeaturedCompanyDetails = async () => {

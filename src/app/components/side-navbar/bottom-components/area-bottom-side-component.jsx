@@ -178,16 +178,18 @@ const AreaBottomSideComp = () => {
   );
 
   useEffect(()=>{
-    console.log("xx-areaCurrentScale",areaCurrentScale)
+    console.log("xx-areaCurrentScale",areaCurrentScale,areaMapViewScales)
     // mapViewScaleReducer.mapViewScales?.[0]?.claimscale > areaCurrentScale ?  setclaimsVisibilityState(true): setclaimsVisibilityState(false)
-    areaMapViewScales.claimscale > areaCurrentScale ?  setclaimsVisibilityState(true): setclaimsVisibilityState(false)
-    areaMapViewScales.proplayerscale > areaCurrentScale ?  setpropertyVisibilityState(true): setpropertyVisibilityState(false)
-    areaMapViewScales.assetscale > areaCurrentScale ?  setassetVisibilityState(true): setassetVisibilityState(false)
-   
+    if (areaMapViewScales) {
+      console.log("xx-if bot-compo-areaMapViewScales")
+      areaMapViewScales.claimscale > areaCurrentScale ? setclaimsVisibilityState(true) : setclaimsVisibilityState(false)
+      areaMapViewScales.proplayerscale > areaCurrentScale ? setpropertyVisibilityState(true) : setpropertyVisibilityState(false)
+      areaMapViewScales.assetscale > areaCurrentScale ? setassetVisibilityState(true) : setassetVisibilityState(false)
+    }
     
    // console.log("areaCurrentScale-mapViewScaleReducer ",mapViewScaleReducer.mapViewScales?.[0]?.claimscale)
 
-  },[areaCurrentScale])
+  },[areaCurrentScale,areaMapViewScales])
 
   useEffect(() => {
     if (areaSyncPropLayerVisible && areaSyncClaimLinkLayerVisible) {

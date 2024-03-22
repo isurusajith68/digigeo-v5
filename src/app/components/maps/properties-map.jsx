@@ -56,6 +56,7 @@ import {
 import { toLonLat } from "ol/proj";
 import { METERS_PER_UNIT } from "ol/proj/Units";
 import { commodityMap_tbl_syncProperty_commodity_VectorLayerStyleFunction } from "./syn-prop-cluster-styles";
+import { updateWindowsHistory } from "@/app/utils/helpers/window-history-replace";
 
 const fill = new Fill();
 const stroke = new Stroke({
@@ -543,7 +544,10 @@ export const PropertiesMap = () => {
     // }
   }, [assetFeatures]);
 
+  //init useeffect
   useEffect(() => {
+    console.log("yy-pmap -init") 
+
     mouseScrollEvent();
   }, []);
 
@@ -570,12 +574,12 @@ export const PropertiesMap = () => {
     );
   }, [claimLinkVectorLayerRef.current]);
 
-  useEffect(() => {
-    let newUrl;
-    newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isPropertiesSideNavOpen}&lyrs=${propertiesLyrs}&z=${zoom}&c=${center}`;
+  // useEffect(() => {
+  //   let newUrl;
+  //   newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isPropertiesSideNavOpen}&lyrs=${propertiesLyrs}&z=${zoom}&c=${center}`;
 
-    window.history.replaceState({}, "", newUrl);
-  }, [zoom, center]);
+  //    updateWindowsHistory(newUrl);
+  // }, [zoom, center]);
 
   const mouseScrollEvent = useCallback((event) => {
     const map = mapRef.current;
@@ -589,6 +593,12 @@ export const PropertiesMap = () => {
       dispatch(setPropertiesInitialCenter(tmpinitialCenter));
       setZoom(tmpZoomLevel);
       setCenter(tmpinitialCenter);
+
+          let newUrl;
+    newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isPropertiesSideNavOpen}&lyrs=${propertiesLyrs}&z=${tmpZoomLevel}&c=${tmpinitialCenter}`;
+
+     updateWindowsHistory(newUrl);
+
       // router.push(
       //   `/?t=${selectedMap}&sn=${isSideNavOpen}&lyrs=${mapLyrs}&z=${tmpZoomLevel}&c=${tmpinitialCenter}`
       // );
@@ -611,7 +621,8 @@ export const PropertiesMap = () => {
     newUrl = `${
       window.location.pathname
     }?t=${selectedMap}&sn=${!tmpValue}&sn2=${isPropertiesSideNavOpen}&lyrs=${propertiesLyrs}&z=${propertiesZoomLevel}&c=${propertiesInitialCenter}`;
-    window.history.replaceState({}, "", newUrl);
+    // window.history.replaceState({}, "", newUrl);
+     updateWindowsHistory(newUrl);
     // dispatch(setUrlUpdate());
   };
 
@@ -619,7 +630,8 @@ export const PropertiesMap = () => {
     dispatch(setPropertiesLyrs(lyrs));
     let newUrl;
     newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isPropertiesSideNavOpen}&lyrs=${lyrs}&z=${propertiesZoomLevel}&c=${propertiesInitialCenter}`;
-    window.history.replaceState({}, "", newUrl);
+    // window.history.replaceState({}, "", newUrl);
+     updateWindowsHistory(newUrl);
   };
 
   const image = new Icon({

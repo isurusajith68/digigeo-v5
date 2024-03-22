@@ -72,8 +72,14 @@ const AreaFilterAreaListItemBrowser = ({areaList, countryHandler, areaHandler ,s
 
         // console.log("qq1-country",a.country)
         // console.log("qq1-area", a.area_name);
+          setstartSearch(true)
+      }else{
+          setstartSearch(false)
+          console.log("crit-setstartSearch(false) at amap")
       }
-       setstartSearch(true)
+      // setstartSearch(false)
+     //probable problem here
+     
     }
 
     //  const p = selectedValue?.[0]?.toString()?.search(/#/)

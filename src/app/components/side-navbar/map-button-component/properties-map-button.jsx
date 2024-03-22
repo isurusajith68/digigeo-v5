@@ -23,6 +23,7 @@ import { setIsPropertiesSideNavOpen, setpropertySearchQuery,
   setsearchParamPropertyName,setsearchParamCountry,setsearchParamStateProv,
   setsearchParamMiningArea,setsearchParamAssetTypeList,setsearchParamCommodityList
 } from "../../../../store/properties-map/properties-map-slice";
+import { updateWindowsHistory } from "@/app/utils/helpers/window-history-replace";
 
 const PropertiesMapButton = ({ onClick }) => {
   let pathname = "";
@@ -83,7 +84,8 @@ const PropertiesMapButton = ({ onClick }) => {
   const openPropertiesNav = () => {
     let newUrl;
     newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=true&lyrs=${propertiesLyrs}&z=${propertiesZoomLevel}&c=${propertiesInitialCenter}`;
-    window.history.replaceState({}, "", newUrl);
+    // window.history.replaceState({}, "", newUrl);
+     updateWindowsHistory(newUrl);
     dispatch(setIsPropertiesSideNavOpen(true));
   };
 

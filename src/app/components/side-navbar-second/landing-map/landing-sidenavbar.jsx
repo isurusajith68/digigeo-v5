@@ -35,6 +35,7 @@ import AccordionItemWithEye from "../../common-comp/accordion-eye";
 import LmapFeaturedCompanyDetailDiv from "./featured-company-detail-div";
 import GeoJSON from "ol/format/GeoJSON";
 import LmapFCompanyPopup from "./lmap-fcompany-popup";
+import { updateWindowsHistory } from "@/app/utils/helpers/window-history-replace";
 
 const LandingMapSideNavbar = () => {
   let pathname = "";
@@ -121,13 +122,16 @@ const LandingMapSideNavbar = () => {
 
   const closeSecondNavBar = () => {
     // setIsSecondSideOpen(false);
+       console.log("yy-hit-2sidenavbar-lmap-compo")
+
     let newUrl;
     if (areaName == "") {
       newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=false&lyrs=${landingMapLyrs}&z=${landingMapZoomLevel}&c=${landingMapInitialCenter}`;
     } else {
       newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=false&lyrs=${landingMapLyrs}&z=${landingMapZoomLevel}&c=${landingMapInitialCenter}&co=${areaCountry}&ma=${areaName}`;
     }
-    window.history.replaceState({}, "", newUrl);
+    // window.history.replaceState({}, "", newUrl);
+     updateWindowsHistory(newUrl);
     dispatch(setIsLandingMapSideNavOpen(false));
   };
 

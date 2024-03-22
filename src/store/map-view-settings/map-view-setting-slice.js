@@ -9,7 +9,7 @@ const initialState = {
 export const fetchmapViewScales = createAsyncThunk(
   "mapViewScale/fetchmapViewScales",
   async () => {
-     
+    //  console.log("yy-mapvisibilityscales-loading")
     const res = await fetch(
       `https://atlas.ceyinfo.cloud/matlas/mapvisibilityscales`,
       {

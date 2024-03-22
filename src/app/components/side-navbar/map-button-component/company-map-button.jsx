@@ -25,6 +25,7 @@ import { Chip } from "@nextui-org/react";
 import PropertiesFilter from "../../filter-popups/properties-filters";
 import CompanyFilter from "../../filter-popups/company-filters";
 import { setIsCompanySideNavOpen,setcompanyId,setcompanyName, setcompanyStockcode} from "../../../../store/company-map/company-map-slice";
+import { updateWindowsHistory } from "@/app/utils/helpers/window-history-replace";
 
 const CompanyMapButton = ({ onClick }) => {
   let pathname = "";
@@ -80,7 +81,8 @@ const CompanyMapButton = ({ onClick }) => {
   const openCompanyNav = () => {
     let newUrl;
     newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=true&lyrs=${companyLyrs}&z=${companyZoomLevel}&c=${companyInitialCenter}`;
-    window.history.replaceState({}, "", newUrl);
+    // window.history.replaceState({}, "", newUrl);
+     updateWindowsHistory(newUrl);
     dispatch(setIsCompanySideNavOpen(true));
   };
     const onClickLocal=()=>{

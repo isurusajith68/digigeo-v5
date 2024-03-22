@@ -59,6 +59,7 @@ import {
 
 import { toLonLat } from "ol/proj";
 import { METERS_PER_UNIT } from "ol/proj/Units";
+import { updateWindowsHistory } from "@/app/utils/helpers/window-history-replace";
 
 const fill = new Fill();
 const stroke = new Stroke({
@@ -721,6 +722,8 @@ export const CompanyMap = () => {
   }, [assetFeatures]);
 
   useEffect(() => {
+    console.log("yy-cmap -init") 
+
     mouseScrollEvent();
   }, []);
 
@@ -746,12 +749,12 @@ export const CompanyMap = () => {
     fPropVectorLayerLabelRef.current?.setStyle(style);
   }, [fPropVectorLayerLabelRef.current]);
 
-  useEffect(() => {
-    let newUrl;
-    newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isCompanySideNavOpen}&lyrs=${companyLyrs}&z=${zoom}&c=${center}`;
+  // useEffect(() => {
+  //   let newUrl;
+  //   newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isCompanySideNavOpen}&lyrs=${companyLyrs}&z=${zoom}&c=${center}`;
 
-    window.history.replaceState({}, "", newUrl);
-  }, [zoom, center]);
+  //    updateWindowsHistory(newUrl);
+  // }, [zoom, center]);
 
   const mouseScrollEvent = useCallback((event) => {
     const map = mapRef.current;
@@ -765,6 +768,14 @@ export const CompanyMap = () => {
       dispatch(setCompanyInitialCenter(tmpinitialCenter));
       setZoom(tmpZoomLevel);
       setCenter(tmpinitialCenter);
+
+          newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isCompanySideNavOpen}&lyrs=${companyLyrs}&z=${tmpZoomLevel}&c=${tmpinitialCenter}`;
+
+         updateWindowsHistory(newUrl);
+      
+
+   // window.history.replaceState({}, "", newUrl);
+
       // router.push(
       //   `/?t=${selectedMap}&sn=${isSideNavOpen}&lyrs=${mapLyrs}&z=${tmpZoomLevel}&c=${tmpinitialCenter}`
       // );
@@ -787,7 +798,8 @@ export const CompanyMap = () => {
     newUrl = `${
       window.location.pathname
     }?t=${selectedMap}&sn=${!tmpValue}&sn2=${isCompanySideNavOpen}&lyrs=${companyLyrs}&z=${companyZoomLevel}&c=${companyInitialCenter}`;
-    window.history.replaceState({}, "", newUrl);
+    // window.history.replaceState({}, "", newUrl);
+     updateWindowsHistory(newUrl);
     // dispatch(setUrlUpdate());
   };
 
@@ -795,7 +807,8 @@ export const CompanyMap = () => {
     dispatch(setCompanyLyrs(lyrs));
     let newUrl;
     newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isCompanySideNavOpen}&lyrs=${lyrs}&z=${companyZoomLevel}&c=${companyInitialCenter}`;
-    window.history.replaceState({}, "", newUrl);
+    // window.history.replaceState({}, "", newUrl);
+     updateWindowsHistory(newUrl);
   };
 
   const image = new Icon({

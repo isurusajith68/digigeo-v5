@@ -19,10 +19,11 @@ import {
 
 import { Autocomplete, AutocompleteItem } from "@nextui-org/react";
 import AreaFilterAreaListItemBrowser from "./area-filter-arealist-item-browser";
+import { updateWindowsHistoryAmap } from "@/app/utils/helpers/window-history-replace";
 
 const AreaFilter = ({ isOpenIn, closePopup }) => {
   const dispatch = useDispatch();
-
+ 
   const [isOpen, setIsOpen] = useState(false);
   // const [country, setCountry] = useState("");
   const [country, setCountry] = useState("");
@@ -38,6 +39,7 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
   const [itemsPerPage, setitemsPerPage] = useState(10);
   const [searchQuery, setsearchQuery] = useState("");
   const [mapViewScale, setmapViewScale] = useState({});
+  const [areaId, setareaId] = useState(0);
 
   const selectedMap = useSelector(
     (state) => state.mapSelectorReducer.selectedMap
@@ -57,7 +59,7 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
 
   const areaName = useSelector((state) => state.areaMapReducer.areaMiningArea);
   const areaCountry = useSelector((state) => state.areaMapReducer.areaCountry);
- const mapViewScaleReducer = useSelector((state) => state.mapViewScaleReducer);
+ //const mapViewScaleReducer = useSelector((state) => state.mapViewScaleReducer);
 
   const customStyles = {
     overlay: {
@@ -233,8 +235,10 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
      
     if (country && miningArea) {
       dispatch(setAreaZoomMode("extent"));
-      const newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=true&lyrs=${areaLyrs}&z=${areaZoomLevel}&c=${areaInitialCenter}&co=${country}&ma=${miningArea}`;
-      window.history.replaceState({}, "", newUrl);
+      //const newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=true&lyrs=${areaLyrs}&z=${areaZoomLevel}&c=${areaInitialCenter}&co=${country}&ma=${miningArea}&aid=${areaId}`;
+    
+      // window.history.replaceState({}, "", newUrl);
+      updateWindowsHistoryAmap(  {isSideNavOpen,areaLyrs,areaZoomLevel,areaInitialCenter,country,miningArea,areaId});
       dispatch(setIsAreaSideNavOpen(true));
       // dispatch(setAreaCountry("Canada"));
       // dispatch(setAreaMiningArea("Timmins"));
@@ -307,25 +311,27 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
     dispatch(setAreaMiningArea(""));
   };
 
-  const areaIdHandler=(areaid)=>{
+  const areaIdHandler = (areaid) => {
+    console.log("yy-areaIdHandler-filter",areaid)
     dispatch(setareaSelectedAreaId(areaid));
-    const mapViewScale1 = mapViewScaleReducer.mapViewScales.find(a => a.area_id == areaid)
-    if(mapViewScale1){
-       console.log("yy-if")
-      setmapViewScale(mapViewScale1)}
-    else{
-      console.log("yy-else")
-       setmapViewScale(mapViewScaleReducer.mapViewScales[0])
-    }
+    setareaId(areaid)
+    // const mapViewScale1 = mapViewScaleReducer.mapViewScales.find(a => a.area_id == areaid)
+    // if(mapViewScale1){
+    //    console.log("yy-if")
+    //   setmapViewScale(mapViewScale1)}
+    // else{
+    //   console.log("yy-else")
+    //    setmapViewScale(mapViewScaleReducer.mapViewScales[0])
+    // }
 
-    console.log("yy-mapViewScale1",mapViewScale1)
+    // console.log("yy-mapViewScale1",mapViewScale1)
 
   }
 
-  useEffect(()=>{
-    dispatch(setareaMapViewScales(mapViewScale));
-      // console.log("mapViewScale",mapViewScale)
-  },[mapViewScale])
+  // useEffect(()=>{
+  //   dispatch(setareaMapViewScales(mapViewScale));
+  //     // console.log("mapViewScale",mapViewScale)
+  // },[mapViewScale])
   return (
     <div>
       <Modal

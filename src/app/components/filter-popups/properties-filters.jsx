@@ -31,6 +31,7 @@ import {Badge, Avatar} from "@nextui-org/react";
 import {CheckIcon} from "../icons/checkicon";
 import {Input} from "@nextui-org/react";
 import PropertyFilterAssetItemBrowser from "./property-filter-asset-item-browser";
+import { updateWindowsHistory } from "@/app/utils/helpers/window-history-replace";
 
 const buildSqlWhereClause = (conditions) => {
 // const propName = {columnName:"propsearchcol" ,searchValue:propNameLikeParam,dataType:"string", matchType:"like",stringCompareFunc:"lower" , wildcard:"%", wildcardPosition:"both"}
@@ -380,7 +381,8 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
 
   const searchAction = async () => {
     const newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=true&lyrs=${propertiesLyrs}&z=${propertiesZoomLevel}&c=${propertiesInitialCenter}`;
-    window.history.replaceState({}, "", newUrl);
+    // window.history.replaceState({}, "", newUrl);
+     updateWindowsHistory(newUrl);
   
    // dispatch(setpropertyMapPropertyAssetIdCsv(getPropertyAssetIdCvs()));
     dispatch(setIsPropertiesSideNavOpen(true));
