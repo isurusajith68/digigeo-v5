@@ -32,6 +32,7 @@ const initialState = {
   areaCurrentScale: 5,
   areaSelectedAreaId: 0,
   areaMapViewScales: {},
+  
 };
 
 const areaMapSlice = createSlice({

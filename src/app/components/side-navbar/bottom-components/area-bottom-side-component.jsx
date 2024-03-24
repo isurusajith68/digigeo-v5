@@ -44,7 +44,7 @@ const AreaBottomSideComp = () => {
   const [propertyVisibilityState, setpropertyVisibilityState] =  useState(true);
   const [assetVisibilityState, setassetVisibilityState] =  useState(true);
 
-  const router = useRouter();
+ 
   try {
     pathname = window.location.href;
   } catch (error) {}
@@ -178,7 +178,7 @@ const AreaBottomSideComp = () => {
   );
 
   useEffect(()=>{
-    console.log("xx-areaCurrentScale",areaCurrentScale,areaMapViewScales)
+    console.log("xx1-areaCurrentScale",areaCurrentScale,areaMapViewScales)
     // mapViewScaleReducer.mapViewScales?.[0]?.claimscale > areaCurrentScale ?  setclaimsVisibilityState(true): setclaimsVisibilityState(false)
     if (areaMapViewScales) {
       console.log("xx-if bot-compo-areaMapViewScales")

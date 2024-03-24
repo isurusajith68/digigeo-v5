@@ -129,7 +129,7 @@ const landingMapMapSlice = createSlice({
       state.landingCurrentScale = action.payload;
     },
    
-    setlandingMapViesScales: (state, action) => {
+    setlandingMapViewScales: (state, action) => {
      
       state.landingMapViewScales = action.payload;
     },

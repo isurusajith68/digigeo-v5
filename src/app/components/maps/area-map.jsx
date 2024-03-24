@@ -372,6 +372,7 @@ export const AreaMap = () => {
   const [syncPropertyObject, setsyncPropertyObject] = useState();
   const [claimObject, setclaimObject] = useState();
    const [mapUnits, setmapUnits] = useState("m");
+   const [mapViewScales, setmapViewScales] = useState([]);
 
   useEffect(() => {
     if (navigatedFPropertyRef.current) {
@@ -802,13 +803,13 @@ export const AreaMap = () => {
   }, [fPropVectorLayerRef?.current]);
 
   useEffect(() => {
-    console.log("yy-mew-areaSelectedAreaId",areaSelectedAreaId)
+    //console.log("yy-mew-areaSelectedAreaId",areaSelectedAreaId)
 
     if(areaSelectedAreaId){
-         console.log("yy-yy")
+        // console.log("yy-yy")
         updateWindowsHistoryAmap(  {isSideNavOpen,areaLyrs:mapLyrs,areaZoomLevel:zoom,areaInitialCenter:center,country:areaCountry,miningArea:areaName,areaId:areaSelectedAreaId});
       }else{
-        console.log("yy-xx")
+        //console.log("yy-xx")
       }
 
     // let newUrl;
@@ -838,7 +839,7 @@ export const AreaMap = () => {
   
   const mouseScrollEvent = useCallback((event) => {
     const map = mapRef.current;
-      console.log("yy-yy1")
+     // console.log("yy-yy1")
     // console.log("mapRef", mapRef.current?.getZoom());
 
 
@@ -1145,6 +1146,20 @@ export const AreaMap = () => {
       stroke: new Stroke({
         color: "blue",
         width: 1,
+      }),
+            text: new Text({
+        //       // textAlign: align == "" ? undefined : align,
+        //       // textBaseline: baseline,
+        font: "20px serif",
+        text: feature.get("area_name") + "-" + feature.get("area_id"),
+        fill: new Fill({ color: "red" }),
+        // stroke: new Stroke({ color: outlineColor, width: outlineWidth }),
+        offsetX: 2,
+        offsetY: -13,
+        // placement: placement,
+        // maxAngle: maxAngle,
+        // overflow: overflow,
+        // rotation: rotation,
       }),
     });
 
@@ -1480,28 +1495,35 @@ export const AreaMap = () => {
     setmapScale(scale.toLocaleString());
   };
 
+  useEffect(()=>{
+
+    if(mapViewScaleReducer?.mapViewScales?.length>0){
+      setmapViewScales(mapViewScaleReducer.mapViewScales)
+    }
+  },[mapViewScaleReducer.mapViewScales])
+
 
   useEffect(() => {
-       console.log("xx-0- setareaMapViewScales ",areaSelectedAreaId)
+      // console.log("xx-0- ue-areaSelectedAreaId-setareaMapViewScales ",areaSelectedAreaId)
     if(areaSelectedAreaId !=undefined &&   areaSelectedAreaId !=0){
-      const mapViewScale1 = mapViewScaleReducer.mapViewScales.find(a => a.area_id == areaSelectedAreaId)
+      const mapViewScale1 = mapViewScales.find(a => a.area_id == areaSelectedAreaId)
       
       if (mapViewScale1) {
-        console.log("xx-88if-amap- setareaMapViewScales ",mapViewScale1)
+       // console.log("xx-88if-amap- setareaMapViewScales ",mapViewScale1)
         dispatch(setareaMapViewScales(mapViewScale1));
       }
       else{
-        console.log("xx-crit- no aid yy-else",mapViewScaleReducer.mapViewScales)
-        dispatch(setareaMapViewScales(mapViewScaleReducer.mapViewScales[0]))
+       // console.log("xx-crit- no aid yy-else",mapViewScales)
+        dispatch(setareaMapViewScales(mapViewScales[0]))
       }
 
-      console.log("xx-99mapViewScale1-set",mapViewScale1)
+      //console.log("xx-99mapViewScale1-set",mapViewScale1)
 
   }else{
        console.log("xx-xxnotmapViewScale1-set",areaSelectedAreaId)
   }
     
-  },[areaSelectedAreaId])
+  },[areaSelectedAreaId,mapViewScales])
 
  
  

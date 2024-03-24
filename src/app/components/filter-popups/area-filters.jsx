@@ -14,7 +14,7 @@ import {
   setAreaZoomMode,
   setIsAreaSideNavOpen,
   setareaSelectedAreaId,
-  setareaMapViewScales,
+
 } from "../../../store/area-map/area-map-slice";
 
 import { Autocomplete, AutocompleteItem } from "@nextui-org/react";

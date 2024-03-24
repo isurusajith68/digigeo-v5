@@ -24,12 +24,25 @@ import {
   setlandingMapFpropLayerVisible,
   setlandingMapSyncClaimLinkLayerVisible,
   setlandingMapSyncPropLayerVisible,
+  setlandingAssetLayerAlwaysVisible,
 } from "@/store/landing-map/landing-map-slice";
 import Image from "next/image";
+
+import LayerVisibleVisibilityStateDiv from './../../common-comp/layer-visible-eye-visibility-state';
+import LayerVisibleLockVisibilityDiv from './../../common-comp/layer-visible-eye-with-lock-with-visibility';
+import AccordionItemWithEyeWithLockVisibility from './../../common-comp/accordion-eye-with-lock-with-visibilty';
+
+
 
 const LandingBottomSideComp = () => {
   let pathname = "";
   const dispatch = useDispatch();
+
+  const [claimsVisibilityState, setclaimsVisibilityState] =  useState(true);
+  const [propertyVisibilityState, setpropertyVisibilityState] =  useState(true);
+  const [assetVisibilityState, setassetVisibilityState] =  useState(true);
+
+
 
   const [property_claimLinkGroupVisible, setproperty_claimLinkGroupVisible] =
     useState(true);
@@ -118,6 +131,11 @@ const LandingBottomSideComp = () => {
     (state) => state.landingMapReducer.landingMapAssetOccurrenceVisible
   );
 
+    const landingAssetLayerAlwaysVisible = useSelector(
+    (state) => state.landingMapReducer.landingAssetLayerAlwaysVisible
+  );
+
+
   //asset type visibility functions
   const setlandingMapAssetOpMineVisibility = (e) => {
     dispatch(setlandingMapAssetOpMineVisible(!landingMapAssetOpMineVisible));
@@ -134,6 +152,10 @@ const LandingBottomSideComp = () => {
   const setlandingMapAssetOccurrenceVisibility = (e) => {
     dispatch(setlandingMapAssetOccurrenceVisible(!landingMapAssetOccurrenceVisible));
   };
+    const setlandingAssetLayerAlwaysVisibility = (e) => {
+    dispatch(setlandingAssetLayerAlwaysVisible(!landingAssetLayerAlwaysVisible));
+  };
+
 
   useEffect(() => {
     if (landingMapSyncPropLayerVisible && landingMapSyncClaimLinkLayerVisible) {
@@ -177,6 +199,28 @@ const LandingBottomSideComp = () => {
     }
   };
 
+    const landingCurrentScale = useSelector(
+    (state) => state.landingMapReducer.landingCurrentScale
+  );
+    const landingMapViewScales = useSelector(
+    (state) => state.landingMapReducer.landingMapViewScales
+  );
+ 
+  
+  useEffect(()=>{
+    console.log("xx1-landingCurrentScale",landingCurrentScale,landingMapViewScales)
+    // mapViewScaleReducer.mapViewScales?.[0]?.claimscale > areaCurrentScale ?  setclaimsVisibilityState(true): setclaimsVisibilityState(false)
+    if (landingMapViewScales) {
+      console.log("xx-if bot-compo-landingMapViewScales")
+      landingMapViewScales.claimscale > landingCurrentScale ? setclaimsVisibilityState(true) : setclaimsVisibilityState(false)
+      landingMapViewScales.proplayerscale > landingCurrentScale ? setpropertyVisibilityState(true) : setpropertyVisibilityState(false)
+      landingMapViewScales.assetscale > landingCurrentScale ? setassetVisibilityState(true) : setassetVisibilityState(false)
+    }
+    
+   // console.log("areaCurrentScale-mapViewScaleReducer ",mapViewScaleReducer.mapViewScales?.[0]?.claimscale)
+
+  },[landingCurrentScale,landingMapViewScales])
+
   return (
     <div className="flex flex-col w-full h-full grow">
       <div className="ml-2 mr-2 flex items-center justify-center border-b-2">
@@ -185,10 +229,13 @@ const LandingBottomSideComp = () => {
       <div className="overflow-y-auto max-h-[53vh]">
         <Accordion>
           <div className="flex flex-col gap-1">
-            <AccordionItemWithEye
+            <AccordionItemWithEyeWithLockVisibility
               title="Assets"
               onClick={setlandingMapAssetLayerVisibility}
               eyeState={landingMapAssetLayerVisible}
+              onLockClick={setlandingAssetLayerAlwaysVisibility}
+              lockState={landingAssetLayerAlwaysVisible}
+              visibilityState={assetVisibilityState}
             >
               <div className="flex flex-col gap-1">
                 <LayerVisibleDiv
@@ -252,7 +299,7 @@ const LandingBottomSideComp = () => {
                   />
                 </LayerVisibleDiv>
               </div>
-            </AccordionItemWithEye>
+            </AccordionItemWithEyeWithLockVisibility>
             <AccordionItemWithEye
               title="Properties"
               onClick={setPropertiesGroupEye}

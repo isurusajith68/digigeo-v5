@@ -27,6 +27,8 @@ import {
 import {
   setIsLandingMapSideNavOpen,
   setFPropertyFeatures,
+  setlandingCurrentScale,
+  setlandingMapViewScales,
   // setclickassetObject,
   // setclickclaimObject,
   // setclickfPropertyObject,
@@ -76,6 +78,7 @@ const stroke = new Stroke({
 
 const areaMApPropertyVectorRendererFuncV2 = (pixelCoordinates, state) => {
   //  console.log("sssss", state);
+  
   const context = state.context;
   const geometry = state.geometry.clone();
   geometry.setCoordinates(pixelCoordinates);
@@ -85,7 +88,7 @@ const areaMApPropertyVectorRendererFuncV2 = (pixelCoordinates, state) => {
   //new code
   const svgtext2 = state.feature.get("hatch");
   //  const img = new Image();
-
+ 
   // img.onload = function () {
   //   feature.set("flag", img);
   // };
@@ -378,7 +381,7 @@ export const LandingMap = () => {
   const [mapUnits, setmapUnits] = useState("m");
 
   const [maxResolutionFProp, setmaxResolutionFProp] = useState(300);
-  const [maxResolutionSyncProps, setmaxResolutionSyncProps] = useState(300);
+ const [maxResolutionClaims, setmaxResolutionClaims] = useState(300);
   const [maxResolutionAssets, setmaxResolutionAssets] = useState(300);
   const [maxResolutionSyncOutlines, setmaxResolutionSyncOutlines] =
     useState(300);
@@ -754,7 +757,7 @@ export const LandingMap = () => {
     const scale = mapRatioScale({ map: mapRef.current });
     // setmapScale(scale.toLocaleString( ));
     setmapScale(scale.toLocaleString());
-
+     dispatch(setlandingCurrentScale(scale ));
     if (fPropVectorLayerRef.current.isVisible()) {
       // if (fPropSourceRef?.current?.getFeatures().length > 0) {
       //   console.log("setIsLandingMapSideNavOpen(true",)
@@ -829,6 +832,10 @@ export const LandingMap = () => {
   );
   const assetFeatures = useSelector(
     (state) => state.landingMapReducer.assetFeatures
+  );
+
+   const landingAssetLayerAlwaysVisible = useSelector(
+    (state) => state.landingMapReducer.landingAssetLayerAlwaysVisible
   );
 
   // const areaName = useSelector((state) => state.landingMapReducer.areaMiningArea);
@@ -999,27 +1006,42 @@ export const LandingMap = () => {
             closestArea = { area: a, d };
           }
         });
+          dispatch(setlandingMapViewScales(closestArea.area));
+        
+        setcurcenteredareaid(closestArea.area.area_id);
+        // console.log("aa-curAreaId",closestArea.area.area_id)
         const r = getMapResolution(
           closestArea.area.featuredpropscale,
           mapUnits
         );
         // console.log("rrr",r,closestArea.area  )
-        setcurcenteredareaid(closestArea.area.area_id);
+       
+        // console.log("aa-featuredpropscale",closestArea.area.featuredpropscale)
+        //featured prop max-scale
         setmaxResolutionFProp(r);
 
         const r1 = getMapResolution(
           closestArea.area.propoutlinescale,
           mapUnits
         );
+       // console.log("aa-propoutlinescale",closestArea.area.propoutlinescale)
+        //prop outline max-res
         setmaxResolutionSyncOutlines(r1);
+
+        //asset max-res
+       // console.log("aa-assetscale",closestArea.area.assetscale)
         const r2 = getMapResolution(closestArea.area.assetscale, mapUnits);
-        setmaxResolutionSyncOutlines(r2);
+        setmaxResolutionAssets(r2);
+        //asset max-res
+       // console.log("aa-claimscale",closestArea.area.claimscale)
+        const r3 = getMapResolution(closestArea.area.claimscale, mapUnits);
+        setmaxResolutionClaims(r3);
         //
       };
 
       // console.log("mapRef", mapRef.current?.getZoom());
       const handleMoveEnd = () => {
-         console.log("yy-url lmap00" );
+        // console.log("yy-url lmap00" );
         const tmpZoomLevel = map.getView().getZoom();
         const tmpinitialCenter = map.getView().getCenter();
         dispatch(setAreaZoomLevel(tmpZoomLevel));
@@ -1033,7 +1055,7 @@ export const LandingMap = () => {
         //   newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isLandingMapSideNavOpen}&lyrs=${mapLyrs}&z=${tmpZoomLevel}&c=${tmpinitialCenter}`;
         
           // window.history.replaceState({}, "", newUrl);
-                updateWindowsHistoryLmap(  {isSideNavOpen,lyrs:mapLyrs,zoom:tmpZoomLevel,center:tmpinitialCenter,sidenav2:isLandingMapSideNavOpen});
+        updateWindowsHistoryLmap(  {isSideNavOpen,lyrs:mapLyrs,zoom:tmpZoomLevel,center:tmpinitialCenter,sidenav2:isLandingMapSideNavOpen});
 
 
         // router.push(
@@ -1915,13 +1937,14 @@ export const LandingMap = () => {
             ref={claimVectorImgLayerRef}
             style={styleFunctionClaim}
             minResolution={0}
-            maxResolution={150}
+            maxResolution={maxResolutionClaims ?? 150}
           >
             <olSourceVector
               ref={claimVectorImgSourceRef}
-              // format={new GeoJSON()}
+              // format={new GeoJSON()}  
               strategy={bbox}
               loader={claimLoaderFunc}
+             
             ></olSourceVector>
           </olLayerVectorImage>
 
@@ -1943,8 +1966,8 @@ export const LandingMap = () => {
           <olLayerVector
             ref={assetLayerRef}
             style={areaMapAssetVectorLayerStyleFunction}
-            minResolution={0}
-            maxResolution={maxResolutionAssets}
+            minResolution={0} 
+            maxResolution={landingAssetLayerAlwaysVisible ? 40075016 : maxResolutionAssets}
           >
             <olSourceVector
               ref={assetSourceRef}
