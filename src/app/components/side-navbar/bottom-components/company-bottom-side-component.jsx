@@ -41,6 +41,7 @@ const CompanyBottomSideComp = () => {
  
   const [claimsVisibilityState, setclaimsVisibilityState] =  useState(true);
   const [propertyOutLineVisibilityState, setpropertyOutLineVisibilityState] =  useState(false);
+  const [propertyPointLineVisibilityState, setpropertyPointLineVisibilityState] =  useState(false);
   const [assetVisibilityState, setassetVisibilityState] =  useState(true);
 
   const [company_claimLinkGroupVisible, setcompany_claimLinkGroupVisible] =
@@ -217,6 +218,29 @@ const CompanyBottomSideComp = () => {
   }, [companySyncPropLayerVisible, companySyncClaimLinkLayerVisible]);
 
     
+    const companyCurrentScale = useSelector(
+    (state) => state.companyMapReducer.companyCurrentScale
+  );
+    const companyMapViewScales = useSelector(
+    (state) => state.companyMapReducer.companyMapViewScales
+  );
+
+  useEffect(() => {
+    console.log("qq-landingCurrentScale", companyCurrentScale, companyMapViewScales)
+    // mapViewScaleReducer.mapViewScales?.[0]?.claimscale > areaCurrentScale ?  setclaimsVisibilityState(true): setclaimsVisibilityState(false)
+    if (companyMapViewScales) {
+      //console.log("xx-if bot-compo-landingMapViewScales")
+      companyMapViewScales.claimscale > companyCurrentScale ? setclaimsVisibilityState(true) : setclaimsVisibilityState(false)
+      companyMapViewScales.propoutlinescale > companyCurrentScale ? setpropertyOutLineVisibilityState(true) : setpropertyOutLineVisibilityState(false)
+      companyMapViewScales.proplayerscale > companyCurrentScale ? setpropertyPointLineVisibilityState(true) : setpropertyPointLineVisibilityState(false)
+      companyMapViewScales.assetscale > companyCurrentScale ? setassetVisibilityState(true) : setassetVisibilityState(false)
+    }
+
+    // console.log("areaCurrentScale-mapViewScaleReducer ",mapViewScaleReducer.mapViewScales?.[0]?.claimscale)
+
+  }, [companyCurrentScale, companyMapViewScales])
+
+  
     
     return (
       <div className="flex flex-col w-full  h-full grow">
@@ -308,10 +332,11 @@ const CompanyBottomSideComp = () => {
                 eyeState={company_claimLinkGroupVisible}
               >
                 <div className="flex flex-col gap-1">
-                  <LayerVisibleDiv
+                  <LayerVisibleVisibilityStateDiv
                     title="Property Points"
                     onClick={setcompanySyncPropLayerVisibility}
                     eyeState={companySyncPropLayerVisible}
+                    visibilityState={propertyPointLineVisibilityState}
                   >
                     <Image
                       src="./sync-prop.svg"
@@ -319,11 +344,12 @@ const CompanyBottomSideComp = () => {
                       height={10}
                       alt="prop"
                     />
-                  </LayerVisibleDiv>
-                  <LayerVisibleDiv
+                  </LayerVisibleVisibilityStateDiv>
+                  <LayerVisibleVisibilityStateDiv
                     onClick={setcompanySyncClaimLinkLayerVisibility}
                     title="Property Outlines"
                     eyeState={companySyncClaimLinkLayerVisible}
+                     visibilityState={propertyOutLineVisibilityState}
                   >
                     <Image
                       src="./sync-prop-outline.svg"
@@ -331,7 +357,7 @@ const CompanyBottomSideComp = () => {
                       height={10}
                       alt="prop"
                     />
-                  </LayerVisibleDiv>
+                  </LayerVisibleVisibilityStateDiv>
                 </div>
               </AccordionItemWithEye>
               <AccordionItemWithEye
@@ -340,10 +366,11 @@ const CompanyBottomSideComp = () => {
                 eyeState={companyClaimLayerVisible}
               >
                 <div className="flex flex-col gap-1">
-                  <LayerVisibleDiv
+                  <LayerVisibleVisibilityStateDiv
                     title="Claims"
                     onClick={setcompanyClaimLayerVisibility}
                     eyeState={companyClaimLayerVisible}
+                     visibilityState={claimsVisibilityState}
                   >
                     <Image
                       src="./claims-layer.svg"
@@ -351,7 +378,7 @@ const CompanyBottomSideComp = () => {
                       height={10}
                       alt="prop"
                     />
-                  </LayerVisibleDiv>
+                  </LayerVisibleVisibilityStateDiv>
                   <LayerVisibleDiv
                     title="Mining Areas"
                     onClick={setcompanyAreaBoundaryLayerVisibility}

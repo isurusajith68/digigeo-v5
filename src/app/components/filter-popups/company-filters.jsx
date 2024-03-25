@@ -18,6 +18,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Autocomplete, AutocompleteItem } from "@nextui-org/react";
 import { setIsCompanySideNavOpen, setcompanyId, setcompanyName ,setcompanyStockcode,setcompanyZoomMode} from "@/store/company-map/company-map-slice";
 import useDebounce from "./useDebounce";
+import { updateWindowsHistoryCmap } from '@/app/utils/helpers/window-history-replace';
 
 const CompanyFilter = ({ isOpenIn, closePopup }) => {
    const [search, setSearch] = useState('')

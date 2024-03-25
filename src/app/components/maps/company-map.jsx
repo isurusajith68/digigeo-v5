@@ -330,8 +330,8 @@ export const CompanyMap = () => {
    const [maxResolutionFProp, setmaxResolutionFProp] = useState(300);
  const [maxResolutionClaims, setmaxResolutionClaims] = useState(300);
   const [maxResolutionAssets, setmaxResolutionAssets] = useState(300);
-  const [maxResolutionSyncOutlines, setmaxResolutionSyncOutlines] =
-    useState(300);
+  const [maxResolutionSyncOutlines, setmaxResolutionSyncOutlines] =  useState(300);
+  const [maxResolutionPropPoints, setmaxResolutionPropPoints] = useState(300);
   const [curcenteredareaid, setcurcenteredareaid] = useState(0);
 
   const [clickDataLoaded, setclickDataLoaded] = useState(false);
@@ -776,7 +776,8 @@ export const CompanyMap = () => {
     const map = mapRef.current;
 
       const setCenteredAreaViewScales = (center) => {
-        let closestArea = { d: 9999999999999 };
+        let closestArea = { d: 9999999999999999 };
+        console.log("qq-mapViewScaleReducer.mapViewScales",center)
         mapViewScaleReducer.mapViewScales.forEach((a) => {
           const dx = a.centroid_x - center[0];
           const dy = a.centroid_y - center[1];
@@ -790,9 +791,12 @@ export const CompanyMap = () => {
 
         dispatch(setcompanyMapViewScales(closestArea.area));
         if(!closestArea.area){
-        alert(`no area found `)
+          alert(`no area found `)
+          return
+        } else {
+          dispatch(setcompanyMapViewScales(closestArea.area));
+          setcurcenteredareaid(closestArea.area.area_id);
         }
-        setcurcenteredareaid(closestArea.area.area_id);
         // console.log("aa-curAreaId",closestArea.area.area_id)
         const r = getMapResolution(
           closestArea.area.featuredpropscale,
@@ -820,6 +824,8 @@ export const CompanyMap = () => {
        // console.log("aa-claimscale",closestArea.area.claimscale)
         const r3 = getMapResolution(closestArea.area.claimscale, mapUnits);
         setmaxResolutionClaims(r3);
+        const r4 = getMapResolution(closestArea.area.proplayerscale, mapUnits);
+        setmaxResolutionPropPoints(r4);
         //
       };
 
@@ -832,12 +838,12 @@ export const CompanyMap = () => {
       dispatch(setCompanyInitialCenter(tmpinitialCenter));
       setZoom(tmpZoomLevel);
       setCenter(tmpinitialCenter);
-
+      
        setCenteredAreaViewScales(tmpinitialCenter);
 
-         const  newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isCompanySideNavOpen}&lyrs=${companyLyrs}&z=${tmpZoomLevel}&c=${tmpinitialCenter}`;
+        //  const  newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isCompanySideNavOpen}&lyrs=${companyLyrs}&z=${tmpZoomLevel}&c=${tmpinitialCenter}`;
 
-        updateWindowsHistoryCmap(  {isSideNavOpen,lyrs:companyLyrs,zoom:tmpZoomLevel,center:tmpinitialCenter,sidenav2:isCompanySideNavOpen});
+        updateWindowsHistoryCmap(  {isSideNavOpen,lyrs:companyLyrs,zoom:tmpZoomLevel,center:tmpinitialCenter,sidenav2:isCompanySideNavOpen,companyId:companyId});
 
       
 
@@ -1666,7 +1672,9 @@ export const CompanyMap = () => {
             {syncClaimLinkPropertyFeatures && (
               <olSourceVector
                 ref={claimLinkSourceRef}
-                //  style={companyMap_tbl_sync_claimlink_VectorLayerStyleFunction}
+                minResolution={0}
+             maxResolution={maxResolutionSyncOutlines}
+                //  style={companyMap_tbl_sync_claimlink_VectorLayerStyleFunction} 
               ></olSourceVector>
             )}
           </olLayerVector>
@@ -1674,7 +1682,7 @@ export const CompanyMap = () => {
             ref={claimVectorImgLayerRef}
             style={styleFunctionClaim}
             minResolution={0}
-            maxResolution={150}
+             maxResolution={maxResolutionClaims ?? 150}
           >
             <olSourceVector
               ref={claimVectorImgSourceRef}
@@ -1694,15 +1702,16 @@ export const CompanyMap = () => {
             ref={assetLayerRef}
             style={areaMapAssetVectorLayerStyleFunction}
             minResolution={0}
-            maxResolution={150}
+            maxResolution={companyAssetLayerAlwaysVisible ? 40075016 : maxResolutionAssets}
+          
           >
             <olSourceVector ref={assetSourceRef}></olSourceVector>
           </olLayerVector>
           <olLayerVector
             ref={syncPropVectorLayerRef}
             style={styleFunctionSyncProperties}
-            minResolution={0}
-            maxResolution={150}
+               minResolution={0}
+             maxResolution={maxResolutionPropPoints}
           >
             <olSourceVector ref={syncPropSourceRef}></olSourceVector>
           </olLayerVector>
