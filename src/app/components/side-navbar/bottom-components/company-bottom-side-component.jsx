@@ -29,10 +29,23 @@ import { setcompanyAreaBoundaryLayerVisible,
      } from "@/store/company-map/company-map-slice";
 import Image from "next/image";
 
+import LayerVisibleVisibilityStateDiv from './../../common-comp/layer-visible-eye-visibility-state';
+import LayerVisibleLockVisibilityDiv from './../../common-comp/layer-visible-eye-with-lock-with-visibility';
+import AccordionItemWithEyeWithLockVisibility from './../../common-comp/accordion-eye-with-lock-with-visibilty';
+
+
+
 const CompanyBottomSideComp = () => {
   let pathname = "";
   const dispatch = useDispatch();
-  const router = useRouter();
+ 
+  const [claimsVisibilityState, setclaimsVisibilityState] =  useState(true);
+  const [propertyOutLineVisibilityState, setpropertyOutLineVisibilityState] =  useState(false);
+  const [assetVisibilityState, setassetVisibilityState] =  useState(true);
+
+  const [company_claimLinkGroupVisible, setcompany_claimLinkGroupVisible] =
+    useState(true);
+
   try {
     pathname = window.location.href;
   } catch (error) { }
@@ -44,12 +57,7 @@ const CompanyBottomSideComp = () => {
     }
   }
 
-  
-  const [property_claimLinkGroupVisible, setproperty_claimLinkGroupVisible] = useState(true)
-  const [claimsVisibilityState, setclaimsVisibilityState] =  useState(true);
-  const [propertyVisibilityState, setpropertyVisibilityState] =  useState(true);
-
-
+   
   const isAreaSideNavOpen = useSelector(
     (state) => state.mapSelectorReducer.isAreaSideNavOpen
   );
@@ -129,6 +137,10 @@ const CompanyBottomSideComp = () => {
       (state) => state.companyMapReducer.companyAssetOccurrenceVisible
     );
 
+        const companyAssetLayerAlwaysVisible = useSelector(
+    (state) => state.companyMapReducer.companyAssetLayerAlwaysVisible
+  );
+
     //asset type visibility functions
     const setcompanyAssetOpMineVisibility = (e) => {
       dispatch(setcompanyAssetOpMineVisible(!companyAssetOpMineVisible));
@@ -145,14 +157,17 @@ const CompanyBottomSideComp = () => {
     const setcompanyAssetOccurrenceVisibility = (e) => {
       dispatch(setcompanyAssetOccurrenceVisible(!companyAssetOccurrenceVisible));
     }
+    const setcompanyAssetLayerAlwaysVisibility = (e) => {
+    dispatch(setcompanyAssetLayerAlwaysVisible(!companyAssetLayerAlwaysVisible));
+    };
 
 
     useEffect(() => {
 
       if (companySyncPropLayerVisible && companySyncClaimLinkLayerVisible) {
-        setproperty_claimLinkGroupVisible(true)
+        setcompany_claimLinkGroupVisible(true)
       } else {
-        setproperty_claimLinkGroupVisible(false)
+        setcompany_claimLinkGroupVisible(false)
       }
     
   
@@ -193,6 +208,14 @@ const CompanyBottomSideComp = () => {
       }
     }
 
+      useEffect(() => {
+    if (companySyncPropLayerVisible && companySyncClaimLinkLayerVisible) {
+      setcompany_claimLinkGroupVisible(true);
+    } else {
+      setcompany_claimLinkGroupVisible(false);
+    }
+  }, [companySyncPropLayerVisible, companySyncClaimLinkLayerVisible]);
+
     
     
     return (
@@ -203,16 +226,20 @@ const CompanyBottomSideComp = () => {
         <div className="overflow-y-auto max-h-[52vh]">
           <Accordion>
             <div className="flex flex-col gap-1">
-              <AccordionItemWithEye
+              <AccordionItemWithEyeWithLockVisibility
                 title="Assets"
                 onClick={setcompanyAssetLayerVisibility}
                 eyeState={companyAssetLayerVisible}
+               onLockClick={setcompanyAssetLayerAlwaysVisibility}
+              lockState={companyAssetLayerAlwaysVisible}
+              visibilityState={assetVisibilityState}
               >
                 <div className="flex flex-col gap-1">
-                  <LayerVisibleDiv
+                  <LayerVisibleVisibilityStateDiv
                     title="Operating Mines"
                     onClick={setcompanyAssetOpMineVisibility}
                     eyeState={companyAssetOpMineVisible}
+                    visibilityState={assetVisibilityState}
                   >
                     <Image
                       src="./asset-opmine.svg"
@@ -220,11 +247,12 @@ const CompanyBottomSideComp = () => {
                       height={10}
                       alt="prop"
                     />
-                  </LayerVisibleDiv>
-                  <LayerVisibleDiv
+                  </LayerVisibleVisibilityStateDiv>
+                  <LayerVisibleVisibilityStateDiv
                     title="Deposits"
                     onClick={setcompanyAssetDepositVisibility}
                     eyeState={companyAssetDepositsVisible}
+                    visibilityState={assetVisibilityState}
                   >
                     <Image
                       src="./asset-deposit.svg"
@@ -232,11 +260,12 @@ const CompanyBottomSideComp = () => {
                       height={10}
                       alt="prop"
                     />
-                  </LayerVisibleDiv>
-                  <LayerVisibleDiv
+                  </LayerVisibleVisibilityStateDiv>
+                  <LayerVisibleVisibilityStateDiv
                     title="Zone"
                     onClick={setcompanyAssetZoneVisibility}
                     eyeState={companyAssetZoneVisible}
+                    visibilityState={assetVisibilityState}
                   >
                     <Image
                       src="./asset-zone.svg"
@@ -244,11 +273,12 @@ const CompanyBottomSideComp = () => {
                       height={10}
                       alt="prop"
                     />
-                  </LayerVisibleDiv>
-                  <LayerVisibleDiv
+                  </LayerVisibleVisibilityStateDiv>
+                  <LayerVisibleVisibilityStateDiv
                     title="Historical Mines"
                     onClick={setcompanyAssetHistoricalVisibility}
                     eyeState={companyAssetHistoricalVisible}
+                    visibilityState={assetVisibilityState}
                   >
                     <Image
                       src="./asset-historical.svg"
@@ -256,11 +286,12 @@ const CompanyBottomSideComp = () => {
                       height={10}
                       alt="prop"
                     />
-                  </LayerVisibleDiv>
-                  <LayerVisibleDiv
+                  </LayerVisibleVisibilityStateDiv>
+                  <LayerVisibleVisibilityStateDiv
                     title="Occurrences"
                     onClick={setcompanyAssetOccurrenceVisibility}
                     eyeState={companyAssetOccurrenceVisible}
+                    visibilityState={assetVisibilityState}
                   >
                     <Image
                       src="./asset-occurrence.svg"
@@ -268,13 +299,13 @@ const CompanyBottomSideComp = () => {
                       height={10}
                       alt="prop"
                     />
-                  </LayerVisibleDiv>
+                  </LayerVisibleVisibilityStateDiv>
                 </div>
-              </AccordionItemWithEye>
+              </AccordionItemWithEyeWithLockVisibility>
               <AccordionItemWithEye
                 title="Properties"
                 onClick={setPropertiesGroupEye}
-                eyeState={property_claimLinkGroupVisible}
+                eyeState={company_claimLinkGroupVisible}
               >
                 <div className="flex flex-col gap-1">
                   <LayerVisibleDiv
@@ -304,7 +335,7 @@ const CompanyBottomSideComp = () => {
                 </div>
               </AccordionItemWithEye>
               <AccordionItemWithEye
-                title="Claims"
+                title="Base Layers"
                 onClick={setcompanyClaimLayerVisibility}
                 eyeState={companyClaimLayerVisible}
               >

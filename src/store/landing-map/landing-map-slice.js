@@ -29,6 +29,7 @@ const initialState = {
   popupFcompanyId: 0,
   landingSyncPropLayerAlwaysVisible: false,
   landingAssetLayerAlwaysVisible: false,
+  landingPropOutlineLayerAlwaysVisible: false,
   landingCurrentScale: 5,
   landingMapViewScales: {},
 };
@@ -124,6 +125,7 @@ const landingMapMapSlice = createSlice({
     setlandingAssetLayerAlwaysVisible: (state, action) => {
       state.landingAssetLayerAlwaysVisible = action.payload;
     },
+
     setlandingCurrentScale: (state, action) => {
      
       state.landingCurrentScale = action.payload;

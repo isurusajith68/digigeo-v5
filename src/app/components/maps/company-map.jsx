@@ -8,14 +8,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, ButtonGroup } from "@nextui-org/react";
 import {
-  setAreaInitialCenter,
-  setAreaLyrs,
-  setAreaZoomLevel,
-  setUrlUpdate,
   setIsSideNavOpen,
-  setPropertiesZoomLevel,
-  setPropertiesInitialCenter,
-  setPropertiesLyrs,
+
   setCompanyZoomLevel,
   setCompanyInitialCenter,
   setCompanyLyrs,
@@ -45,6 +39,8 @@ import {
   setclickclaimObject,
   setclickfPropertyObject,
   setclicksyncPropertyObject,
+    setcompanyCurrentScale,
+  setcompanyMapViewScales,
 } from "@/store/company-map/company-map-slice";
 import CompanyMapClickPopup from "./company-map-popup/company-map-click-popup";
 import { all, bbox, bbox as bboxStrategy } from "ol/loadingstrategy";
@@ -59,7 +55,7 @@ import {
 
 import { toLonLat } from "ol/proj";
 import { METERS_PER_UNIT } from "ol/proj/Units";
-import { updateWindowsHistory } from "@/app/utils/helpers/window-history-replace";
+import { updateWindowsHistoryCmap } from "@/app/utils/helpers/window-history-replace";
 
 const fill = new Fill();
 const stroke = new Stroke({
@@ -315,6 +311,10 @@ function mapRatioScale({ map, toRound = true }) {
   return toRound ? Math.round(scale) : scale;
 }
 
+const getMapResolution = (scale, unit) => {
+  return scale / (inchesPreUnit(unit) * DOTS_PER_INCH);
+};
+
 export const CompanyMap = () => {
   let pathname = "";
   try {
@@ -325,6 +325,14 @@ export const CompanyMap = () => {
   const [center, setCenter] = useState("");
   const [zoom, setZoom] = useState("");
   const [claimObject, setclaimObject] = useState(undefined);
+  const [mapUnits, setmapUnits] = useState("m");
+
+   const [maxResolutionFProp, setmaxResolutionFProp] = useState(300);
+ const [maxResolutionClaims, setmaxResolutionClaims] = useState(300);
+  const [maxResolutionAssets, setmaxResolutionAssets] = useState(300);
+  const [maxResolutionSyncOutlines, setmaxResolutionSyncOutlines] =
+    useState(300);
+  const [curcenteredareaid, setcurcenteredareaid] = useState(0);
 
   const [clickDataLoaded, setclickDataLoaded] = useState(false);
   const [clickedOnFeature, setclickedOnFeature] = useState(false);
@@ -340,6 +348,9 @@ export const CompanyMap = () => {
   const selectedSynOutLineRef = useRef();
   const selectedClaimRef = useRef();
   const navigatedFPropertyRef = useRef();
+
+  const mapViewScaleReducer = useSelector((state) => state.mapViewScaleReducer);
+
 
   const dispatch = useDispatch();
 
@@ -562,6 +573,7 @@ export const CompanyMap = () => {
   const onViewChange = useCallback((e) => {
     const scale = mapRatioScale({ map: mapRef.current });
     setmapScale(scale.toLocaleString());
+    dispatch(setcompanyCurrentScale(scale ));
   });
 
   useEffect(() => {
@@ -588,6 +600,10 @@ export const CompanyMap = () => {
 
   const isCompanySideNavOpen = useSelector(
     (state) => state.companyMapReducer.isCompanySideNavOpen
+  );
+
+     const companyAssetLayerAlwaysVisible = useSelector(
+    (state) => state.companyMapReducer.companyAssetLayerAlwaysVisible
   );
 
   const syncPropSourceRef = useRef(null);
@@ -722,10 +738,10 @@ export const CompanyMap = () => {
   }, [assetFeatures]);
 
   useEffect(() => {
-    console.log("yy-cmap -init") 
+    
 
     mouseScrollEvent();
-  }, []);
+  }, [mapViewScaleReducer.mapViewScales]);
 
   useEffect(() => {
     fPropVectorLayerRef?.current
@@ -759,6 +775,54 @@ export const CompanyMap = () => {
   const mouseScrollEvent = useCallback((event) => {
     const map = mapRef.current;
 
+      const setCenteredAreaViewScales = (center) => {
+        let closestArea = { d: 9999999999999 };
+        mapViewScaleReducer.mapViewScales.forEach((a) => {
+          const dx = a.centroid_x - center[0];
+          const dy = a.centroid_y - center[1];
+
+          const d = Math.sqrt(dx * dx + dy * dy);
+
+          if (closestArea.d > d) {
+            closestArea = { area: a, d };
+          }
+        });
+
+        dispatch(setcompanyMapViewScales(closestArea.area));
+        if(!closestArea.area){
+        alert(`no area found `)
+        }
+        setcurcenteredareaid(closestArea.area.area_id);
+        // console.log("aa-curAreaId",closestArea.area.area_id)
+        const r = getMapResolution(
+          closestArea.area.featuredpropscale,
+          mapUnits
+        );
+        // console.log("rrr",r,closestArea.area  )
+       
+        // console.log("aa-featuredpropscale",closestArea.area.featuredpropscale)
+        //featured prop max-scale
+        setmaxResolutionFProp(r);
+
+        const r1 = getMapResolution(
+          closestArea.area.propoutlinescale,
+          mapUnits
+        );
+       // console.log("aa-propoutlinescale",closestArea.area.propoutlinescale)
+        //prop outline max-res
+        setmaxResolutionSyncOutlines(r1);
+
+        //asset max-res
+       // console.log("aa-assetscale",closestArea.area.assetscale)
+        const r2 = getMapResolution(closestArea.area.assetscale, mapUnits);
+        setmaxResolutionAssets(r2);
+        //asset max-res
+       // console.log("aa-claimscale",closestArea.area.claimscale)
+        const r3 = getMapResolution(closestArea.area.claimscale, mapUnits);
+        setmaxResolutionClaims(r3);
+        //
+      };
+
     // console.log("mapRef", mapRef.current?.getZoom());
     const handleMoveEnd = () => {
       // console.log("map", map);
@@ -769,9 +833,12 @@ export const CompanyMap = () => {
       setZoom(tmpZoomLevel);
       setCenter(tmpinitialCenter);
 
-          newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isCompanySideNavOpen}&lyrs=${companyLyrs}&z=${tmpZoomLevel}&c=${tmpinitialCenter}`;
+       setCenteredAreaViewScales(tmpinitialCenter);
 
-         updateWindowsHistory(newUrl);
+         const  newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isCompanySideNavOpen}&lyrs=${companyLyrs}&z=${tmpZoomLevel}&c=${tmpinitialCenter}`;
+
+        updateWindowsHistoryCmap(  {isSideNavOpen,lyrs:companyLyrs,zoom:tmpZoomLevel,center:tmpinitialCenter,sidenav2:isCompanySideNavOpen});
+
       
 
    // window.history.replaceState({}, "", newUrl);
@@ -783,13 +850,14 @@ export const CompanyMap = () => {
       // const newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&lyrs=${mapLyrs}&z=${tmpZoomLevel}&c=${tmpinitialCenter}`;
       // window.history.replaceState({}, "", newUrl);
     };
-
+      if (mapViewScaleReducer.mapViewScales.length > 0) {
     map?.on("moveend", handleMoveEnd);
+      }
 
     return () => {
       map?.un("moveend", handleMoveEnd);
     };
-  }, []);
+  }, [mapViewScaleReducer.mapViewScales]);
 
   const collapsibleBtnHandler = () => {
     const tmpValue = String(isSideNavOpen).toLowerCase() === "true";

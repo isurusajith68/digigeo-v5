@@ -15,7 +15,7 @@ const LayerVisibleVisibilityStateDiv = ({ title, children, onClick, eyeState, vi
   return (
     <div>
       <div
-              className="flex items-center justify-between pl-4   border rounded-lg border-blue-200 hover:border-blue-100 hover:border-2 focus:outline-none text-black text-sm sm:text-sm py-1 w-full transition duration-150 ease-in"
+              className="flex items-center justify-between pl-4   border rounded-lg border-blue-200 hover:border-blue-100 hover:border-2 focus:outline-none text-black text-sm sm:text-sm py-0 w-full transition duration-150 ease-in"
       >
         <div className="flex">
         <span className="mr-2">{children}</span>

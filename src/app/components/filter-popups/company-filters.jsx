@@ -156,8 +156,10 @@ const CompanyFilter = ({ isOpenIn, closePopup }) => {
        dispatch(setcompanyId(companyidLocal));
         dispatch(setcompanyName(company));
     dispatch(setcompanyZoomMode("extent"));
-    const newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=true&lyrs=${companyLyrs}&z=${companyZoomLevel}&c=${companyInitialCenter}`;
-    updateWindowsHistory(newUrl);
+    // const newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=true&lyrs=${companyLyrs}&z=${companyZoomLevel}&c=${companyInitialCenter}`;
+    updateWindowsHistoryCmap( {isSideNavOpen,lyrs:companyLyrs,zoomLevel:companyZoomLevel,initialCenter:companyInitialCenter,companyId});
+
+
     //window.history.replaceState({}, "", newUrl);
     dispatch(setIsCompanySideNavOpen(true));
     dispatch(setcompanyStockcode(stockcode));
@@ -348,3 +350,4 @@ const CompanyFilter = ({ isOpenIn, closePopup }) => {
   );
 };
 export default CompanyFilter;
+    

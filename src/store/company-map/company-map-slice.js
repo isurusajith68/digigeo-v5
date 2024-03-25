@@ -131,7 +131,7 @@ const companyMapSlice = createSlice({
    
     setcompanyMapViewScales: (state, action) => {
      
-      state.companyMapViesScales = action.payload;
+      state.companyMapViewScales = action.payload;
     },
   },
 });

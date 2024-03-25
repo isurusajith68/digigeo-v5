@@ -2,9 +2,9 @@
 
 // import { Accordion, AccordionItem, Button } from "@nextui-org/react";
 import React, { useEffect, useState } from "react";
-import { AiFillMinusSquare, AiFillPlusSquare } from "react-icons/ai";
-import { BsFillArrowLeftSquareFill } from "react-icons/bs";
-import { GiEarthAmerica } from "react-icons/gi";
+// import { AiFillMinusSquare, AiFillPlusSquare } from "react-icons/ai";
+// import { BsFillArrowLeftSquareFill } from "react-icons/bs";
+// import { GiEarthAmerica } from "react-icons/gi";
 
 import { useDispatch, useSelector } from "react-redux";
 // import { setIsAreaSideNavOpen } from "../../../store/map-selector/map-selector-slice";
@@ -250,10 +250,11 @@ const AreaBottomSideComp = () => {
               visibilityState={assetVisibilityState}
             >
               <div className="flex flex-col gap-1">
-                <LayerVisibleDiv
+                <LayerVisibleVisibilityStateDiv
                   title="Operating Mines"
                   onClick={setareaAssetOpMineVisibility}
                   eyeState={areaAssetOpMineVisible}
+                   visibilityState={assetVisibilityState}
                 >
                   <Image
                     src="./asset-opmine.svg"
@@ -261,11 +262,12 @@ const AreaBottomSideComp = () => {
                     height={10}
                     alt="prop"
                   />
-                </LayerVisibleDiv>
-                <LayerVisibleDiv
+                </LayerVisibleVisibilityStateDiv>
+                <LayerVisibleVisibilityStateDiv
                   title="Deposits"
                   onClick={setareaAssetDepositVisibility}
                   eyeState={areaAssetDepositsVisible}
+                   visibilityState={assetVisibilityState}
                 >
                   <Image
                     src="./asset-deposit.svg"
@@ -273,11 +275,12 @@ const AreaBottomSideComp = () => {
                     height={10}
                     alt="prop"
                   />
-                </LayerVisibleDiv>
-                <LayerVisibleDiv
+                </LayerVisibleVisibilityStateDiv>
+                <LayerVisibleVisibilityStateDiv
                   title="Zone"
                   onClick={setareaAssetZoneVisibility}
                   eyeState={areaAssetZoneVisible}
+                   visibilityState={assetVisibilityState}
                 >
                   <Image
                     src="./asset-zone.svg"
@@ -285,11 +288,12 @@ const AreaBottomSideComp = () => {
                     height={10}
                     alt="prop"
                   />
-                </LayerVisibleDiv>
-                <LayerVisibleDiv
+                </LayerVisibleVisibilityStateDiv>
+                <LayerVisibleVisibilityStateDiv
                   title="Historical Mines"
                   onClick={setareaAssetHistoricalVisibility}
                   eyeState={areaAssetHistoricalVisible}
+                   visibilityState={assetVisibilityState}
                 >
                   <Image
                     src="./asset-historical.svg"
@@ -297,11 +301,12 @@ const AreaBottomSideComp = () => {
                     height={10}
                     alt="prop"
                   />
-                </LayerVisibleDiv>
-                <LayerVisibleDiv
+                </LayerVisibleVisibilityStateDiv>
+                <LayerVisibleVisibilityStateDiv
                   title="Occurrences"
                   onClick={setareaAssetOccurrenceVisibility}
                   eyeState={areaAssetOccurrenceVisible}
+                   visibilityState={assetVisibilityState}
                 >
                   <Image
                     src="./asset-occurrence.svg"
@@ -309,7 +314,7 @@ const AreaBottomSideComp = () => {
                     height={10}
                     alt="prop"
                   />
-                </LayerVisibleDiv>
+                </LayerVisibleVisibilityStateDiv>
               </div>
             </AccordionItemWithEyeWithLockVisibility>
             <AccordionItemWithEye
@@ -348,7 +353,7 @@ const AreaBottomSideComp = () => {
               </div>
             </AccordionItemWithEye>
             <AccordionItemWithEye
-              title="Claims"
+              title="Base Layers"
               onClick={setareaClaimLayerVisibility}
               eyeState={areaClaimLayerVisible}
             >

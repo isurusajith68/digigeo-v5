@@ -20,6 +20,8 @@ import {
   setclickclaimObject,
   setclickfPropertyObject,
   setclicksyncPropertyObject,
+  setpropertyCurrentScale,
+  setpropertyMapViewScales
 } from "../../../store/properties-map/properties-map-slice";
 
 import { BsFillArrowLeftSquareFill } from "react-icons/bs";
@@ -56,7 +58,7 @@ import {
 import { toLonLat } from "ol/proj";
 import { METERS_PER_UNIT } from "ol/proj/Units";
 import { commodityMap_tbl_syncProperty_commodity_VectorLayerStyleFunction } from "./syn-prop-cluster-styles";
-import { updateWindowsHistory } from "@/app/utils/helpers/window-history-replace";
+import { updateWindowsHistoryCmap } from "@/app/utils/helpers/window-history-replace";
 
 const fill = new Fill();
 const stroke = new Stroke({
@@ -123,6 +125,11 @@ function mapRatioScale({ map, toRound = true }) {
   return toRound ? Math.round(scale) : scale;
 }
 
+const getMapResolution = (scale, unit) => {
+  return scale / (inchesPreUnit(unit) * DOTS_PER_INCH);
+};
+
+
 //clustring - sync prop
 // export const coordinates = (() => {
 //   const count = 20000;
@@ -177,6 +184,10 @@ export const PropertiesMap = () => {
     (state) => state.propertiesMapReducer.navigatedFPropId
   );
 
+  const mapViewScaleReducer = useSelector((state) => state.mapViewScaleReducer);
+
+
+
   const propertyFlyToLocation = useSelector(
     (state) => state.propertiesMapReducer.propertyMapFlyToLocation
   );
@@ -185,6 +196,18 @@ export const PropertiesMap = () => {
   const [popup, setPopup] = useState();
   const [distance, setDistance] = useState(40);
   const [minDistance, setMinDistance] = useState(20);
+
+  
+  const [mapUnits, setmapUnits] = useState("m");
+
+  const [maxResolutionFProp, setmaxResolutionFProp] = useState(300);
+ const [maxResolutionClaims, setmaxResolutionClaims] = useState(300);
+  const [maxResolutionAssets, setmaxResolutionAssets] = useState(300);
+  const [maxResolutionSyncOutlines, setmaxResolutionSyncOutlines] =
+    useState(300);
+  const [curcenteredareaid, setcurcenteredareaid] = useState(0);
+
+
 
   useEffect(() => {
     if (navigatedFPropertyRef.current) {
@@ -393,6 +416,8 @@ export const PropertiesMap = () => {
   const onViewChange = useCallback((e) => {
     const scale = mapRatioScale({ map: mapRef.current });
     setmapScale(scale.toLocaleString());
+    
+    dispatch(setpropertyCurrentScale(scale ));
   });
 
   useEffect(() => {
@@ -449,6 +474,10 @@ export const PropertiesMap = () => {
   );
   const assetFeatures = useSelector(
     (state) => state.propertiesMapReducer.assetFeatures
+  );
+
+     const propertyAssetLayerAlwaysVisible = useSelector(
+    (state) => state.propertiesMapReducer.propertyAssetLayerAlwaysVisible
   );
 
   useEffect(() => {
@@ -546,10 +575,10 @@ export const PropertiesMap = () => {
 
   //init useeffect
   useEffect(() => {
-    console.log("yy-pmap -init") 
+    
 
     mouseScrollEvent();
-  }, []);
+  }, [mapViewScaleReducer.mapViewScales]);
 
   useEffect(() => {
     fPropVectorLayerRef?.current
@@ -584,6 +613,55 @@ export const PropertiesMap = () => {
   const mouseScrollEvent = useCallback((event) => {
     const map = mapRef.current;
 
+          const setCenteredAreaViewScales = (center) => {
+        // console.log("popl2", mapViewScaleReducer.mapViewScales )
+        let closestArea = { d: 999999999999 };
+        mapViewScaleReducer.mapViewScales.forEach((a) => {
+          //console.log("popl2-q1")
+          const dx = a.centroid_x - center[0];
+          const dy = a.centroid_y - center[1];
+
+          const d = Math.sqrt(dx * dx + dy * dy);
+
+          if (closestArea.d > d) {
+             //console.log("popl2-q2")
+            closestArea = { area: a, d };
+          }
+        });
+          console.log("popl23-closestArea.area", closestArea.area )
+          dispatch(setpropertyMapViewScales(closestArea.area));
+          
+        setcurcenteredareaid(closestArea.area.area_id);
+        // console.log("aa-curAreaId",closestArea.area.area_id)
+        const r = getMapResolution(
+          closestArea.area.featuredpropscale,
+          mapUnits
+        );
+        // console.log("rrr",r,closestArea.area  )
+       
+        // console.log("aa-featuredpropscale",closestArea.area.featuredpropscale)
+        //featured prop max-scale
+        setmaxResolutionFProp(r);
+
+        const r1 = getMapResolution(
+          closestArea.area.propoutlinescale,
+          mapUnits
+        );
+       // console.log("aa-propoutlinescale",closestArea.area.propoutlinescale)
+        //prop outline max-res
+        setmaxResolutionSyncOutlines(r1);
+
+        //asset max-res
+       // console.log("aa-assetscale",closestArea.area.assetscale)
+        const r2 = getMapResolution(closestArea.area.assetscale, mapUnits);
+        setmaxResolutionAssets(r2);
+        //asset max-res
+       // console.log("aa-claimscale",closestArea.area.claimscale)
+        const r3 = getMapResolution(closestArea.area.claimscale, mapUnits);
+        setmaxResolutionClaims(r3);
+        //
+    };
+    
     // console.log("mapRef", mapRef.current?.getZoom());
     const handleMoveEnd = () => {
       // console.log("map", map);
@@ -594,10 +672,13 @@ export const PropertiesMap = () => {
       setZoom(tmpZoomLevel);
       setCenter(tmpinitialCenter);
 
-          let newUrl;
-    newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isPropertiesSideNavOpen}&lyrs=${propertiesLyrs}&z=${tmpZoomLevel}&c=${tmpinitialCenter}`;
+       setCenteredAreaViewScales(tmpinitialCenter);
 
-     updateWindowsHistory(newUrl);
+    //       let newUrl;
+    // newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isPropertiesSideNavOpen}&lyrs=${propertiesLyrs}&z=${tmpZoomLevel}&c=${tmpinitialCenter}`;
+
+updateWindowsHistoryCmap(  {isSideNavOpen,lyrs:propertiesLyrs,zoom:tmpZoomLevel,center:tmpinitialCenter,sidenav2:isPropertiesSideNavOpen});
+
 
       // router.push(
       //   `/?t=${selectedMap}&sn=${isSideNavOpen}&lyrs=${mapLyrs}&z=${tmpZoomLevel}&c=${tmpinitialCenter}`
@@ -606,13 +687,15 @@ export const PropertiesMap = () => {
       // const newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&lyrs=${mapLyrs}&z=${tmpZoomLevel}&c=${tmpinitialCenter}`;
       // window.history.replaceState({}, "", newUrl);
     };
-
-    map?.on("moveend", handleMoveEnd);
-
+    
+    if (mapViewScaleReducer.mapViewScales.length > 0) {
+       
+      map?.on("moveend", handleMoveEnd);
+    } 
     return () => {
       map?.un("moveend", handleMoveEnd);
     };
-  }, []);
+  }, [mapViewScaleReducer.mapViewScales]);
 
   const collapsibleBtnHandler = () => {
     const tmpValue = String(isSideNavOpen).toLowerCase() === "true";
@@ -1625,7 +1708,7 @@ export const PropertiesMap = () => {
             ref={assetLayerRef}
             style={areaMapAssetVectorLayerStyleFunction}
             minResolution={0}
-            maxResolution={150}
+             maxResolution={propertyAssetLayerAlwaysVisible ? 40075016 : maxResolutionAssets}
           >
             <olSourceVector ref={assetSourceRef}></olSourceVector>
           </olLayerVector>

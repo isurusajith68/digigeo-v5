@@ -2,13 +2,13 @@
 
 // import { Accordion, AccordionItem, Button } from "@nextui-org/react";
 import React, { useEffect, useState } from "react";
-import { AiFillMinusSquare, AiFillPlusSquare } from "react-icons/ai";
-import { BsFillArrowLeftSquareFill } from "react-icons/bs";
-import { GiEarthAmerica } from "react-icons/gi";
+// import { AiFillMinusSquare, AiFillPlusSquare } from "react-icons/ai";
+// import { BsFillArrowLeftSquareFill } from "react-icons/bs";
+// import { GiEarthAmerica } from "react-icons/gi";
 
 import { useDispatch, useSelector } from "react-redux";
 // import { setIsAreaSideNavOpen } from "../../../store/map-selector/map-selector-slice";
-import { useRouter, useSearchParams } from "next/navigation";
+// import { useRouter, useSearchParams } from "next/navigation";
 import Accordion from "../../common-comp/accordion";
 import AccordionItemWithEye from "../../common-comp/accordion-eye";
 import LayerVisibleDiv from "../../common-comp/layer-visible-eye";
@@ -26,9 +26,13 @@ import {
   setpropertyMapAssetZoneVisible,
   setpropertyMapAssetHistoricalVisible,
   setpropertyMapAssetOccurrenceVisible,
+  setpropertyAssetLayerAlwaysVisible
 } from "../../../../store/properties-map/properties-map-slice";
 import Image from "next/image";
- 
+import LayerVisibleVisibilityStateDiv from './../../common-comp/layer-visible-eye-visibility-state';
+import LayerVisibleLockVisibilityDiv from './../../common-comp/layer-visible-eye-with-lock-with-visibility';
+import AccordionItemWithEyeWithLockVisibility from './../../common-comp/accordion-eye-with-lock-with-visibilty';
+
 
 
 const PropertiesBottomSideComp = () => {
@@ -38,8 +42,14 @@ const PropertiesBottomSideComp = () => {
   let pathname = "";
   const dispatch = useDispatch();
   const [property_claimLinkGroupVisible, setproperty_claimLinkGroupVisible] = useState(true)
+  const [claimsVisibilityState, setclaimsVisibilityState] =  useState(true);
+  const [propertyVisibilityState, setpropertyVisibilityState] =  useState(true);
+  const [assetVisibilityState, setassetVisibilityState] =  useState(true);
+  const [propertyOutLineVisibilityState, setpropertyOutLineVisibilityState] =  useState(false);
 
-  const router = useRouter();
+  // const [pMapViewScales, setpMapViewScales] = useState({});
+
+  
   try {
     pathname = window.location.href;
   } catch (error) {}
@@ -77,6 +87,9 @@ const PropertiesBottomSideComp = () => {
   );
   const propertyMapAssetLayerVisible = useSelector(
     (state) => state.propertiesMapReducer.propertyMapAssetLayerVisible
+  );
+  const propertyAssetLayerAlwaysVisible = useSelector(
+    (state) => state.propertiesMapReducer.propertyAssetLayerAlwaysVisible
   );
   const propertyMapSyncPropLayerVisible = useSelector(
     (state) => state.propertiesMapReducer.propertyMapSyncPropLayerVisible
@@ -143,6 +156,9 @@ const PropertiesBottomSideComp = () => {
     const setpropertyMapAssetOccurrenceVisibility = (e) => {
       dispatch(setpropertyMapAssetOccurrenceVisible(!propertyMapAssetOccurrenceVisible));
     }
+      const setpropertyAssetLayerAlwaysVisibility = (e) => {
+    dispatch(setpropertyAssetLayerAlwaysVisible(!propertyAssetLayerAlwaysVisible));
+  };
 
 
   useEffect(() => {
@@ -164,6 +180,35 @@ const PropertiesBottomSideComp = () => {
     }
   };
 
+    const propertyCurrentScale = useSelector(
+    (state) => state.propertiesMapReducer.propertyCurrentScale
+  );
+
+    const propertyMapViewScales = useSelector(
+    (state) => state.propertiesMapReducer.propertyMapViewScales
+  );
+
+  // useEffect(()=>{
+  //   setpMapViewScales(propertyMapViewScales)
+  // },[propertyMapViewScales])
+
+    useEffect(()=>{
+    console.log("popl23-pCurrentScale",propertyCurrentScale,propertyMapViewScales)
+    // mapViewScaleReducer.mapViewScales?.[0]?.claimscale > areaCurrentScale ?  setclaimsVisibilityState(true): setclaimsVisibilityState(false)
+    if (propertyMapViewScales) {
+      console.log("popl23-succ-pMapViewScales",propertyMapViewScales)
+      propertyMapViewScales.claimscale > propertyCurrentScale ? setclaimsVisibilityState(true) : setclaimsVisibilityState(false)
+      propertyMapViewScales.proplayerscale > propertyCurrentScale ? setpropertyVisibilityState(true) : setpropertyVisibilityState(false)
+      propertyMapViewScales.assetscale > propertyCurrentScale ? setassetVisibilityState(true) : setassetVisibilityState(false)
+      propertyMapViewScales.propoutlinescale > propertyCurrentScale ? setpropertyOutLineVisibilityState(true) : setpropertyOutLineVisibilityState(false)
+      
+    }
+    
+   // console.log("areaCurrentScale-mapViewScaleReducer ",mapViewScaleReducer.mapViewScales?.[0]?.claimscale)
+
+    }, [propertyCurrentScale, propertyMapViewScales])
+  
+
   return (
     <div className="flex flex-col w-full  h-full grow">
       <div className="ml-2 mr-2  flex items-center justify-center border-b-2">
@@ -172,16 +217,20 @@ const PropertiesBottomSideComp = () => {
       <div className="overflow-y-auto max-h-[52vh]">
         <Accordion>
           <div className="flex flex-col gap-1">
-            <AccordionItemWithEye
+            <AccordionItemWithEyeWithLockVisibility
               title="Assets"
               onClick={setpropertyMapAssetLayerVisibility}
               eyeState={propertyMapAssetLayerVisible}
+                onLockClick={setpropertyAssetLayerAlwaysVisibility}
+              lockState={propertyAssetLayerAlwaysVisible}
+              visibilityState={assetVisibilityState}
             >
               <div className="flex flex-col gap-1">
-                <LayerVisibleDiv
+                <LayerVisibleVisibilityStateDiv
                   title="Operating Mines"
                   onClick={setpropertyMapAssetOpMineVisibility}
                   eyeState={propertyMapAssetOpMineVisible}
+                   visibilityState={assetVisibilityState}
                 >
                   <Image
                     src="./asset-opmine.svg"
@@ -189,11 +238,12 @@ const PropertiesBottomSideComp = () => {
                     height={10}
                     alt="prop"
                   />
-                </LayerVisibleDiv>
-                <LayerVisibleDiv
+                </LayerVisibleVisibilityStateDiv>
+                <LayerVisibleVisibilityStateDiv
                   title="Deposits"
                   onClick={setpropertyMapAssetDepositVisibility}
                   eyeState={propertyMapAssetDepositsVisible}
+                   visibilityState={assetVisibilityState}
                 >
                   <Image
                     src="./asset-deposit.svg"
@@ -201,11 +251,12 @@ const PropertiesBottomSideComp = () => {
                     height={10}
                     alt="prop"
                   />
-                </LayerVisibleDiv>
-                <LayerVisibleDiv
+                </LayerVisibleVisibilityStateDiv>
+                <LayerVisibleVisibilityStateDiv
                   title="Zone"
                   onClick={setpropertyMapAssetZoneVisibility}
                   eyeState={propertyMapAssetZoneVisible}
+                   visibilityState={assetVisibilityState}
                 >
                   <Image
                     src="./asset-zone.svg"
@@ -213,11 +264,12 @@ const PropertiesBottomSideComp = () => {
                     height={10}
                     alt="prop"
                   />
-                </LayerVisibleDiv>
-                <LayerVisibleDiv
+                </LayerVisibleVisibilityStateDiv>
+                <LayerVisibleVisibilityStateDiv
                   title="Historical Mines"
                   onClick={setpropertyMapAssetHistoricalVisibility}
                   eyeState={propertyMapAssetHistoricalVisible}
+                   visibilityState={assetVisibilityState}
                 >
                   <Image
                     src="./asset-historical.svg"
@@ -225,11 +277,12 @@ const PropertiesBottomSideComp = () => {
                     height={10}
                     alt="prop"
                   />
-                </LayerVisibleDiv>
-                <LayerVisibleDiv
+                </LayerVisibleVisibilityStateDiv>
+                <LayerVisibleVisibilityStateDiv
                   title="Occurrences"
                   onClick={setpropertyMapAssetOccurrenceVisibility}
                   eyeState={propertyMapAssetOccurrenceVisible}
+                   visibilityState={assetVisibilityState}
                 >
                   <Image
                     src="./asset-occurrence.svg"
@@ -237,9 +290,9 @@ const PropertiesBottomSideComp = () => {
                     height={10}
                     alt="prop"
                   />
-                </LayerVisibleDiv>
+                </LayerVisibleVisibilityStateDiv>
               </div>
-            </AccordionItemWithEye>
+            </AccordionItemWithEyeWithLockVisibility>
             <AccordionItemWithEye
               title="Properties"
               onClick={setPropertiesGroupEye}
@@ -258,10 +311,11 @@ const PropertiesBottomSideComp = () => {
                     alt="prop"
                   />
                 </LayerVisibleDiv>
-                <LayerVisibleDiv
+                <LayerVisibleVisibilityStateDiv
                   onClick={setpropertyMapSyncClaimLinkLayerVisibility}
                   title="Property Outlines"
                   eyeState={propertyMapSyncClaimLinkLayerVisible}
+                   visibilityState={propertyOutLineVisibilityState}
                 >
                   <Image
                     src="./sync-prop-outline.svg"
@@ -269,19 +323,20 @@ const PropertiesBottomSideComp = () => {
                     height={10}
                     alt="prop"
                   />
-                </LayerVisibleDiv>
+                </LayerVisibleVisibilityStateDiv>
               </div>
             </AccordionItemWithEye>
             <AccordionItemWithEye
-              title="Claims"
+              title="Base Layers"
               onClick={setpropertyMapClaimLayerVisibility}
               eyeState={propertyMapClaimLayerVisible}
             >
               <div className="flex flex-col gap-1">
-                <LayerVisibleDiv
+                <LayerVisibleVisibilityStateDiv
                   title="Claims"
                   onClick={setpropertyMapClaimLayerVisibility}
                   eyeState={propertyMapClaimLayerVisible}
+                   visibilityState={claimsVisibilityState}
                 >
                   <Image
                     src="./claims-layer.svg"
@@ -289,7 +344,7 @@ const PropertiesBottomSideComp = () => {
                     height={10}
                     alt="prop"
                   />
-                </LayerVisibleDiv>
+                </LayerVisibleVisibilityStateDiv>
                 <LayerVisibleDiv
                   title="Mining Areas"
                   onClick={setpropertyMapAreaBoundaryLayerVisibility}

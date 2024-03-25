@@ -32,9 +32,9 @@ const initialState = {
   searchParamMiningArea:"",
   searchParamAssetTypeList:[],
   searchParamCommodityList: [],
-   navigatedFPropId: 0,
-    popupFcompanyId:0,
-     propertySyncPropLayerAlwaysVisible: false,
+  navigatedFPropId: 0,
+  popupFcompanyId:0,
+  propertySyncPropLayerAlwaysVisible: false,
   propertyAssetLayerAlwaysVisible: false,
   propertyCurrentScale: 5,
   propertyMapViewScales: {},
@@ -160,7 +160,7 @@ const propertiesMapSlice = createSlice({
    
     setpropertyMapViewScales: (state, action) => {
      
-      state.propertyMapViesScales = action.payload;
+      state.propertyMapViewScales = action.payload;
     },
   },
 });

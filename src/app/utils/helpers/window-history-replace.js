@@ -10,10 +10,10 @@ export const updateWindowsHistoryAmap=({isSideNavOpen,areaLyrs,areaZoomLevel,are
   window.history.replaceState({}, "", newUrl);
 }
 
-export const updateWindowsHistoryCmap=({isSideNavOpen,areaLyrs,areaZoomLevel,areaInitialCenter,country,miningArea,areaId} )=>{
+export const updateWindowsHistoryCmap=({isSideNavOpen,lyrs,zoomLevel,initialCenter,companyId} )=>{
 
     const selectedMap="company"
-      const newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=true&lyrs=${areaLyrs}&z=${areaZoomLevel}&c=${areaInitialCenter}&co=${country}&ma=${miningArea}&aid=${areaId}`;
+      const newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=true&lyrs=${lyrs}&z=${zoomLevel}&c=${initialCenter}&companyId=${companyId}`;
 
   
   window.history.replaceState({}, "", newUrl);

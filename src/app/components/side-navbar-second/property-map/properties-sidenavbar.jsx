@@ -194,7 +194,11 @@ const PropertiesSideNavbar = () => {
               { cache: "no-store" }
             );
             const d = await res.json();
-            
+            let i=0
+            for(const o of d.data){
+              o.id=i
+              i++
+            }  
 
             setFeaturedCompanies(d.data);
       }
@@ -387,7 +391,7 @@ const PropertiesSideNavbar = () => {
                   <div className="flex flex-col gap-1 overflow-y-auto max-h-[40vh]">
                     {featuredCompanies?.map((i) => (
                       <PropertyFeaturedCompanyDetailDiv
-                        key={i.colour}
+                        key={i.id}
                         title={i.company2}
                         companyid={i.companyid}
                         // onClick={() => console.log(featuredCompanies)}

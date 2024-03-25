@@ -16,7 +16,6 @@ import {
 import { BsFillArrowLeftSquareFill } from "react-icons/bs";
 import { GiEarthAmerica } from "react-icons/gi";
 import { AiFillMinusSquare, AiFillPlusSquare } from "react-icons/ai";
-import AreaSideNavbar from "../side-navbar-second/area-map/area-sidenavbar";
 import {
   setIsAreaSideNavOpen,
   setclickassetObject,
@@ -45,7 +44,7 @@ import {
   Circle,
   Text,
 } from "ol/style";
-import { getBottomLeft, getCenter, getWidth } from "ol/extent";
+import { getBottomLeft,   getWidth } from "ol/extent";
 import { getHeight } from "ol/extent";
 import { toContext } from "ol/render";
 import { areaMapAssetVectorLayerStyleFunction } from "./asset-styles";
@@ -404,9 +403,9 @@ export const LandingMap = () => {
   const allSyncPropVectorLayerRef = useRef(null);
   const allSyncPropSourceRef = useRef(null);
 
-  useEffect(() => {
-    console.log("maxResolutionFProp", maxResolutionFProp);
-  }, [maxResolutionFProp]);
+  // useEffect(() => {
+  //   console.log("maxResolutionFProp", maxResolutionFProp);
+  // }, [maxResolutionFProp]);
 
   const syncClaimLinkLoaderFunc = useCallback(
     (extent, resolution, projection) => {
@@ -951,7 +950,7 @@ export const LandingMap = () => {
   // init useeffect
   useEffect(() => {
     // mouseScrollEvent();
-    console.log("yy-lmap -init") 
+    //console.log("yy-lmap -init") 
 
     getSyncPropertiesGeometry();
   }, []);
@@ -960,10 +959,7 @@ export const LandingMap = () => {
     mouseScrollEvent();
   }, [mapViewScaleReducer.mapViewScales]);
 
-  // useEffect(() => {
-
-  //    console.log("mapViewScales",mapViewScaleReducer.mapViewScales)
-  // }, [mapViewScaleReducer.mapViewScales]);
+ 
 
   useEffect(() => {
     fPropVectorLayerRef?.current
@@ -994,8 +990,7 @@ export const LandingMap = () => {
       const map = mapRef.current;
 
       const setCenteredAreaViewScales = (center) => {
-        // console.log("popl1", mapViewScaleReducer.mapViewScales )
-        let closestArea = { d: 9999999999999999 };
+        let closestArea = { d: 99999999999 };
         mapViewScaleReducer.mapViewScales.forEach((a) => {
           const dx = a.centroid_x - center[0];
           const dy = a.centroid_y - center[1];
@@ -1212,6 +1207,8 @@ export const LandingMap = () => {
   //layer visibility useEffects
   useEffect(() => {
     fPropVectorLayerRef?.current?.setVisible(landingMapFpropLayerVisible);
+    fPropVectorLayerLabelRef?.current?.setVisible(landingMapFpropLayerVisible);
+
   }, [landingMapFpropLayerVisible]);
   useEffect(() => {
     claimLinkVectorLayerRef?.current?.setVisible(

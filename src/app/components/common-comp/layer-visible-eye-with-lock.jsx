@@ -12,7 +12,7 @@ const LayerVisibleLockDiv = ({ title, children, onClick, eyeState,onLockClick,lo
     <div>
       <div
         style={{ alignItems: "center" }}
-        className="relative item-center flex pl-4 border rounded-lg border-blue-200 hover:border-blue-100 hover:border-2 focus:outline-none text-black text-sm sm:text-sm py-1 w-full transition duration-150 ease-in"
+        className="relative item-center flex pl-4 border rounded-lg border-blue-200 hover:border-blue-100 hover:border-2 focus:outline-none text-black text-sm sm:text-sm  w-full transition duration-150 ease-in"
       >
         <span className="mr-2">{children}</span>
         <h3 style={{ margin: 0, marginRight: "10px" }}>{title}</h3>
