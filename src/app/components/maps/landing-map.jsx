@@ -1806,7 +1806,7 @@ export const LandingMap = () => {
 
         <ButtonGroup
           variant="faded"
-          className="fixed right-0 bottom-1 z-50 "
+          className="fixed right-[5vw] bottom-1 z-50 "
           color="primary"
         >
           <Button className={`w-36 bg-blue-700 text-white`}>
@@ -1877,8 +1877,8 @@ export const LandingMap = () => {
           style={{
             width: isSideNavOpen
               ? isLandingMapSideNavOpen
-                ? "65vw"
-                : "83vw"
+                ? "63vw"
+                : "82vw"
               : "100vw",
             // width: isSideNavOpen ? "75vw" : "90vw",
             // width: `${isLandingMapSideNavOpen ? "75vw" : "100vw"}`,
