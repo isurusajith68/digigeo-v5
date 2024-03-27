@@ -56,6 +56,10 @@ import {
 import { toLonLat } from "ol/proj";
 import { METERS_PER_UNIT } from "ol/proj/Units";
 import { updateWindowsHistoryAmap } from "@/app/utils/helpers/window-history-replace";
+// import Image from 'next/image'
+import GetTopAds from './../advertisements/get-top-ads';
+import GetRightAds from './../advertisements/get-right-ads';
+
 
 const fill = new Fill();
 const stroke = new Stroke({
@@ -1622,7 +1626,7 @@ export const AreaMap = () => {
 
         <ButtonGroup
           variant="faded"
-          className="fixed right-0 bottom-1 z-50 "
+          className="fixed right-[85px] bottom-1 z-50 "
           color="primary"
         >
           <Button className={`w-36 bg-blue-700 text-white`}>
@@ -1680,7 +1684,14 @@ export const AreaMap = () => {
             )}
           </div>
         </div>
-
+        <div  className="absolute top-0  z-50 w-full h-min-[500] bg-red-200"> 
+        {GetTopAds()}
+         
+        </div>
+        <div  className="absolute top-0 right-0  z-50 h-full w-min-[500] bg-green-200"> 
+        {GetRightAds()}
+         
+        </div>
         <Map
           ref={mapRef}
           style={{

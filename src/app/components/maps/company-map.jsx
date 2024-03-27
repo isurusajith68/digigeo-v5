@@ -791,7 +791,7 @@ export const CompanyMap = () => {
 
         dispatch(setcompanyMapViewScales(closestArea.area));
         if(!closestArea.area){
-          alert(`no area found `)
+         // alert(`no area found `)
           return
         } else {
           dispatch(setcompanyMapViewScales(closestArea.area));
