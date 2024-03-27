@@ -1684,14 +1684,14 @@ export const AreaMap = () => {
             )}
           </div>
         </div>
-        <div  className="absolute top-0  z-50 w-full h-min-[500] bg-red-200"> 
+        {/* <div  className="absolute top-0  z-50 w-full h-min-[500] bg-red-200"> 
         {GetTopAds()}
          
         </div>
         <div  className="absolute top-0 right-0  z-50 h-full w-min-[500] bg-green-200"> 
         {GetRightAds()}
          
-        </div>
+        </div> */}
         <Map
           ref={mapRef}
           style={{
