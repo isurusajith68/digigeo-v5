@@ -68,6 +68,8 @@ import { Spinner } from "@nextui-org/react";
 import DialogStartup from "@/app/utils/dialog/dialog-startup";
 import MovingBorder from "@/app/utils/moving-border/moving-border";
 import { updateWindowsHistoryLmap } from "@/app/utils/helpers/window-history-replace";
+import GetTopAds from "../advertisements/get-top-ads";
+import GetRightAds from "../advertisements/get-right-ads";
 
 const fill = new Fill();
 const stroke = new Stroke({
@@ -1862,7 +1864,14 @@ export const LandingMap = () => {
             )}
           </div>
         </div>
+        <div className="absolute top-0  z-50 w-full h-min-[500] bg-red-200">
+          {GetTopAds()}
 
+        </div>
+        <div className="absolute top-0 right-0  z-50 h-full w-min-[500] bg-green-200">
+          {GetRightAds()}
+
+        </div>
         <Map
           ref={mapRef}
           style={{
