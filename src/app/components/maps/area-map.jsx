@@ -1155,7 +1155,7 @@ export const AreaMap = () => {
         //       // textAlign: align == "" ? undefined : align,
         //       // textBaseline: baseline,
         font: "20px serif",
-        text: feature.get("area_name") + "-" + feature.get("area_id"),
+        text: feature.get("area_name")  ,
         fill: new Fill({ color: "red" }),
         // stroke: new Stroke({ color: outlineColor, width: outlineWidth }),
         offsetX: 2,
@@ -1612,7 +1612,7 @@ export const AreaMap = () => {
           >
             Terrain
           </Button>
-          <Button
+          {/* <Button
             onClick={() => setLyrs("p")}
             className={`${
               mapLyrs == "p"
@@ -1621,7 +1621,7 @@ export const AreaMap = () => {
             }  w-22`}
           >
             {areaSelectedAreaId}
-          </Button>
+          </Button> */}
         </ButtonGroup>
 
         <ButtonGroup

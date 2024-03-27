@@ -1374,7 +1374,8 @@ export const LandingMap = () => {
         //       // textAlign: align == "" ? undefined : align,
         //       // textBaseline: baseline,
         font: "20px serif",
-        text: feature.get("area_name") + "-" + feature.get("area_id"),
+        text: feature.get("area_name")  ,
+        // text: feature.get("area_name") + "-" + feature.get("area_id"),
         fill: new Fill({ color: "red" }),
         // stroke: new Stroke({ color: outlineColor, width: outlineWidth }),
         offsetX: 2,
@@ -1793,7 +1794,7 @@ export const LandingMap = () => {
           >
             Terrain
           </Button>
-          <Button
+          {/* <Button
             className={`${
               mapLyrs == "p"
                 ? "bg-blue-900 text-white"
@@ -1801,7 +1802,7 @@ export const LandingMap = () => {
             }  w-22`}
           >
             {curcenteredareaid}
-          </Button>
+          </Button> */}
         </ButtonGroup>
 
         <ButtonGroup
