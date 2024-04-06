@@ -11,7 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Image from "next/image";
 import Link from "next/link";
 import LmapFCompanyFProperties from "./lmap-fcompany-popup-properties";
-import AMapDialogComponent from "./lmap-fcompany-dialog";
+import LMapDialogComponent from "./lmap-fcompany-dialog";
 import { Spinner } from "@nextui-org/react";
 
 const formatUrl = (url) => {
@@ -123,10 +123,11 @@ const LmapFCompanyPopup = ({}) => {
   // const areaCountry = useSelector((state) => state.areaMapReducer.areaCountry);
 
   const popupFcompanyId = useSelector(
-    (state) => state.areaMapReducer.popupFcompanyId
+    (state) => state.landingMapReducer.popupFcompanyId
   );
 
   useEffect(() => {
+    console.log("rr1-popupFcompanyId",popupFcompanyId,)
     clearForm();
     setlogoLoaded(false);
     if (popupFcompanyId) {
@@ -239,7 +240,7 @@ const LmapFCompanyPopup = ({}) => {
         style={customStyles}
         ariaHideApp={false}
       > */}
-      <AMapDialogComponent
+      <LMapDialogComponent
         clearForm={clearForm}
         // title=""
         // // onClose={closePopup}
@@ -305,7 +306,7 @@ const LmapFCompanyPopup = ({}) => {
             <LmapFCompanyFProperties companyid={popupFcompanyId} />
           </div>
         </div>
-      </AMapDialogComponent>
+      </LMapDialogComponent>
     </div>
   );
 };

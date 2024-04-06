@@ -1,5 +1,6 @@
 "use client";
 
+ 
 import { Button } from "@nextui-org/react";
 import { usePathname, useRouter } from "next/navigation";
  
@@ -13,6 +14,8 @@ import Image from 'next/image'
 import DialogCommonComponent from "../../utils/dialog/dialog-common";
 
 const HomeNavbar = () => {
+
+  
 
   const [disclaimerStatus,setdisclaimerStatus] = useState(false)
   const [helpDialogStatus,sethelpDialogStatus] = useState(false)
@@ -73,7 +76,9 @@ const HomeNavbar = () => {
       setdisclaimerStatus(true)
     }
   const showHelp = () => {
-     
+    //InvestorMappingHelpFile.docx
+    // router.push("/help/InvestorMappingHelpFile.docx.html")
+    router.push("/help")
       sethelpDialogStatus(true)
     }
   return (
@@ -227,7 +232,7 @@ const HomeNavbar = () => {
           </span>
         </DialogCommonComponent>
       )}
-      {helpDialogStatus && (
+      {/* {helpDialogStatus && (
         <DialogCommonComponent
           title={"Help"}
           onClose={sethelpDialogStatus}
@@ -236,7 +241,7 @@ const HomeNavbar = () => {
         >
           <span> Stay tuned for our Help Center.</span>
         </DialogCommonComponent>
-      )}
+      )} */}
     </header>
   );
 };

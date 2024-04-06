@@ -3,7 +3,7 @@ import { useSearchParams } from 'next/navigation'
 import { useRef, useEffect } from 'react'
 import { AiOutlineCloseCircle } from 'react-icons/ai';
 import { useDispatch, useSelector } from "react-redux";
-import { setpopupFcompanyId } from "../../../../store/area-map/area-map-slice";
+import { setpopupFcompanyId } from "../../../../store/landing-map/landing-map-slice";
 // type Props = {
 //     title: string,
 //     onClose: () => void,
@@ -22,11 +22,11 @@ export default function LMapDialogComponent({
   const dispatch = useDispatch();
 
       const popupFcompanyId = useSelector(
-      (state) => state.areaMapReducer.popupFcompanyId
+      (state) => state.landingMapReducer.popupFcompanyId
     );
 
     useEffect(()=>{
-      
+      console.log("rr1-popupFcompanyId2",popupFcompanyId,)
        if(popupFcompanyId && !dialogRef.current.open){
          dialogRef.current?.show();
        }

@@ -350,6 +350,7 @@ const LandingMapSideNavbar = () => {
                     </AccordionItemWithEye> */}
                 </div>
               </Accordion>
+              
             </div>
           </div>
         </div>

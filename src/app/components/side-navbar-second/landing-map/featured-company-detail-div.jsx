@@ -4,8 +4,8 @@
 
 import { useState } from "react";
 import { MdInfoOutline } from "react-icons/md";
-import AreaFCompanyPopup from "./lmap-fcompany-popup";
-import { setpopupFcompanyId } from "../../../../store/area-map/area-map-slice";
+import LmapFCompanyPopup from "./lmap-fcompany-popup";
+import { setpopupFcompanyId } from "../../../../store/landing-map/landing-map-slice";
 import { useDispatch } from "react-redux";
 
 const LmapFeaturedCompanyDetailDiv = ({
@@ -47,7 +47,7 @@ const LmapFeaturedCompanyDetailDiv = ({
             />
           </span>
           {isOpenIn == "y" ? (
-            <AreaFCompanyPopup
+            <LmapFCompanyPopup
               isOpenIn={isOpenIn}
               // closePopup={closeDialog}
               titleIn={title}

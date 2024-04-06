@@ -9,11 +9,9 @@ import { Circle as CircleStyle, Fill, Stroke, Style, Icon } from "ol/style";
 import {
   setareaFlyToLocation,
   setnavigatedFPropId,
-} from "@/store/area-map/area-map-slice";
-import { radioGroup } from "@nextui-org/react";
+} from "@/store/landing-map/landing-map-slice";
 import DialogComponent from "../../../utils/dialog/dialog";
 import AreaMapClickPopup from "../../maps/area-map-popup/area-map-click-popup";
-import { areaMApPropertyVectorRendererFuncV2Highlight } from "../../maps/area-map-styles/area-map-styles";
 
 const LmapFCompanyFProperties = ({ companyid }) => {
   const [featureObjects, setfeaturesObjects] = useState([]);

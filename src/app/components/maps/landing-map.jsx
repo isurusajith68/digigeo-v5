@@ -760,6 +760,7 @@ export const LandingMap = () => {
     setmapScale(scale.toLocaleString());
      dispatch(setlandingCurrentScale(scale ));
     if (fPropVectorLayerRef.current.isVisible()) {
+      //fPropSourceRef.current.refresh()
       // if (fPropSourceRef?.current?.getFeatures().length > 0) {
       //   console.log("setIsLandingMapSideNavOpen(true",)
       //   dispatch(setIsLandingMapSideNavOpen(true));
@@ -1716,7 +1717,7 @@ export const LandingMap = () => {
   };
 
   return (
-    <div className="flex  border-4 border-red-400">
+    <div className="flex   ">
       <LandingMapSideNavbar />
       <div className="relative">
         <div className="w-12 absolute left-0 top-0 z-50  ">
