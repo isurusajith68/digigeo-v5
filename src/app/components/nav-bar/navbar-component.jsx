@@ -12,6 +12,7 @@ import { useSelector } from "react-redux";
 import Link from "next/link";
 import Image from 'next/image'
 import DialogCommonComponent from "../../utils/dialog/dialog-common";
+import { MapViewMode } from "@/store/types";
 
 const HomeNavbar = () => {
 
@@ -37,7 +38,8 @@ const HomeNavbar = () => {
 
   const router = useRouter();
   const mapLyrs = useSelector((state) => state.mapSelectorReducer.areaLyrs);
-
+  const mapViewMode = useSelector((state) => state.mapSelectorReducer.mapViewMode);
+  
   useEffect(() => {
     const button = document.querySelector("#menu-button");
     const menu = document.querySelector("#menu");
@@ -73,7 +75,8 @@ const HomeNavbar = () => {
 
   const showDisclaimer = () => {
     console.log("PP1")
-      setdisclaimerStatus(true)
+    setdisclaimerStatus(true)
+    
     }
   const showHelp = () => {
     //InvestorMappingHelpFile.docx
@@ -82,7 +85,7 @@ const HomeNavbar = () => {
       sethelpDialogStatus(true)
     }
   return (
-    <header>
+    <header className={`   ${mapViewMode == "HEADED" ? "block" : "hidden"} `}>
       <nav
         className="
           flex flex-wrap

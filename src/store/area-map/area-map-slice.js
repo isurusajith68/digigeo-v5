@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { ZoomMode } from "../types";
 
 const initialState = {
   isAreaSideNavOpen: false,
@@ -8,7 +9,7 @@ const initialState = {
   featuredPropertyFeatures: undefined,
   syncClaimLinkPropertyFeatures: undefined,
   assetFeatures: undefined,
-  areaZoomMode: "custom",
+  areaZoomMode: ZoomMode.DYNAMIC,
   areaFpropLayerVisible: true,
   areaAssetLayerVisible: true,
   areaSyncPropLayerVisible: true,
@@ -32,7 +33,6 @@ const initialState = {
   areaCurrentScale: 5,
   areaSelectedAreaId: 0,
   areaMapViewScales: {},
-  
 };
 
 const areaMapSlice = createSlice({
@@ -127,21 +127,17 @@ const areaMapSlice = createSlice({
       state.areaAssetLayerAlwaysVisible = action.payload;
     },
     setareaCurrentScale: (state, action) => {
-     
       state.areaCurrentScale = action.payload;
     },
     setareaSelectedAreaId: (state, action) => {
-     
       state.areaSelectedAreaId = action.payload;
     },
     setareaMapViewScales: (state, action) => {
-     
       state.areaMapViewScales = action.payload;
     },
   },
 });
 
- 
 export const {
   setAreaCountry,
   setAreaMiningArea,
@@ -174,7 +170,6 @@ export const {
   setareaCurrentScale,
   setareaSelectedAreaId,
   setareaMapViewScales,
-
 } = areaMapSlice.actions;
 
 export default areaMapSlice.reducer;

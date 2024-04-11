@@ -240,7 +240,7 @@ const AreaFCompanyPopup = ({ }) => {
 
 
   return (
-    <div>
+    <div >
       {/* <Modal
         isOpen={isOpen}
         onRequestClose={closePopup}

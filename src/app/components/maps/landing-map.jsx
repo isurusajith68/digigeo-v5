@@ -360,6 +360,10 @@ export const LandingMap = () => {
     (state) => state.landingMapReducer.navigatedFPropId
   );
 
+  const mapViewMode = useSelector((state) => state.mapSelectorReducer.mapViewMode);
+
+
+
   const mapViewScaleReducer = useSelector((state) => state.mapViewScaleReducer);
   //
   const [coordinates, setCoordinates] = useState(undefined);
@@ -1722,7 +1726,7 @@ export const LandingMap = () => {
       <div className="relative">
         <div className="w-12 absolute left-0 top-0 z-50  ">
           <div className="flex flex-col gap-4 mt-2">
-            <Button isIconOnly variant="bordered" className="bg-blue-900">
+            <Button isIconOnly variant="bordered" className={`bg-blue-900 ${mapViewMode == " HEADED" ? "block": "hidden"}`}>
               <BsFillArrowLeftSquareFill
                 // size={26}
                 className={`cursor-pointer text-white h-6 w-6 ${
@@ -1879,13 +1883,20 @@ export const LandingMap = () => {
           style={{
             width: isSideNavOpen
               ? isLandingMapSideNavOpen
-                ? "63vw"
-                : "82vw"
+                ? mapViewMode == "HEADED" ? "65vw" : "100vw"
+                : mapViewMode == "HEADED" ? "83vw" : "100vw"
               : "100vw",
-            // width: isSideNavOpen ? "75vw" : "90vw",
-            // width: `${isLandingMapSideNavOpen ? "75vw" : "100vw"}`,
-            height: "90vh",
+
+            height: mapViewMode == "HEADED" ? "90vh" : "100vh",
           }}
+          // style={{
+          //   width: isSideNavOpen
+          //     ? isLandingMapSideNavOpen
+          //       ? "63vw"
+          //       : "82vw"
+          //     : "100vw",
+          //   height: "90vh",
+          // }}
           controls={[]}
           onSingleclick={onSingleclick}
           onPointermove={onPointerMove}

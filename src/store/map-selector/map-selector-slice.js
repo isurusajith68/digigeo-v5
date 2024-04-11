@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { MapViewMode } from "../types";
 
 const initialState = {
   selectedMap: "landing",
@@ -15,6 +16,7 @@ const initialState = {
   companyInitialCenter: [-10694872.010699773, 7434223.337137634],
   propertiesInitialCenter: [-10694872.010699773, 7434223.337137634],
   landingMapInitialCenter: [-10694872.010699773, 7434223.337137634],
+  mapViewMode:"HEADED",
 };
 
 const mapSelectorSlice = createSlice({
@@ -66,6 +68,9 @@ const mapSelectorSlice = createSlice({
     setLandingMapInitialCenter: (state, action) => {
       state.landingMapInitialCenter = action.payload;
     },
+    setmapViewMode: (state, action) => {
+      state.mapViewMode = action.payload;
+    },
   },
 });
 
@@ -84,6 +89,7 @@ export const {
   setCompanyInitialCenter,
   setPropertiesInitialCenter,
   setLandingMapInitialCenter,
+  setmapViewMode,
 } = mapSelectorSlice.actions;
 
 export default mapSelectorSlice.reducer;

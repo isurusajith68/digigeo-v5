@@ -17,6 +17,7 @@ import {
   setPropertiesLyrs,
   setPropertiesZoomLevel,
   setSelectedMap,
+  setmapViewMode
 } from "../../../store/map-selector/map-selector-slice";
 import {
   setAreaCountry,
@@ -29,6 +30,7 @@ import {
 import { setIsPropertiesSideNavOpen } from "../../../store/properties-map/properties-map-slice";
 import { setIsCompanySideNavOpen } from "../../../store/company-map/company-map-slice";
 import { fetchmapViewScales } from "@/store/map-view-settings/map-view-setting-slice";
+import { MapViewMode } from "@/store/types";
 
 
  
@@ -54,11 +56,15 @@ export const LandingPage = () => {
   const areaName = searchParams.get("ma");
   const areaCountry = searchParams.get("co");
   const areaid = searchParams.get("aid");
+  const mapViewMode = searchParams.get("mvm") ?? "HEADED"   ;
+  // const mapViewMode = searchParams.get("mvm") ?? MapViewMode.HEADLESS;
+
 
   useEffect(() => {
      
     updateRedux();
-     dispatch(fetchmapViewScales());
+    dispatch(fetchmapViewScales());
+    console.log("mapViewMode",mapViewMode,)
   }, []);
 
   const updateRedux = async () => {
@@ -68,6 +74,8 @@ export const LandingPage = () => {
       dispatch(setareaSelectedAreaId(areaid));
       dispatch(setAreaZoomMode("custom"));
       dispatch(setSelectedMap(mapType));
+      dispatch(setmapViewMode(mapViewMode));
+
       switch (mapType) {
         case "area":
           dispatch(
@@ -138,7 +146,7 @@ export const LandingPage = () => {
 
   return (
     <div className="w-full flex bg-white   h-[90vh]">
-      <div className={`${isSideNavOpen ? "z-40 h-full" : "fixed top-15 left-0 z-40"}`}>
+      <div className={`${isSideNavOpen ? "z-40 h-full" : "fixed top-15 left-0 z-40"}    ${mapViewMode == "HEADED" ? "block" : "hidden"}`}>
         <SideNavbar />
       </div>
       <div className="z-0">

@@ -1,23 +1,9 @@
 
 "use client"
-
-
-
-// import fs from "fs";
-// import parse from 'node-html-parser';
+ 
 import { useEffect, useRef } from "react";
- 
- 
 
-// export async function getHelpHtml() {
-//     const htmlContent = fs.readFileSync(`./public/help/InvestorMappingHelpFile.docx.html`, 'utf-8');
-
-//     return {
-//         props: {
-//             renderedHTML: htmlContent,
-//         },
-//     };
-// }
+ 
 
 export default function Page() {
     

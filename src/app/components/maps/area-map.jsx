@@ -59,7 +59,9 @@ import { updateWindowsHistoryAmap } from "@/app/utils/helpers/window-history-rep
 // import Image from 'next/image'
 import GetTopAds from './../advertisements/get-top-ads';
 import GetRightAds from './../advertisements/get-right-ads';
-
+import { MapViewMode, ZoomMode } from "@/store/types";
+import { Tooltip } from "@nextui-org/react";
+import { usePathname } from 'next/navigation'
 
 const fill = new Fill();
 const stroke = new Stroke({
@@ -322,7 +324,7 @@ export const AreaMap = () => {
   let pathname = "";
   try {
     pathname = window.location.href;
-  } catch (error) {}
+  } catch (error) { }
   //  useSelector
   const router = useRouter();
   const [center, setCenter] = useState("");
@@ -347,19 +349,24 @@ export const AreaMap = () => {
   const navigatedFPropId = useSelector(
     (state) => state.areaMapReducer.navigatedFPropId
   );
-    const areaSyncPropLayerAlwaysVisible = useSelector(
+  const areaSyncPropLayerAlwaysVisible = useSelector(
     (state) => state.areaMapReducer.areaSyncPropLayerAlwaysVisible
   );
- const areaAssetLayerAlwaysVisible = useSelector(
+  const areaAssetLayerAlwaysVisible = useSelector(
     (state) => state.areaMapReducer.areaAssetLayerAlwaysVisible
   );
 
-    const areaMapViewScales = useSelector(
+  const areaMapViewScales = useSelector(
     (state) => state.areaMapReducer.areaMapViewScales
   );
-    const areaSelectedAreaId = useSelector(
+  const areaSelectedAreaId = useSelector(
     (state) => state.areaMapReducer.areaSelectedAreaId
   );
+  const areaZoomMode = useSelector(
+    (state) => state.areaMapReducer.areaZoomMode
+  );
+
+  const mapViewMode = useSelector((state) => state.mapSelectorReducer.mapViewMode);
 
 
 
@@ -375,8 +382,10 @@ export const AreaMap = () => {
   const [fPropertyObject, setfPropertyObject] = useState();
   const [syncPropertyObject, setsyncPropertyObject] = useState();
   const [claimObject, setclaimObject] = useState();
-   const [mapUnits, setmapUnits] = useState("m");
-   const [mapViewScales, setmapViewScales] = useState([]);
+  const [mapUnits, setmapUnits] = useState("m");
+  const [mapViewScales, setmapViewScales] = useState([]);
+
+  // const pathname2 = usePathname()
 
   useEffect(() => {
     if (navigatedFPropertyRef.current) {
@@ -602,8 +611,8 @@ export const AreaMap = () => {
   const onViewChange = useCallback((e) => {
     const scale = mapRatioScale({ map: mapRef.current });
     setmapScale(scale.toLocaleString());
-     dispatch(setareaCurrentScale(scale ));
-     
+    dispatch(setareaCurrentScale(scale));
+
     //  console.log("areaCurrentScale-map",scale)
   });
 
@@ -611,13 +620,13 @@ export const AreaMap = () => {
     if (mapViewRef.current) {
       const scale = mapRatioScale({ map: mapRef.current });
       setmapScale(scale.toLocaleString());
-      
+
     }
   }, [mapViewRef.current]);
 
   useEffect(() => {
     if (areaFlyToLocation?.length > 0)
-      flyTo(mapViewRef?.current, areaFlyToLocation, () => {});
+      flyTo(mapViewRef?.current, areaFlyToLocation, () => { });
   }, [areaFlyToLocation]);
 
   const selectedMap = useSelector(
@@ -668,14 +677,12 @@ export const AreaMap = () => {
     (state) => state.areaMapReducer.assetFeatures
   );
 
-   const mapViewScaleReducer = useSelector((state) => state.mapViewScaleReducer);
+  const mapViewScaleReducer = useSelector((state) => state.mapViewScaleReducer);
 
   const areaName = useSelector((state) => state.areaMapReducer.areaMiningArea);
   const areaCountry = useSelector((state) => state.areaMapReducer.areaCountry);
 
-  // const areaZoomMode = useSelector(
-  //   (state) => state.areaMapReducer.areaZoomMode
-  // );
+
   //set styles
   useEffect(() => {
     const style = new Style({});
@@ -713,11 +720,17 @@ export const AreaMap = () => {
 
     if (syncPropSourceRef.current) {
       const p1 = syncPropSourceRef.current?.getExtent()[0];
-      if (p1 != Infinity) {
-        mapRef.current?.getView()?.fit(syncPropSourceRef.current?.getExtent(), {
-          padding: [200, 200, 200, 200],
-          duration: 3000,
-        });
+      if (areaZoomMode == ZoomMode.DYNAMIC) {
+        if (p1 != Infinity) {
+          mapRef.current?.getView()?.fit(syncPropSourceRef.current?.getExtent(), {
+            padding: [200, 200, 200, 200],
+            duration: 3000,
+          });
+        }
+      } else {
+        if (p1 != Infinity) {
+          mapRef.current?.getView()?.setZoom(areaZoomLevel);
+        }
       }
     }
   }, [syncPropertyFeatures]);
@@ -784,9 +797,10 @@ export const AreaMap = () => {
 
   //init useeffect
   useEffect(() => {
-    
+
     mouseScrollEvent();
-    
+
+    console.log("mapViewMode-amap",mapViewMode,)
 
   }, []);
 
@@ -809,12 +823,12 @@ export const AreaMap = () => {
   useEffect(() => {
     //console.log("yy-mew-areaSelectedAreaId",areaSelectedAreaId)
 
-    if(areaSelectedAreaId){
-        // console.log("yy-yy")
-        updateWindowsHistoryAmap(  {isSideNavOpen,areaLyrs:mapLyrs,areaZoomLevel:zoom,areaInitialCenter:center,country:areaCountry,miningArea:areaName,areaId:areaSelectedAreaId});
-      }else{
-        //console.log("yy-xx")
-      }
+    if (areaSelectedAreaId) {
+      // console.log("yy-yy")
+      updateWindowsHistoryAmap({ isSideNavOpen, areaLyrs: mapLyrs, areaZoomLevel: zoom, areaInitialCenter: center, country: areaCountry, miningArea: areaName, areaId: areaSelectedAreaId });
+    } else {
+      //console.log("yy-xx")
+    }
 
     // let newUrl;
     // if (areaName == "") {
@@ -824,26 +838,26 @@ export const AreaMap = () => {
     // }
     //  updateWindowsHistory(newUrl);
   }, [zoom, center]);
-    const handleMoveEnd = useCallback( () => {
-      const map = mapRef.current;
-       
-      const tmpZoomLevel = map.getView().getZoom();
-      const tmpinitialCenter = map.getView().getCenter();
-      dispatch(setAreaZoomLevel(tmpZoomLevel));
-      dispatch(setAreaInitialCenter(tmpinitialCenter));
-      setZoom(tmpZoomLevel);
-      setCenter(tmpinitialCenter);
+  const handleMoveEnd = useCallback(() => {
+    const map = mapRef.current;
 
-        // let newUrl;
-      
+    const tmpZoomLevel = map.getView().getZoom();
+    const tmpinitialCenter = map.getView().getCenter();
+    dispatch(setAreaZoomLevel(tmpZoomLevel));
+    dispatch(setAreaInitialCenter(tmpinitialCenter));
+    setZoom(tmpZoomLevel);
+    setCenter(tmpinitialCenter);
 
-       
-    },[])
+    // let newUrl;
 
-  
+
+
+  }, [])
+
+
   const mouseScrollEvent = useCallback((event) => {
     const map = mapRef.current;
-     // console.log("yy-yy1")
+    // console.log("yy-yy1")
     // console.log("mapRef", mapRef.current?.getZoom());
 
 
@@ -877,23 +891,30 @@ export const AreaMap = () => {
     //     window.location.pathname
     //   }?t=${selectedMap}&sn=${!tmpValue}&sn2=${isAreaSideNavOpen}&lyrs=${mapLyrs}&z=${areaZoomLevel}&c=${areaInitialCenter}&co=${areaCountry}&ma=${areaName}`;
     // }
-           updateWindowsHistoryAmap(  {isAreaSideNavOpen,isSideNavOpen,areaLyrs:mapLyrs,areaZoomLevel,areaInitialCenter,country:areaCountry,miningArea:areaName,areaId:areaSelectedAreaId});
+    updateWindowsHistoryAmap({ isAreaSideNavOpen, isSideNavOpen, areaLyrs: mapLyrs, areaZoomLevel, areaInitialCenter, country: areaCountry, miningArea: areaName, areaId: areaSelectedAreaId });
 
     // window.history.replaceState({}, "", newUrl);
     // dispatch(setUrlUpdate());
   };
+
+  const copyMapUrl = () => {
+   
+    alert("ppp" + pathname)
+    navigator.clipboard.writeText(pathname + "&mvm=HEADLESS");
+
+  }
 
   const setLyrs = (lyrs) => {
     dispatch(setAreaLyrs(lyrs));
     let newUrl;
     if (areaName == "") {
       newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isAreaSideNavOpen}&lyrs=${lyrs}&z=${areaZoomLevel}&c=${areaInitialCenter}`;
-      updateWindowsHistoryAmap(  {isAreaSideNavOpen,isSideNavOpen,areaLyrs:lyrs,areaZoomLevel,areaInitialCenter,country:areaCountry,miningArea:areaName,areaId:areaSelectedAreaId});
-      
+      updateWindowsHistoryAmap({ isAreaSideNavOpen, isSideNavOpen, areaLyrs: lyrs, areaZoomLevel, areaInitialCenter, country: areaCountry, miningArea: areaName, areaId: areaSelectedAreaId });
+
     } else {
       //newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isAreaSideNavOpen}&lyrs=${lyrs}&z=${areaZoomLevel}&c=${areaInitialCenter}&co=${areaCountry}&ma=${areaName}`;
-      updateWindowsHistoryAmap(  {isAreaSideNavOpen,isSideNavOpen,areaLyrs:lyrs,areaZoomLevel,areaInitialCenter,country:areaCountry,miningArea:areaName,areaId:areaSelectedAreaId});
-      
+      updateWindowsHistoryAmap({ isAreaSideNavOpen, isSideNavOpen, areaLyrs: lyrs, areaZoomLevel, areaInitialCenter, country: areaCountry, miningArea: areaName, areaId: areaSelectedAreaId });
+
     }
     window.history.replaceState({}, "", newUrl);
   };
@@ -901,8 +922,8 @@ export const AreaMap = () => {
     //const newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=true&lyrs=${mapLyrs}&z=${areaZoomLevel}&c=${areaInitialCenter}`;
     // window.history.replaceState({}, "", newUrl);
     //updateWindowsHistory(newUrl);
-      updateWindowsHistoryAmap(  {isSideNavOpen,areaLyrs:mapLyrs,areaZoomLevel,areaInitialCenter,country:areaCountry,miningArea:areaName,areaId:areaSelectedAreaId});
-    
+    updateWindowsHistoryAmap({ isSideNavOpen, areaLyrs: mapLyrs, areaZoomLevel, areaInitialCenter, country: areaCountry, miningArea: areaName, areaId: areaSelectedAreaId });
+
     dispatch(setIsAreaSideNavOpen(true));
   };
 
@@ -933,7 +954,7 @@ export const AreaMap = () => {
     if (resolution < 300)
       t =
         feature.get("prop_name") +
-          (feature.get("prop_alias") ? "/" + feature.get("prop_alias") : "") ??
+        (feature.get("prop_alias") ? "/" + feature.get("prop_alias") : "") ??
         "";
     const s = new Style({
       text: new Text({
@@ -1151,11 +1172,11 @@ export const AreaMap = () => {
         color: "blue",
         width: 1,
       }),
-            text: new Text({
+      text: new Text({
         //       // textAlign: align == "" ? undefined : align,
         //       // textBaseline: baseline,
         font: "20px serif",
-        text: feature.get("area_name")  ,
+        text: feature.get("area_name"),
         fill: new Fill({ color: "red" }),
         // stroke: new Stroke({ color: outlineColor, width: outlineWidth }),
         offsetX: 2,
@@ -1499,52 +1520,51 @@ export const AreaMap = () => {
     setmapScale(scale.toLocaleString());
   };
 
-  useEffect(()=>{
+  useEffect(() => {
 
-    if(mapViewScaleReducer?.mapViewScales?.length>0){
+    if (mapViewScaleReducer?.mapViewScales?.length > 0) {
       setmapViewScales(mapViewScaleReducer.mapViewScales)
     }
-  },[mapViewScaleReducer.mapViewScales])
+  }, [mapViewScaleReducer.mapViewScales])
 
 
   useEffect(() => {
-      // console.log("xx-0- ue-areaSelectedAreaId-setareaMapViewScales ",areaSelectedAreaId)
-    if(areaSelectedAreaId !=undefined &&   areaSelectedAreaId !=0){
+    // console.log("xx-0- ue-areaSelectedAreaId-setareaMapViewScales ",areaSelectedAreaId)
+    if (areaSelectedAreaId != undefined && areaSelectedAreaId != 0) {
       const mapViewScale1 = mapViewScales.find(a => a.area_id == areaSelectedAreaId)
-      
+
       if (mapViewScale1) {
-       // console.log("xx-88if-amap- setareaMapViewScales ",mapViewScale1)
+        // console.log("xx-88if-amap- setareaMapViewScales ",mapViewScale1)
         dispatch(setareaMapViewScales(mapViewScale1));
       }
-      else{
-       // console.log("xx-crit- no aid yy-else",mapViewScales)
+      else {
+        // console.log("xx-crit- no aid yy-else",mapViewScales)
         dispatch(setareaMapViewScales(mapViewScales[0]))
       }
 
       //console.log("xx-99mapViewScale1-set",mapViewScale1)
 
-  }else{
-       console.log("xx-xxnotmapViewScale1-set",areaSelectedAreaId)
-  }
-    
-  },[areaSelectedAreaId,mapViewScales])
+    } else {
+      console.log("xx-xxnotmapViewScale1-set", areaSelectedAreaId)
+    }
 
- 
- 
-  
+  }, [areaSelectedAreaId, mapViewScales])
+
+
+
+
 
   return (
     <div className="flex">
-      <AreaSideNavbar />
+      <AreaSideNavbar className={`   ${mapViewMode == "HEADED" ? "block" : "hidden"}`} />
       <div className="relative">
         <div className="w-12 absolute left-0 top-0 z-50 ml-2">
           <div className="flex flex-col gap-4 mt-2">
-            <Button isIconOnly variant="bordered" className="bg-blue-900">
+            <Button isIconOnly variant="bordered" className={`bg-blue-900 ${mapViewMode == "HEADED" ? "flex" : "hidden"}`}>
               <BsFillArrowLeftSquareFill
                 // size={26}
-                className={`cursor-pointer text-white h-6 w-6 ${
-                  isSideNavOpen ? "" : "rotate-180"
-                }`}
+                className={`cursor-pointer text-white h-6 w-6 ${isSideNavOpen ? "" : "rotate-180"
+                  }`}
                 onClick={() => collapsibleBtnHandler()}
               />
             </Button>
@@ -1566,6 +1586,29 @@ export const AreaMap = () => {
                 onClick={onClickViewMinusZoom}
               />
             </Button>
+            <Tooltip
+              content={
+                <div className="px-1 py-2">
+                  <div className="text-small font-bold">Copy Map Url</div>
+                  <div className="text-tiny">Copies map url to clipboard</div>
+                </div>
+              }
+            >
+              <Button isIconOnly variant="bordered" className={`bg-blue-900 ${mapViewMode == "HEADED" ? "flex" : "hidden"}`} onClick={() => copyMapUrl()}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="WHITE" class="bi bi-copy" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1z" />
+                className={`cursor-pointer text-white h-6 w-6 ${isSideNavOpen ? "" : "rotate-180"
+                  }`}
+                
+              </svg>
+              {/* <BsFillArrowLeftSquareFill
+                // size={26}
+                className={`cursor-pointer text-white h-6 w-6 ${isSideNavOpen ? "" : "rotate-180"
+                  }`}
+                onClick={() => collapsibleBtnHandler()}
+              /> */}
+              </Button>
+            </Tooltip>
             {/* {!isAreaSideNavOpen && isSideNavOpen ? (
               <Button
                 variant="bordered"
@@ -1584,31 +1627,28 @@ export const AreaMap = () => {
         >
           <Button
             onClick={() => setLyrs("m")}
-            className={`${
-              mapLyrs == "m"
-                ? "bg-blue-900 text-white"
-                : "bg-blue-700 text-white"
-            }  w-22`}
+            className={`${mapLyrs == "m"
+              ? "bg-blue-900 text-white"
+              : "bg-blue-700 text-white"
+              }  w-22`}
           >
             Map
           </Button>
           <Button
             onClick={() => setLyrs("s")}
-            className={`${
-              mapLyrs == "s"
-                ? "bg-blue-900 text-white"
-                : "bg-blue-700 text-white"
-            }  w-22`}
+            className={`${mapLyrs == "s"
+              ? "bg-blue-900 text-white"
+              : "bg-blue-700 text-white"
+              }  w-22`}
           >
             Satellite
           </Button>
           <Button
             onClick={() => setLyrs("p")}
-            className={`${
-              mapLyrs == "p"
-                ? "bg-blue-900 text-white"
-                : "bg-blue-700 text-white"
-            }  w-22`}
+            className={`${mapLyrs == "p"
+              ? "bg-blue-900 text-white"
+              : "bg-blue-700 text-white"
+              }  w-22`}
           >
             Terrain
           </Button>
@@ -1697,13 +1737,21 @@ export const AreaMap = () => {
           style={{
             width: isSideNavOpen
               ? isAreaSideNavOpen
-                ? "65vw"
-                : "83vw"
-              : "100vw",
-            // width: isSideNavOpen ? (isLandingMapSideNavOpen ? "65vw" : "83vw") : "100vw",
-            // width: `${isAreaSideNavOpen ? "75vw" : "100vw"}`,
-            height: "90vh",
+                ? mapViewMode == "HEADED" ? "65vw": "100vw"
+                : mapViewMode == "HEADED" ? "83vw": "100vw"
+              :  "100vw",
+            
+            height: mapViewMode == "HEADED" ? "90vh" : "100vh",
           }}
+          // style={{
+          //   width: isSideNavOpen
+          //     ? isAreaSideNavOpen
+          //       ?  "65vw"
+          //       : "83vw"
+          //     : "100vw",
+            
+          //   height: "90vh",
+          // }}
           controls={[]}
           onSingleclick={onSingleclick}
           onPointermove={onPointerMove}
@@ -1751,7 +1799,7 @@ export const AreaMap = () => {
             {syncClaimLinkPropertyFeatures && (
               <olSourceVector
                 ref={claimLinkSourceRef}
-                // style={areaMap_tbl_sync_claimlink_VectorLayerStyleFunction}
+              // style={areaMap_tbl_sync_claimlink_VectorLayerStyleFunction}
               ></olSourceVector>
             )}
           </olLayerVector>
@@ -1759,7 +1807,7 @@ export const AreaMap = () => {
             ref={claimVectorImgLayerRef}
             style={styleFunctionClaim}
             minResolution={0}
-            maxResolution={getMapResolution( areaMapViewScales?.claimscale ?? 350000,mapUnits) ?? 150}
+            maxResolution={getMapResolution(areaMapViewScales?.claimscale ?? 350000, mapUnits) ?? 150}
           >
             <olSourceVector
               ref={claimVectorImgSourceRef}
@@ -1779,7 +1827,7 @@ export const AreaMap = () => {
             ref={assetLayerRef}
             style={areaMapAssetVectorLayerStyleFunction}
             minResolution={0}
-             maxResolution={areaAssetLayerAlwaysVisible ? 40075016 : getMapResolution( areaMapViewScales?.assetscale ?? 450000,mapUnits)??150 }  
+            maxResolution={areaAssetLayerAlwaysVisible ? 40075016 : getMapResolution(areaMapViewScales?.assetscale ?? 450000, mapUnits) ?? 150}
           >
             <olSourceVector ref={assetSourceRef}></olSourceVector>
           </olLayerVector>
@@ -1787,7 +1835,7 @@ export const AreaMap = () => {
             ref={syncPropVectorLayerRef}
             style={styleFunctionSyncProperties}
             minResolution={0}
-            maxResolution={areaSyncPropLayerAlwaysVisible ? 40075016 : getMapResolution(areaMapViewScales?.proplayerscale ?? 950000,mapUnits) ?? 150}  
+            maxResolution={areaSyncPropLayerAlwaysVisible ? 40075016 : getMapResolution(areaMapViewScales?.proplayerscale ?? 950000, mapUnits) ?? 150}
           >
             <olSourceVector ref={syncPropSourceRef}></olSourceVector>
           </olLayerVector>
