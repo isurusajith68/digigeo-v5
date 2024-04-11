@@ -22,6 +22,8 @@ const LmapFCompanyFProperties = ({ companyid }) => {
   const blocknoRef = useRef(0);
   const pidRef = useRef(0);
 
+
+
   const featuredPropertyFeatures = useSelector(
     (state) => state.areaMapReducer.featuredPropertyFeatures
   );
@@ -31,6 +33,7 @@ const LmapFCompanyFProperties = ({ companyid }) => {
   const areaName = useSelector((state) => state.areaMapReducer.areaMiningArea);
 
   useEffect(() => {
+    console.log("ff1-companyid", companyid,)
     setunNamedFeatureObjects([]);
     setloadData((t) => !t);
   }, [companyid]);
@@ -206,8 +209,8 @@ const LmapFCompanyFProperties = ({ companyid }) => {
                       fp.get("id")
                     )
                   }
-                  //onClick={() => setIsOpenIn(true)}
-                  // onClick={() => console.log("title", title)}
+                //onClick={() => setIsOpenIn(true)}
+                // onClick={() => console.log("title", title)}
                 />
               </span>
 

@@ -39,7 +39,7 @@ export default function Page() {
 
     return (
         <div className="overflow-y-scroll h-[100vh]">
-            <iframe ref={ifr} src="/help/InvestorMappingHelpFile.docx.html" frameBorder="0" width="100%"   allowFullScreen  ></iframe>
+            <iframe ref={ifr} src="/help/InvestorMappingHelpFile.docx.html" frameBorder="0" width="100%" height="100%"  allowFullScreen  ></iframe>
             {/* <div dangerouslySetInnerHTML={{ __html: parsedHTML.querySelector('body').innerHTML }} /> */}
         </div>
     );
