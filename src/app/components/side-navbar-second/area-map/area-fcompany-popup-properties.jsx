@@ -173,8 +173,12 @@ const AreaFCompanyFProperties = ({ companyid }) => {
 
    
   const getDomElements = useMemo(() => {
+
+    const namedProps = featureObjects.filter(p => p.get("prop_name"))
+
+    namedProps.sort((a, b) => { return a.get("prop_name").toUpperCase() > b.get("prop_name").toUpperCase() ? 1 :-1 })
      
-    const r = featureObjects.map((fp) => {
+    const r = namedProps.map((fp) => {
       // if (!fp.get("propertyid")) {
       //   pidRef.current = pidRef.current - 1;
       // }
@@ -236,9 +240,9 @@ const AreaFCompanyFProperties = ({ companyid }) => {
       }
     });
      
-    const ee= unNamedFeatureObjects.filter(r=> !r.get("propertyid"))
+    // const ee= unNamedFeatureObjects.filter(r=> !r.get("propertyid"))
 
-    console.log("unNamedFeatureObjects", ee)
+    // console.log("unNamedFeatureObjects", ee)
     
     const unNamedProps = unNamedFeatureObjects.map((fp) => {
         
@@ -323,7 +327,7 @@ const AreaFCompanyFProperties = ({ companyid }) => {
       }}
     >
       <div style={{ fontWeight: 700 }}>{areaName}</div>
-      <div style={{ fontWeight: 600 }}>{"Featured Properties"}</div>
+      <div  className="  w-full bg-blue-800 px-2 mx-2 text-white">{"Featured Properties"}</div>
       <div
         className="bg-slate-100"
         style={{
