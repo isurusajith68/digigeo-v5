@@ -177,7 +177,8 @@ const CMapFCompanyAddlock = ({    titleIn,companyid }) => {
         `https://atlas.ceyinfo.cloud/matlas/company_details/${companyid}`,
         { cache: "no-store" }
       );
-        const d = await res.json();
+      const d = await res.json();
+        
         let { url, urlPrefix,profile } = formatUrl(d.data[0]?.url ?? "");
         seturl(url)
       const logo = d.data[0]?.logo;
@@ -213,18 +214,18 @@ const CMapFCompanyAddlock = ({    titleIn,companyid }) => {
               alt="Logo"
                
               />)} </div>
-            <span>{title}</span>
+          <div className="flex justify-center p-2 w-full"><p className="mx-auto  max-w-[15rem] text-center font-bold">{title}</p> </div>
             <span>
             {sponsorData && sponsorData.map(sd =>(  
               <span key={sd.text} style={sd.style}>{sd.text}</span>))
             } 
             </span>
             {/* <div className="w-64 whitespace-nowrap text-ellipsis  "></div> */}
-            { profile && ( <Link href={profile} target="_blank" className="rounded-lg border border-solid" >
+          {profile && (<Link href={profile} target="_blank" className="rounded-lg border border-solid  " >
              
-              See Profile..
+            <p className="overflow-hidden text-blue-600    whitespace-nowrap text-ellipsis max-w-[15rem]" > {profile}</p>
             </Link>)}
-            {url && (<Link href={url} target="_blank" className="rounded-lg border border-solid" >
+            {url && (<Link href={url} target="_blank" className="rounded-lg border border-solid underline" >
              
               {"Read More"} 
             </Link>)}

@@ -98,6 +98,8 @@ const CompanySideNavbar = () => {
 
  
   const [featuredPropertiesLocal, setFeaturedPropertiesLocal] = useState([]);
+  const [namedFeaturedPropertiesLocal, setnamedFeaturedPropertiesLocal] = useState([]);
+  const [unNamedFeaturedPropertiesLocal, setunNamedFeaturedPropertiesLocal] = useState([]);
   //data load
   useEffect(() => {
    // console.log("companyId",companyId)
@@ -160,19 +162,29 @@ const CompanySideNavbar = () => {
     if (featuredPropertyFeatures?.features) {
       const e = new GeoJSON().readFeatures(featuredPropertyFeatures)
       
-      let blockno = 1
-      for (let index = 0; index < e.length; index++) {
-        const element = e[index];
+      const namedp = e.filter(fp => fp.get("prop_name"))
+      const unnamedp = e.filter(fp => !fp.get("prop_name"))
 
-        if(!element.get("prop_name")){
+      //sort namedp
+
+      namedp.sort((a, b) => { return a.get("prop_name").toUpperCase() > b.get("prop_name").toUpperCase() ? 1 : -1 })
+
+      //rename empty prop_names
+      let blockno = 1
+      for (let index = 0; index < unnamedp.length; index++) {
+        const element = unnamedp[index];
+
+        //if(!element.get("prop_name")){
           element.set("prop_name","Block-" + blockno)
           blockno++;
 
-        }
+       // }
         
       }
       console.log("loading f props -cmp2", e)
       setFeaturedPropertiesLocal(e);
+      setnamedFeaturedPropertiesLocal(namedp)
+      setunNamedFeaturedPropertiesLocal(unnamedp)
 
     } else {
           setFeaturedPropertiesLocal([]);
@@ -342,8 +354,8 @@ const CompanySideNavbar = () => {
                   onClick={setFpropLayerVisibility}
                   eyeState={companyFpropLayerVisible}
                 >
-                  <div className="flex flex-col gap-1 overflow-y-auto max-h-[40vh]">
-                    {featuredPropertiesLocal.map(
+                  <div className="flex flex-col gap-1 overflow-y-auto overflow-x-hidden max-h-[40vh]">
+                    {namedFeaturedPropertiesLocal.map(
                       (i) =>
                         i.get("prop_name") && (
                           <FeaturedPropertyDetailDiv
@@ -366,7 +378,35 @@ const CompanySideNavbar = () => {
                           </FeaturedPropertyDetailDiv>
                         )
                     )}
+                    {unNamedFeaturedPropertiesLocal.length > 0 && <div className="w-full bg-blue-800 text-white mx-2 px-2">Un-named Properties</div>}
+                    {unNamedFeaturedPropertiesLocal.map(
+                      (i) =>
+                        i.get("prop_name") && (
+                          <FeaturedPropertyDetailDiv
+                            key={i.get("id")}
+                            title={i.get("prop_name")}
+                            propertyid={i.get("propertyid")}
+                          // onClick={() => console.log(featuredCompanies)}
+                          //imgRect.src = "data:image/svg+xml;utf8," + encodeURIComponent(hatch);
+                          >
+                            <Image
+                              src={
+                                "data:image/svg+xml;utf8," +
+                                encodeURIComponent(i.get("hatch"))
+                              }
+                              className={`w-4 h-4`}
+                              width={4}
+                              height={4}
+                              alt="prop"
+                            />
+                          </FeaturedPropertyDetailDiv>
+                        )
+                    )}
+
                   </div>
+              
+                  
+                  
                 </AccordionItemWithEye>
                 <AccordionItemWithOutEye title="All Properties">
                   <div className="overflow-y-auto max-h-[25vh]">

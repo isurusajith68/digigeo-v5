@@ -353,8 +353,8 @@ export const LandingMap = () => {
 
   const dispatch = useDispatch();
 
-  const areaFlyToLocation = useSelector(
-    (state) => state.landingMapReducer.areaFlyToLocation
+  const landingMapFlyToLocation = useSelector(
+    (state) => state.landingMapReducer.landingMapFlyToLocation
   );
   const navigatedFPropId = useSelector(
     (state) => state.landingMapReducer.navigatedFPropId
@@ -805,9 +805,9 @@ export const LandingMap = () => {
   }, [mapViewRef.current]);
 
   useEffect(() => {
-    if (areaFlyToLocation?.length > 0)
-      flyTo(mapViewRef?.current, areaFlyToLocation, () => {});
-  }, [areaFlyToLocation]);
+    if (landingMapFlyToLocation?.length > 0)
+      flyTo(mapViewRef?.current, landingMapFlyToLocation, () => {});
+  }, [landingMapFlyToLocation]);
 
   const selectedMap = useSelector(
     (state) => state.mapSelectorReducer.selectedMap

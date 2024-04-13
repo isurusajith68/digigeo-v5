@@ -10,11 +10,11 @@ export const updateWindowsHistoryAmap=({isSideNavOpen,areaLyrs,areaZoomLevel,are
   window.history.replaceState({}, "", newUrl);
 }
 
-export const updateWindowsHistoryCmap=({isSideNavOpen,lyrs,zoomLevel,initialCenter,companyId} )=>{
+export const updateWindowsHistoryCmap=({isSideNavOpen,lyrs,zoom,center,companyId} )=>{
 
     const selectedMap="company"
-      const newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=true&lyrs=${lyrs}&z=${zoomLevel}&c=${initialCenter}&companyId=${companyId}`;
-
+      const newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=true&lyrs=${lyrs}&z=${zoom}&c=${center}&companyId=${companyId}`;
+  //console.log("ff2-newUrl", newUrl);
   
   window.history.replaceState({}, "", newUrl);
 }

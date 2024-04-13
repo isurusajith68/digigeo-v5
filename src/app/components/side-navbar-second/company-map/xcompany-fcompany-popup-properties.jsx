@@ -28,7 +28,14 @@ const CompanyFCompanyFProperties = ({companyid}) => {
       console.log("werty")
       const e = new GeoJSON().readFeatures(featuredPropertyFeatures)
       const y = e.filter(f=> f.get("propertyid") ==null)
-      console.log("fp added20",y)
+      console.warn("no propertyid- company map ", y)
+
+      //sort
+      e.sort((a, b) => {
+        return a.get("prop_name")?.toUpperCase() < b.get("prop_name")?.toUpperCase() ? -1 : 1
+      })
+
+      console.log("ff1-e cmap",e)
       setfeaturesObjects(e)
        
     }, [featuredPropertyFeatures])

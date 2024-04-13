@@ -932,13 +932,13 @@ export const areaMApPropertyVectorRendererFuncV2_labels = (
       polcenter[0] - widthText / 2,
       polcenter[1]
     );
-    if (state.feature.get("prop_name")) {
-      context.fillText(
-        "(" + state.feature.get("prop_name") + ")",
-        polcenter[0] - widthText / 2,
-        polcenter[1] + 19
-      );
-    }
+    // if (state.feature.get("prop_name")) {
+    //   context.fillText(
+    //     "(" + state.feature.get("prop_name") + ")",
+    //     polcenter[0] - widthText / 2,
+    //     polcenter[1] + 19
+    //   );
+    // }
 
     // context.restore();
   } else if (state.resolution < 400) {

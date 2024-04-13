@@ -7,7 +7,7 @@ import GeoJSON from "ol/format/GeoJSON";
 import { MdInfoOutline } from "react-icons/md";
 import { Circle as CircleStyle, Fill, Stroke, Style, Icon } from "ol/style";
 import {
-  setareaFlyToLocation,
+  setlandingMapFlyToLocation,
   setnavigatedFPropId,
 } from "@/store/landing-map/landing-map-slice";
 import DialogComponent from "../../../utils/dialog/dialog";
@@ -39,34 +39,78 @@ const LmapFCompanyFProperties = ({ companyid }) => {
   }, [companyid]);
 
   //set unnmaed props
-  useEffect(() => {
+  useEffect(  () => {
     console.log("unNamedFeatureObjects2", unNamedFeatureObjects);
+     let gj;
+    const getFeaturedProperties = async  () => {
+     
+      const f = async () => {
+        const res = await fetch(
+          `https://atlas.ceyinfo.cloud/matlas/view_hotplay_company/${companyid}`,
+          { cache: "no-store" }
+        );
 
-    if (featuredPropertyFeatures?.features) {
-      const e = new GeoJSON().readFeatures(featuredPropertyFeatures);
-      let b = 0;
-      for (let index = 0; index < e.length; index++) {
-        const element = e[index];
-        if (!element.get("propertyid")) {
-          pidRef.current = pidRef.current - 1;
-          element.set("propertyid", pidRef.current);
-        }
+        const d = await res.json();
+          gj = {
+          type: "FeatureCollection",
+          crs: {
+            type: "name",
+            properties: {
+              name: "EPSG:3857",
+            },
+          },
+          features: d.data[0].json_build_object.features,
+        };
 
-        if (!element.get("prop_name")) {
-          if (companyid == element.get("companyid")) {
-            b++;
-            element.set("prop_name_empty", "Block" + b);
+        if (gj?.features?.length > 0) {
+          console.log("ff1-gj",)
+          const e = new GeoJSON().readFeatures(gj);
+          let b = 0;
+          const unNamedPs= []
+          for (let index = 0; index < e.length; index++) {
+            const element = e[index];
+            if (!element.get("propertyid")) {
+              pidRef.current = pidRef.current - 1;
+              element.set("propertyid", pidRef.current);
+            }
 
-            setunNamedFeatureObjects((p) => [...p, element]);
-            // console.log("b",b)
+            if (!element.get("prop_name")) {
+              if (companyid == element.get("companyid")) {
+                b++;
+                element.set("prop_name_empty", "Block" + b);
+                unNamedPs.push(element)
+                // setunNamedFeatureObjects((p) => [...p, element]);
+                // console.log("b",b)
+              }
+            }
           }
-        }
-      }
+          setunNamedFeatureObjects(unNamedPs);
+          
+          
+          //sort
+          // e.sort((a, b) => {
+          //   a.get("prop_name")?.toUpperCase() > b.get("prop_name")?.toUpperCase() ? 1 : -1
+          // })
+          console.log("ff1-esorted",e,)
 
-      setfeaturesObjects(e);
-    } else {
-      console.log("lop2");
-    }
+          setfeaturesObjects(e);
+        } else {
+          console.log("no f props for compnayid:" + companyid);
+        }
+
+
+
+
+
+      };
+
+      await f();
+     
+    };
+
+     getFeaturedProperties();
+
+   
   }, [loadData]);
 
   //flyto
@@ -79,7 +123,8 @@ const LmapFCompanyFProperties = ({ companyid }) => {
       loc = [(extent[0] + extent[2]) / 2, (extent[1] + extent[3]) / 2];
     }
     //flyTo
-    dispatch(setareaFlyToLocation(loc));
+    console.log("ff1-loc",loc,)
+    dispatch(setlandingMapFlyToLocation(loc));
 
     //set style
     dispatch(setnavigatedFPropId(feature.get("id")));
@@ -168,12 +213,29 @@ const LmapFCompanyFProperties = ({ companyid }) => {
   };
 
   const getDomElements = useMemo(() => {
-    const r = featureObjects.map((fp) => {
+
+    //sort
+    // e.sort((a, b) => {
+    //   a.get("prop_name")?.toUpperCase() > b.get("prop_name")?.toUpperCase() ? 1 : -1
+    // })
+  //  const unnamedProperties = featureObjects.filter(fp => !fp.get("prop_name"))   
+    const namedProperties = featureObjects.filter(fp => fp.get("prop_name"))   
+
+    console.log("ff1-namedProperties",namedProperties,)
+
+    namedProperties.sort((a, b) => {
+     return a.get("prop_name")?.toUpperCase() < b.get("prop_name")?.toUpperCase() ? -1 : 1
+    })
+
+
+
+    const r = namedProperties.map((fp) => {
       // if (!fp.get("propertyid")) {
       //   pidRef.current = pidRef.current - 1;
       // }
-
-      if (companyid == fp.get("companyid") && fp.get("prop_name")) {
+      //sort
+   
+      // if (companyid == fp.get("companyid") && fp.get("prop_name")) {
         // if (!fp.get("prop_name")) {
         //   console.log("blocknoRef1", blocknoRef.current);
         //   blocknoRef.current = blocknoRef.current + 1;
@@ -227,12 +289,13 @@ const LmapFCompanyFProperties = ({ companyid }) => {
             </div>
           </div>
         );
-      }
+      // }
     });
 
-    const ee = unNamedFeatureObjects.filter((r) => !r.get("propertyid"));
+    // const ee = unNamedFeatureObjects.filter((r) => !r.get("prop_name"));
 
-    console.log("unNamedFeatureObjects", ee);
+    // console.log("ff1-unNamedFeatureObjects", ee);
+    console.log("ff1-2unNamedFeatureObjects2", unNamedFeatureObjects);
 
     const unNamedProps = unNamedFeatureObjects.map((fp) => {
       return (
@@ -315,7 +378,7 @@ const LmapFCompanyFProperties = ({ companyid }) => {
       }}
     >
       <div style={{ fontWeight: 700 }}>{areaName}</div>
-      <div style={{ fontWeight: 600 }}>{"Featured Properties"}</div>
+      <div   className="flex justify-center bg-blue-600 text-white w-full font-medium">{"Featured Properties"}</div>
       <div
         className="bg-slate-100"
         style={{

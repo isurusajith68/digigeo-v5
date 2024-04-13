@@ -48,7 +48,7 @@ import {
 import LandingBottomSideComp from "./bottom-components/landing-bottom-side-component";
 
 import Link from "next/link";
-import { updateWindowsHistory } from "@/app/utils/helpers/window-history-replace";
+import { updateWindowsHistory, updateWindowsHistoryCmap } from "@/app/utils/helpers/window-history-replace";
 
 // } from "../../../store/area-map/area-map-slice";
 
@@ -117,7 +117,7 @@ const SideNavbar = () => {
   );
 
   const selectMapHandler = (selectedValue) => {
-     console.log("yy- hit-sidenavbar-compo1")
+    
     dispatch(setSelectedMap(selectedValue));
     let newUrl;
     if (selectedValue == "area") {
@@ -127,16 +127,23 @@ const SideNavbar = () => {
       } else {
         newUrl = `${window.location.pathname}?t=${selectedValue}&sn=${isSideNavOpen}&sn2=${isAreaSideNavOpen}&lyrs=${areaLyrs}&z=${areaZoomLevel}&c=${areaInitialCenter}&co=${areaCountry}&ma=${areaState}`;
       }
+      updateWindowsHistory(newUrl);
     } else if (selectedValue == "properties") {
       newUrl = `${window.location.pathname}?t=${selectedValue}&sn=${isSideNavOpen}&sn2=${isPropertiesSideNavOpen}&lyrs=${propertiesLyrs}&z=${propertiesZoomLevel}&c=${propertiesInitialCenter}`;
+      updateWindowsHistory(newUrl);
     } else if (selectedValue == "company") {
       newUrl = `${window.location.pathname}?t=${selectedValue}&sn=${isSideNavOpen}&sn2=${isCompanySideNavOpen}&lyrs=${companyLyrs}&z=${companyZoomLevel}&c=${companyInitialCenter}`;
-    } else   {
+      console.log("ff2-updateWindowsHistoryCmap", companyInitialCenter, companyZoomLevel)
+      updateWindowsHistoryCmap({ isSideNavOpen, lyrs: companyLyrs, zoom: companyZoomLevel, center: companyInitialCenter, sidenav2: isCompanySideNavOpen, companyId: 0 });
+
+    } else {
        console.log("yy-hit-sidenavbar-compo3")
       newUrl = `${window.location.pathname}?t=${selectedValue}&sn=${isSideNavOpen}&sn2=${isCompanySideNavOpen}&lyrs=${companyLyrs}&z=${companyZoomLevel}&c=${companyInitialCenter}`;
+      updateWindowsHistory(newUrl);
     }
     // window.history.replaceState({}, "", newUrl);
-     updateWindowsHistory(newUrl);
+    
+
   };
 
   const resetAllFilters =()=>{
