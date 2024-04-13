@@ -479,7 +479,7 @@ const stroke = new Stroke({
 });
 const stroke_SelectedProp = new Stroke({
   color: "rgba(0,0,0,0.8)",
-  width: 5,
+  width: 9,
 });
 
 export const areaMApPropertyVectorRendererFuncV2Highlight = (

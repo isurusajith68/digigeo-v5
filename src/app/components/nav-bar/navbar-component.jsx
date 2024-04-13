@@ -205,9 +205,9 @@ const HomeNavbar = () => {
                 </span>
               </Button>
             </li>
-            {/* <li>
+            <li>
               <ThemeSwitcher />
-            </li> */}
+            </li>
           </ul>
         </div>
       </nav>
