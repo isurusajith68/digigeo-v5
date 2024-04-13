@@ -326,8 +326,8 @@ const AreaFCompanyFProperties = ({ companyid }) => {
         alignItems: "center",
       }}
     >
-      <div style={{ fontWeight: 700 }}>{areaName}</div>
-      <div  className="  w-full bg-blue-800 px-2 mx-2 text-white">{"Featured Properties"}</div>
+      <div className="  w-full bg-blue-800 px-2 mx-2 text-white text-center">{areaName}</div>
+      <div className="  w-full bg-blue-800 px-2 mx-2 text-white text-center">{"Featured Properties"}</div>
       <div
         className="bg-slate-100"
         style={{
@@ -338,7 +338,7 @@ const AreaFCompanyFProperties = ({ companyid }) => {
           overflowY: "auto",
           maxHeight: "18.5rem",
           width: "20rem",
-          margin: "1rem",
+          // margin: "1rem",
         }}
       >
         <DialogComponent

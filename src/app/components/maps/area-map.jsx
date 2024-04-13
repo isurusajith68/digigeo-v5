@@ -62,6 +62,9 @@ import GetRightAds from './../advertisements/get-right-ads';
 import { MapViewMode, ZoomMode } from "@/store/types";
 import { Tooltip } from "@nextui-org/react";
 import { usePathname } from 'next/navigation'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const fill = new Fill();
 const stroke = new Stroke({
@@ -897,11 +900,13 @@ export const AreaMap = () => {
     // dispatch(setUrlUpdate());
   };
 
+  const notify = () => toast.success("Copied Url to Clipboard");
+
   const copyMapUrl = () => {
    
-    alert("ppp" + pathname)
+    //alert("ppp" + pathname)
     navigator.clipboard.writeText(pathname + "&mvm=HEADLESS");
-
+    notify()
   }
 
   const setLyrs = (lyrs) => {
@@ -1551,11 +1556,23 @@ export const AreaMap = () => {
   }, [areaSelectedAreaId, mapViewScales])
 
 
-
+  
 
 
   return (
     <div className="flex">
+      <ToastContainer
+        position="top-center"
+        autoClose={1000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <AreaSideNavbar className={`   ${mapViewMode == "HEADED" ? "block" : "hidden"}`} />
       <div className="relative">
         <div className="w-12 absolute left-0 top-0 z-50 ml-2">
@@ -1589,8 +1606,8 @@ export const AreaMap = () => {
             <Tooltip
               content={
                 <div className="px-1 py-2">
-                  <div className="text-small font-bold">Copy Map Url</div>
-                  <div className="text-tiny">Copies map url to clipboard</div>
+                  <div className="text-small font-bold">Copy Map View Url</div>
+                  <div className="text-tiny">Copies headless map url to clipboard</div>
                 </div>
               }
             >
