@@ -9,7 +9,7 @@ const initialState = {
   featuredPropertyFeatures: undefined,
   syncClaimLinkPropertyFeatures: undefined,
   assetFeatures: undefined,
-  areaZoomMode: ZoomMode.DYNAMIC,
+  areaZoomMode: ZoomMode.ExTENT,
   areaFpropLayerVisible: true,
   areaAssetLayerVisible: true,
   areaSyncPropLayerVisible: true,

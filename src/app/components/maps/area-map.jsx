@@ -723,10 +723,11 @@ export const AreaMap = () => {
 
     if (syncPropSourceRef.current) {
       const p1 = syncPropSourceRef.current?.getExtent()[0];
-      if (areaZoomMode == ZoomMode.DYNAMIC) {
+      if (areaZoomMode == ZoomMode.ExTENT) {
+
         if (p1 != Infinity) {
           mapRef.current?.getView()?.fit(syncPropSourceRef.current?.getExtent(), {
-            padding: [200, 200, 200, 200],
+            padding: [100, 100, 100, 100],
             duration: 3000,
           });
         }

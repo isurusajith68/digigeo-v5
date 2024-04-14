@@ -16,7 +16,7 @@ const AreaPropertyNode = ({ propertyName,location }) => {
 
     const handlePropertyNodeClick = (location) => {
     dispatch(setareaFlyToLocation(location));
-  }
+    }
 
 
   return (

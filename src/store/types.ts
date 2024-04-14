@@ -1,7 +1,7 @@
 
 
 export enum  ZoomMode {
-    DYNAMIC = "dynamic",
+    ExTENT = "extent",
     FIXED = "fixed"
 }
 // export type  MapViewMode =  "HEADLESS" | "HEADED"
