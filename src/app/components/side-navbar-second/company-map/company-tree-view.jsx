@@ -62,6 +62,7 @@ const CompanyTreeView = ({ syncPropFeatures }) => {
     console.log("syncPropFeatues", syncPropFeatures,)
     if (syncPropFeatures?.features?.length>0) {
       const features = new GeoJSON().readFeatures(syncPropFeatures)
+      features.sort((a, b) => { return a.get("country")?.toUpperCase() > b.get("country")?.toUpperCase() ? 1 : -1 })
        
       const nodes = [];
       features?.map(f => {
@@ -77,6 +78,24 @@ const CompanyTreeView = ({ syncPropFeatures }) => {
         addNode(nodes, f.get("country"), f.get("state_prov"), f.get("prop_name"), loc)
             
       })
+
+      //sort according to property names
+
+      for(const cont of nodes) {
+        
+        cont.children.sort((a, b) => { return a.label?.toUpperCase() > b.label?.toUpperCase() ? 1 : -1 })
+      }
+
+      for (const cont of nodes) {
+
+        for (const stp of cont.children) {
+          stp.children.sort((a, b) => { return a.label?.toUpperCase() > b.label?.toUpperCase() ? 1 : -1 })
+        }
+
+       
+      }
+
+
 
       //     const treeData = [ map_area
       //   {
