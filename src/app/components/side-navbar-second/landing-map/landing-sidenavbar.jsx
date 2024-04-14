@@ -318,7 +318,7 @@ const LandingMapSideNavbar = () => {
             {/* <TreeView data={treeData} /> */}
             <div>
               <Accordion>
-                <div className="flex flex-col gap-6 ">
+                <div className="flex flex-col gap-6  ">
                   <AccordionItemWithEye
                     title="Featured Companies"
                     onClick={setlandingMapFpropLayerVisibility}

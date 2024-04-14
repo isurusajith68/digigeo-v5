@@ -22,7 +22,7 @@ const AccordionItemWithEye = ({ title, children, onClick, eyeState }) => {
         // style={{ alignItems: "center" }}
         className="relative items-center flex pl-4 border rounded-lg border-blue-700 focus:outline-none bg-blue-900 text-white text-sm sm:text-sm  w-full transition duration-150 ease-in"
       >
-        <h3 style={{ margin: 0, marginRight: "10px" }}>{title}</h3>
+        <h3 style={{ margin: 0, marginRight: "10px" }} className="text-white" >{title}</h3>
         <div className="flex absolute right-0 mr-4 gap-4">
           <span onClick={toggleAccordion} className="cursor-pointer">
             {isOpen ? <FaChevronDown /> : <FaChevronLeft />}

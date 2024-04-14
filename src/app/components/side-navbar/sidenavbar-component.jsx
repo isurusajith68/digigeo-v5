@@ -199,7 +199,7 @@ const SideNavbar = () => {
       >
         <div>
           <div className="mr-2 mt-1  flex items-center justify-center border-b-2">
-            <span className="font-bold">Filters</span>
+            <span className="font-bold dark:text-white text-black">Filters</span>
           </div>
           {/* <div className="m-2">
                 <Input

@@ -7,7 +7,7 @@ module.exports = {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
     "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
   ],
-  darkMode:"class",
+  darkMode: "class",
   theme: {
     extend: {
       keyframes: () => ({
@@ -37,11 +37,11 @@ module.exports = {
       themes: {
         light: {
           layout: {}, // light theme layout tokens
-          colors: {}, // light theme colors
+          colors: {background: "#009000" }, // light theme colors
         },
         dark: {
           layout: {}, // dark theme layout tokens
-          colors: { background: "#0D001A" }, // dark theme colors
+          colors: { background: "#009000" }, // dark theme colors
         },
         modern: {
           extend: "light", // <- inherit default values from dark theme

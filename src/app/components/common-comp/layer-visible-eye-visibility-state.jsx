@@ -15,11 +15,11 @@ const LayerVisibleVisibilityStateDiv = ({ title, children, onClick, eyeState, vi
   return (
     <div>
       <div
-              className="flex items-center justify-between pl-4   border rounded-lg border-blue-200 hover:border-blue-100 hover:border-2 focus:outline-none text-black text-sm sm:text-sm py-0 w-full transition duration-150 ease-in"
+        className="flex items-center justify-between bg-white pl-4   border rounded-lg border-blue-200 hover:border-blue-100 hover:border-2 focus:outline-none text-black text-sm sm:text-sm py-0 w-full transition duration-150 ease-in"
       >
         <div className="flex">
         <span className="mr-2">{children}</span>
-        <h3 style={{ margin: 0, marginRight: "10px" }}>{title}</h3>
+          <h3 style={{ margin: 0, marginRight: "10px" }} className="  text-black">{title}</h3>
         </div>
         <div className="flex items-center justify-center mr-4">
           {/* <span onClick={toggleAccordion} className="cursor-pointer"> 

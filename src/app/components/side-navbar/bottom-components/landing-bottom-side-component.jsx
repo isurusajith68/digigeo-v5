@@ -224,7 +224,7 @@ const LandingBottomSideComp = () => {
   return (
     <div className="flex flex-col w-full h-full grow">
       <div className="ml-2 mr-2 flex items-center justify-center border-b-2">
-        <span className="font-bold">Map Layers</span>
+        <span className="font-bold dark:text-white text-black">Map Layers</span>
       </div>
       <div className="overflow-y-auto max-h-[53vh]">
         <Accordion>
