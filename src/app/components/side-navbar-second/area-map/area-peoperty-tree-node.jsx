@@ -22,7 +22,7 @@ const AreaPropertyNode = ({ propertyName,location }) => {
   return (
     <div>
       <div
-        className="flex justify-between hover:bg-slate-200 cursor-pointer"
+        className="flex justify-between hover:bg-slate-200 cursor-pointer bg-white"
         style={{ marginLeft: "20px" }}
         onClick={() => {
           handlePropertyNodeClick(location);

@@ -235,7 +235,7 @@ const AreaBottomSideComp = () => {
 
   return (
     <div className="flex flex-col w-full h-full grow">
-      <div className="ml-2 mr-2 flex items-center justify-center border-b-2">
+      <div className="ml-2 mr-2 flex items-center justify-center border-b-2 dark:text-white text-black">
         <span className="font-bold">Map Layers</span>
       </div>
       <div className="overflow-y-auto max-h-[53vh]">

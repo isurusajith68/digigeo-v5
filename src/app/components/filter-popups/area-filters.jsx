@@ -332,6 +332,14 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
   //   dispatch(setareaMapViewScales(mapViewScale));
   //     // console.log("mapViewScale",mapViewScale)
   // },[mapViewScale])
+
+  const customClassNames = {
+    base: ' text-black',  // Class for the overall container
+     
+   // inputWrapper: 'dark:text-white text-black', // Class for the input field wrapper
+    // ... other elements you want to customize
+  };
+
   return (
     <div>
       <Modal
@@ -365,7 +373,7 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
                     Exploration Areas
                   </span> */}
           {/* <div className="flex-col gap-2   w-[16vw]"> */}
-          <div className="flex    justify-around  ">
+          <div className="flex    justify-around  dark:text-white text-black">
             <div>
               <span className="block">Country</span>
               <Autocomplete
@@ -373,7 +381,7 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
                 allowsEmptyCollection={true}
                 allowsCustomValue={true}
                 // label="Select a country"
-                className="max-w-xs"
+                className="max-w-xs dark:text-white text-black"
                 onInputChange={(e) => {
                   if (e) {
                     const fa = allAreaList.filter((a) => a.country == e);
@@ -393,11 +401,15 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
                 }}
                 inputValue={country}
                 defaultSelectedKey={country}
+                classNames={customClassNames}
+                inputProps={{ className: "dark:text-black text-black" }}
+                
               >
                 {countryList.map((countryObj) => (
                   <AutocompleteItem
                     key={countryObj.country}
                     value={countryObj.country}
+                    className="dark:text-white text-black"
                   >
                     {countryObj.country}
                   </AutocompleteItem>
@@ -412,7 +424,7 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
                 allowsEmptyCollection={true}
                 allowsCustomValue
                 // label={areaInfo}
-                className="max-w-xs"
+                className="max-w-xs dark:text-white text-black"
                 defaultSelectedKey={miningArea}
                 onInputChange={(e) => {
                   const r = new RegExp(e, "i");
@@ -428,6 +440,8 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
                   setfilteredAreaList(fa);
                   setMiningArea(e);
                 }}
+                inputProps={{ className: " text-black" }}
+                classNames={customClassNames}
               >
                 {/* {areaList.map((areaObj) => (
                           <AutocompleteItem
@@ -447,12 +461,12 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
             searchAction={searchAction}
             areaIdHandler={areaIdHandler}
           />
-          <section className="flex items-center justify-between mt-3 bottom-8 border-t-2 border-gray-300 w-full">
+          <section className="flex items-center justify-between mt-3 bottom-8 border-t-2 border-gray-300 w-full dark:text-white text-black">
             <div className="mt-2">
               <Chip
                 color="default"
                 variant="light"
-                className="cursor-pointer"
+                className="cursor-pointer text-black"
                 onClick={resetHandler}
               >
                 Reset

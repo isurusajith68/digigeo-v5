@@ -115,14 +115,14 @@ const getTableBodyV1 =()=>{
           groupedAreaList?.map((a) => {
             return (
               <TableRow key={a.gid}>
-                <TableCell>{`${a.country}`}</TableCell>
-                <TableCell>{`${a.area_name}`}</TableCell>
+                <TableCell className=" cursor-pointer hover:scale-125  dark:text-white text-black" >{`${a.country}`}</TableCell>
+                <TableCell className=" cursor-pointer hover:scale-125  dark:text-white text-black" >{`${a.area_name}`}</TableCell>
                 <TableCell> <Image
                   src="./navigation.svg"
                   width={15}
                   height={15}
                   alt="prop"
-                  className=" cursor-pointer hover:scale-125 "
+                  className=" cursor-pointer hover:scale-125  dark:text-white text-black"
                   onClick={(e) => {
                     flytoHandler(a.gid);
                   }}

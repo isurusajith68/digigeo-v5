@@ -282,7 +282,7 @@ const AreaSideNavbar = () => {
                 : "hidden"
             }`}
           >
-            <div className="ml-2 mr-2 mt-1 mb-1 flex items-center justify-center border-b-2 relative">
+            <div className="ml-2 mr-2 mt-1 mb-1 flex items-center justify-center border-b-2 relative dark:text-white text-black">
               <div className="flex flex-col">
                 {areaCountry && (
                   <span className="font-bold block">
