@@ -18,7 +18,7 @@ const PropertyFeaturedCompanyDetailDiv = ({ companyid, title, children, onClick 
     <div>
       <div
         style={{ alignItems: "center" }}
-        className="relative item-center flex pl-4 border rounded-lg border-blue-200 hover:border-blue-100 hover:border-2 focus:outline-none text-black text-sm sm:text-sm py-1 w-full transition duration-150 ease-in"
+        className="bg-white relative item-center flex pl-4 border rounded-lg border-blue-200 hover:border-blue-100 hover:border-2 focus:outline-none text-black text-sm sm:text-sm py-1 w-full transition duration-150 ease-in"
       >
         <span className="mr-2">{children}</span>
         <h3

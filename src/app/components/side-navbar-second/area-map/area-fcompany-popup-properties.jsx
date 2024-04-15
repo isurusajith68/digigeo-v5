@@ -194,7 +194,7 @@ const AreaFCompanyFProperties = ({ companyid }) => {
         return (
           <div
             key={fp.get("propertyid")  }
-            className="hover:bg-blue-200 odd:bg-slate-200  px-2 "
+            className="hover:bg-blue-200 odd:bg-slate-200  px-2 text-black"
             style={{
               display: "flex",
               justifyContent: "space-between",

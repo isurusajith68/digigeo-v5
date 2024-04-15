@@ -84,7 +84,7 @@ const getStyledTexts = (name) => {
       sp.style.marginLeft = "0.25rem";
       sp.appendChild(sptext);
       spans.push(sp);
-      contents.push({ text: stockEx, style: { marginLeft: "0.25rem" } });
+      contents.push({ text: stockEx, style: { marginLeft: "0.25rem",color:"black" } });
 
       //add 2
       const sp2 = document.createElement("SPAN");
@@ -275,11 +275,11 @@ const LmapFCompanyPopup = ({}) => {
                 <Image src={logoPath} width={200} height={100} alt="Logo" />
               )}
             </div>
-            <span className="font-bold">{title}</span>
+            <span className="font-bold text-black">{title}</span>
             <span>
               {sponsorData.length > 0 &&
                 sponsorData.map((sd) => (
-                  <span key={sd.text} style={sd.style}>
+                  <span key={sd.text} style={sd.style}  >
                     {sd.text}
                   </span>
                 ))}
@@ -289,7 +289,7 @@ const LmapFCompanyPopup = ({}) => {
               <Link
                 href={urlPrefix + url}
                 target="_blank"
-                className="font-bold  rounded-lg border border-solid underline hover:text-blue-600"
+                className="font-bold  rounded-lg border border-solid underline hover:text-blue-600 text-black"
               >
                 {url}
               </Link>
@@ -298,7 +298,7 @@ const LmapFCompanyPopup = ({}) => {
               <Link
                 href={profile}
                 target="_blank"
-                className="rounded-full border border-solid border-black p-2 underline hover:text-blue-600"
+                className="rounded-full border border-solid border-black p-2 underline hover:text-blue-600 text-black"
               >
                 {"Read More"}
               </Link>

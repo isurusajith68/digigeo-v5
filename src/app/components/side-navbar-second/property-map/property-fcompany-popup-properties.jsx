@@ -107,7 +107,7 @@ const PropertyFCompanyFProperties = ({ companyid }) => {
             console.log("mapAreas",mapAreas);
             let blockno = 0;
                     return (<>
-                      <span key={area} className="bg-blue-600 text-white w-full pl-2" > {area}</span>
+                      <span key={area} className="bg-blue-600 text-white w-full pl-2 " > {area}</span>
                         {featureObjects.map((fp) => {
                            
                           // if (companyid == fp.get("companyid") && fp.get("prop_name") ) {
@@ -122,7 +122,7 @@ const PropertyFCompanyFProperties = ({ companyid }) => {
                             return (
                               <div
                                 key={fp.get("id")}
-                                className="hover:bg-blue-200 odd:bg-slate-200  cursor-pointer px-2"
+                                className="hover:bg-blue-200 odd:bg-slate-200  cursor-pointer px-2 text-black"
                                 style={{
                                   display: "flex",
                                   justifyContent: "space-between",
@@ -177,9 +177,9 @@ const PropertyFCompanyFProperties = ({ companyid }) => {
         alignItems: "center",
       }}
     >
-      <div style={{ fontWeight: 600 }}>{"Featured Properties"}</div>
+      <div  className="bg-blue-800 text-white w-[18rem] mx-2 px-2">{"Featured Properties"}</div>
       <div
-        className="bg-slate-100"
+        className="bg-slate-100 mx-2"
         style={{
           display: "flex",
           flexDirection: "column",
@@ -188,7 +188,7 @@ const PropertyFCompanyFProperties = ({ companyid }) => {
           maxHeight: "18.5rem",
           overflowY: "auto",
           width: "18rem",
-          margin:"1rem",
+         
         }}
       >
         {

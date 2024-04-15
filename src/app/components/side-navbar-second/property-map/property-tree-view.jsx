@@ -140,7 +140,7 @@ const PropertyTreeView = ({ syncPropFeatures }) => {
     }
   }
   return (
-    <div className="max-h-[150px]">
+    <div className="max-h-[150px] bg-white">
       {treeViewData?.map((node) => (
         <PropertyCountryNode
           key={node.label}

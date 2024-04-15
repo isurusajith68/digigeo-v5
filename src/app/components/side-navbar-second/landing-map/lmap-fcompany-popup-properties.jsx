@@ -12,6 +12,7 @@ import {
 } from "@/store/landing-map/landing-map-slice";
 import DialogComponent from "../../../utils/dialog/dialog";
 import AreaMapClickPopup from "../../maps/area-map-popup/area-map-click-popup";
+import { Spinner } from "@nextui-org/react";
 
 const LmapFCompanyFProperties = ({ companyid }) => {
   const [featureObjects, setfeaturesObjects] = useState([]);
@@ -19,6 +20,7 @@ const LmapFCompanyFProperties = ({ companyid }) => {
   const [showDlg, setshowDlg] = useState("n");
   const [fpropObj, setfpropObj] = useState();
   const [loadData, setloadData] = useState(false);
+  const [dataLoaded, setdataLoaded] = useState(false);
   const blocknoRef = useRef(0);
   const pidRef = useRef(0);
 
@@ -92,7 +94,7 @@ const LmapFCompanyFProperties = ({ companyid }) => {
           //   a.get("prop_name")?.toUpperCase() > b.get("prop_name")?.toUpperCase() ? 1 : -1
           // })
           console.log("ff1-esorted",e,)
-
+          setdataLoaded(false)
           setfeaturesObjects(e);
         } else {
           console.log("no f props for compnayid:" + companyid);
@@ -246,7 +248,7 @@ const LmapFCompanyFProperties = ({ companyid }) => {
         return (
           <div
             key={fp.get("propertyid")}
-            className="hover:bg-blue-200 odd:bg-slate-200  px-2"
+            className="hover:bg-blue-200 odd:bg-slate-200  px-2 text-black"
             style={{
               display: "flex",
               justifyContent: "space-between",
@@ -361,7 +363,7 @@ const LmapFCompanyFProperties = ({ companyid }) => {
         </div>
       </div>
     );
-
+    setdataLoaded(true)
     return [...r, h, ...unNamedProps];
   }, [featureObjects]);
 
@@ -377,7 +379,7 @@ const LmapFCompanyFProperties = ({ companyid }) => {
         alignItems: "center",
       }}
     >
-      <div style={{ fontWeight: 700 }}>{areaName}</div>
+      <div  className="font-bold dark:text-white text-black">{areaName}</div>
       <div   className="flex justify-center bg-blue-600 text-white w-full font-medium">{"Featured Properties"}</div>
       <div
         className="bg-slate-100"
@@ -406,6 +408,8 @@ const LmapFCompanyFProperties = ({ companyid }) => {
             syncPropObj={{}}
           ></AreaMapClickPopup>
         </DialogComponent>
+        {!dataLoaded && <Spinner size="lg" />}
+         
         {getDomElements}
       </div>
     </div>

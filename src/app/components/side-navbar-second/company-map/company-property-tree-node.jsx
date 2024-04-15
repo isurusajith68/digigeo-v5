@@ -21,7 +21,7 @@ const CompanyPropertyNode = ({ propertyName,location }) => {
 
   return (
     <div>
-      <div className="flex justify-between hover:bg-slate-200 cursor-pointer" style={{ marginLeft: "20px" }} onClick={() => {
+      <div className="flex justify-between hover:bg-slate-200 cursor-pointer bg-white" style={{ marginLeft: "20px" }} onClick={() => {
        console.log("poli")
        handlePropertyNodeClick(location)
       }}>

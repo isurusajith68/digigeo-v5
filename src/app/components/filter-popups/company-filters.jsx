@@ -214,6 +214,14 @@ const CompanyFilter = ({ isOpenIn, closePopup }) => {
     dispatch(setcompanyStockcode(""));
     
   }
+
+  const customClassNames = {
+    base: ' text-white',  // Class for the overall container
+
+    // inputWrapper: 'dark:text-white text-black', // Class for the input field wrapper
+    // ... other elements you want to customize
+  };
+
   return (
     <div>
       <Modal
@@ -266,11 +274,14 @@ const CompanyFilter = ({ isOpenIn, closePopup }) => {
                       }}
                       defaultSelectedKey={company}
                       inputValue={company}
+                      classNames={customClassNames}
+                      inputProps={{ className: "dark:text-white text-black" }}
                     >
                       {companyList.map((companyObj) => (
                         <AutocompleteItem
                           key={companyObj.companyid}
                           value={companyObj.name} 
+                          className="dark:text-white text-black"
                         >
                           {companyObj.name}
                         </AutocompleteItem>
@@ -289,15 +300,18 @@ const CompanyFilter = ({ isOpenIn, closePopup }) => {
                       }}
                       onSelectionChange={(e) => {
                          setCompanyidLocal(e)
-                      
+                         
                       }}
                       // defaultSelectedKey={stockcode}
                       inputValue={stockcode}
+                      classNames={customClassNames}
+                      inputProps={{ className: "dark:text-white text-black" }}
                     >
                       {StockcodeList.map((companyObj) => (
                         <AutocompleteItem
                           key={companyObj.companyid}
                           value={companyObj.stockcode}
+                          className="dark:text-white text-black"
                         >
                           {companyObj.stockcode}
                         </AutocompleteItem>

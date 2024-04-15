@@ -84,7 +84,7 @@ const getStyledTexts = (name) => {
       sp.style.marginLeft = "0.25rem";
       sp.appendChild(sptext);
       spans.push(sp);
-      contents.push({text:stockEx  ,style:{marginLeft : "0.25rem"} });
+      contents.push({ text: stockEx, style: { marginLeft: "0.25rem", color: "black" } });
 
       //add 2
       const sp2 = document.createElement("SPAN");
@@ -297,7 +297,7 @@ const AreaFCompanyPopup = ({ }) => {
               <Link
                 href={urlPrefix + url}
                 target="_blank"
-                className="font-bold  rounded-lg border border-solid underline hover:text-blue-600"
+                className="font-bold  rounded-lg border border-solid underline hover:text-blue-600 text-black"
               >
                 {url}
               </Link>
@@ -306,7 +306,7 @@ const AreaFCompanyPopup = ({ }) => {
               <Link
                 href={profile}
                 target="_blank"
-                className="rounded-full border border-solid border-black p-2 underline hover:text-blue-600"
+                className="rounded-full border border-solid border-black p-2 underline hover:text-blue-600 text-black"
               >
                 {"Read More"}
               </Link>

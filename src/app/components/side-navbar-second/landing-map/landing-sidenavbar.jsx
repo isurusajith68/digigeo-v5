@@ -306,7 +306,7 @@ const LandingMapSideNavbar = () => {
                     {areaName}/{areaCountry}
                   </span>
                 )} */}
-                <span className="font-bold block">Exploration Activities</span>
+                <span className="font-bold block dark:text-white text-black">Exploration Activities</span>
               </div>
               {/* <AiOutlineCloseCircle
                 onClick={closeSecondNavBar}

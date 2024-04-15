@@ -16,7 +16,7 @@ import PropertyStateProvNode from "./property-stateprov-treenode";
 
   return (
     <div>
-      <div onClick={handleToggle} className="flex hover:bg-slate-200 cursor-pointer" >
+      <div onClick={handleToggle} className="flex hover:bg-slate-200 cursor-pointer bg-white" >
        
          {<span>{isOpen ? "-" : "+"}</span>}
 
