@@ -1536,7 +1536,7 @@ updateWindowsHistoryCmap(  {isSideNavOpen,lyrs:propertiesLyrs,zoom:tmpZoomLevel,
 
         <ButtonGroup
           variant="faded"
-          className="absolute left-0 bottom-1 z-50 "
+          // className="absolute left-0 bottom-1 z-50 "
           color="primary"
         >
           <Button

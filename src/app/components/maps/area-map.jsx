@@ -1633,10 +1633,10 @@ export const AreaMap = () => {
             ) : null} */}
           </div>
         </div>
-        <div className="flex items-end absolute left-0 bottom-1 z-50  " >
+        <div className="flex items-end fixed   bottom-1 z-50  " >
         <ButtonGroup
           variant="faded"
-          className="fixed  bottom-1 z-50  "
+          // className="fixed  bottom-1 z-50  "
           color="primary"
         >
           <Button
