@@ -777,10 +777,10 @@ export const LandingMap = () => {
           id: f.get("id"),
           companyid: f.get("companyid"),
           colour: f.get("colour"),
-          company2: f.get("sponsors"),
+          company2: f.get("company2"),
         };
       });
-
+      console.log("qq2-vfObjs?.length",...vfObjs,)
       dispatch(setFPropertyFeatures(vfObjs));
 
       if (vfObjs?.length > 0) {
@@ -792,6 +792,7 @@ export const LandingMap = () => {
     } else {
       dispatch(setIsLandingMapSideNavOpen(false));
     }
+    //mapRef.current.render()
   });
 
   useEffect(() => {
@@ -1720,6 +1721,8 @@ export const LandingMap = () => {
     setmapScale(scale.toLocaleString());
   };
 
+  const copyRight = `©2024 DigiGeoData`
+
   return (
     <div className="flex   ">
       <LandingMapSideNavbar />
@@ -1764,9 +1767,10 @@ export const LandingMap = () => {
             ) : null} */}
           </div>
         </div>
+        <div className="flex items-end absolute left-0 bottom-1 z-50  " >
         <ButtonGroup
           variant="faded"
-          className="absolute left-0 bottom-1 z-50  "
+         
           color="primary"
         >
           <Button
@@ -1808,7 +1812,9 @@ export const LandingMap = () => {
           >
             {curcenteredareaid}
           </Button> */}
-        </ButtonGroup>
+          </ButtonGroup>
+          <div><p>{copyRight}</p></div>
+        </div>
 
         <ButtonGroup
           variant="faded"

@@ -1495,6 +1495,9 @@ updateWindowsHistoryCmap(  {isSideNavOpen,lyrs:propertiesLyrs,zoom:tmpZoomLevel,
     }
   }, [mapViewRef.current]);
 
+  const copyRight = `©2024 DigiGeoData`
+
+
   return (
     <div className="flex">
       <PropertiesSideNavbar />
@@ -1529,6 +1532,8 @@ updateWindowsHistoryCmap(  {isSideNavOpen,lyrs:propertiesLyrs,zoom:tmpZoomLevel,
             </Button>
           </div>
         </div>
+        <div className="flex items-end absolute left-0 bottom-1 z-50  " >
+
         <ButtonGroup
           variant="faded"
           className="absolute left-0 bottom-1 z-50 "
@@ -1564,7 +1569,9 @@ updateWindowsHistoryCmap(  {isSideNavOpen,lyrs:propertiesLyrs,zoom:tmpZoomLevel,
           >
             Terrain
           </Button>
-        </ButtonGroup>
+          </ButtonGroup>
+          <div><p>{copyRight}</p></div>
+        </div>
         <ButtonGroup
           variant="faded"
           className="fixed right-0 bottom-1 z-50 "

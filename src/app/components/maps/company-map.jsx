@@ -1482,6 +1482,9 @@ export const CompanyMap = () => {
     }
   }, [mapViewRef.current]);
 
+  const copyRight = `©2024 DigiGeoData`
+
+
   return (
     <div className="flex">
       <CompanySideNavbar />
@@ -1517,6 +1520,8 @@ export const CompanyMap = () => {
             </Button>
           </div>
         </div>
+        <div className="flex items-end absolute left-0 bottom-1 z-50  " >
+
         <ButtonGroup
           variant="faded"
           className="absolute left-0 bottom-1 z-50"
@@ -1552,7 +1557,9 @@ export const CompanyMap = () => {
           >
             Terrain
           </Button>
-        </ButtonGroup>
+          </ButtonGroup>
+          <div><p>{copyRight}</p></div>
+        </div>
 
         <ButtonGroup
           variant="faded"

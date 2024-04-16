@@ -192,7 +192,7 @@ export const commodityMap_tbl_syncProperty_commodity_VectorLayerStyleFunction =
         // fill: new Fill({ color: fillColor }),
         // stroke: new Stroke({ color: outlineColor, width: outlineWidth }),
         offsetX: 2,
-        offsetY: -13,
+        offsetY: -19,
         // placement: placement,
         // maxAngle: maxAngle,
         // overflow: overflow,

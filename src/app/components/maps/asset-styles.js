@@ -148,18 +148,15 @@ const getText = function (feature, resolution) {
 };
 
 const createTextStyle = function (feature, resolution) {
- 
-  const font = 500 + " " + 25 + "/" + 25 + " " + "Sans Serif";
+  // const font = 600 + " " + 65 + "/" + 65 + " " + "Sans Serif";
  
 
   return new Text({
-     
-    font: font,
-    text: getText(feature, resolution),
-    
+    font: "bold 14px serif",
+    text: "Asset:" + getText(feature, resolution),
+
     offsetX: 0,
-    offsetY: -20,
-   
+    offsetY: +25,
   });
 };
 

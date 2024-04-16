@@ -1558,7 +1558,7 @@ export const AreaMap = () => {
 
 
   
-
+  const copyRight = `©2024 DigiGeoData`
 
   return (
     <div className="flex">
@@ -1633,6 +1633,7 @@ export const AreaMap = () => {
             ) : null} */}
           </div>
         </div>
+        <div className="flex items-end absolute left-0 bottom-1 z-50  " >
         <ButtonGroup
           variant="faded"
           className="fixed  bottom-1 z-50  "
@@ -1676,7 +1677,8 @@ export const AreaMap = () => {
             {areaSelectedAreaId}
           </Button> */}
         </ButtonGroup>
-
+          <div><p>{copyRight}</p></div>
+        </div>
         <ButtonGroup
           variant="faded"
           className="fixed right-[85px] bottom-1 z-50 "
