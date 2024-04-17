@@ -723,19 +723,22 @@ export const AreaMap = () => {
     }
 
     if (syncPropSourceRef.current) {
-      const p1 = syncPropSourceRef.current?.getExtent()[0];
-      if (areaZoomMode == ZoomMode.ExTENT) {
 
-        if (p1 != Infinity) {
-          mapRef.current?.getView()?.fit(syncPropSourceRef.current?.getExtent(), {
-            padding: [100, 100, 100, 100],
-            duration: 3000,
-          });
+      if (areaZoomMode == ZoomMode.ExTENT) {
+        const p1 = syncPropSourceRef.current.getExtent();
+        if (p1[0] != Infinity) {
+          if (syncPropSourceRef.current?.getFeatures().length > 0) {
+            mapRef.current?.getView()?.fit(p1, {
+              padding: [100, 100, 100, 100],
+              duration: 3000,
+            });
+          }
+
         }
-      } else {
-        if (p1 != Infinity) {
+      } else { //fixed zoom
+       
           mapRef.current?.getView()?.setZoom(areaZoomLevel);
-        }
+        
       }
     }
   }, [syncPropertyFeatures]);
@@ -747,6 +750,18 @@ export const AreaMap = () => {
       navigatedFPropertyRef.current = e;
       fPropSourceRef?.current?.addFeatures(e);
       fPropSourceLabelRef?.current?.addFeatures(e);
+
+      if (!syncPropSourceRef?.current?.getFeatures().length) {
+        const p2 = fPropSourceRef.current?.getExtent()
+        if (p2[0] != Infinity) {
+          mapRef.current?.getView()?.fit(p2, {
+            padding: [100, 100, 100, 100],
+            duration: 3000,
+          });
+
+        }
+      }
+
     }
 
     //  if (fPropSourceRef.current) {
@@ -805,7 +820,7 @@ export const AreaMap = () => {
 
     mouseScrollEvent();
 
-    console.log("mapViewMode-amap",mapViewMode,)
+    console.log("mapViewMode-amap", mapViewMode,)
 
   }, []);
 
@@ -905,7 +920,7 @@ export const AreaMap = () => {
   const notify = () => toast.success("Copied Url to Clipboard");
 
   const copyMapUrl = () => {
-   
+
     //alert("ppp" + pathname)
     navigator.clipboard.writeText(pathname + "&mvm=HEADLESS");
     notify()
@@ -1173,26 +1188,37 @@ export const AreaMap = () => {
   //     });
   // }
 
-  const styleFunctionAreaBoundary = (feature) => {
+  const styleFunctionAreaBoundary = (feature, resolution) => {
+    console.log("ww2-resolution", resolution)
+    
+    let text=""
+    let txtObjAreaName
+    if (resolution < 3000) {
+      txtObjAreaName = new Text({
+        //       // textAlign: align == "" ? undefined : align,
+        //       // textBaseline: baseline,
+        font:  "15px serif",
+        text: feature.get("area_name"),
+        fill: new Fill({ color: "red" }),
+        // stroke: new Stroke({ color: outlineColor, width: outlineWidth }),
+        offsetX: 0,
+        offsetY: 0,
+        // placement: placement,
+        // maxAngle: maxAngle,
+        overflow: true,
+        // rotation: rotation,
+      })
+    }  
+
+   
+
+
     const s = new Style({
       stroke: new Stroke({
         color: "blue",
         width: 1,
       }),
-      text: new Text({
-        //       // textAlign: align == "" ? undefined : align,
-        //       // textBaseline: baseline,
-        font: "20px serif",
-        text: feature.get("area_name"),
-        fill: new Fill({ color: "red" }),
-        // stroke: new Stroke({ color: outlineColor, width: outlineWidth }),
-        offsetX: 2,
-        offsetY: -13,
-        // placement: placement,
-        // maxAngle: maxAngle,
-        // overflow: overflow,
-        // rotation: rotation,
-      }),
+      text: txtObjAreaName,
     });
 
     return s;
@@ -1553,13 +1579,13 @@ export const AreaMap = () => {
 
       //set style of selected area
       const afs = areaBoundaryImgSourceRef.current?.getFeatures();
-      console.log("ww1-afs",afs)
+      console.log("ww1-afs", afs)
       const selAreaF = afs?.find(af => af.get("area_id") == areaSelectedAreaId)
 
       if (selAreaF) {
-       
+
         console.log("ww1-sel", selAreaF)
-        
+
         const s = new Style({
           stroke: new Stroke({
             color: "yellow",
@@ -1597,7 +1623,7 @@ export const AreaMap = () => {
   }, [areaSelectedAreaId, mapViewScales])
 
 
-  
+
   const copyRight = `©2024 DigiGeoData`
 
 
@@ -1654,7 +1680,7 @@ export const AreaMap = () => {
                 </div>
               }
             > */}
-              {/* <Button isIconOnly variant="bordered" className={`bg-blue-900 ${mapViewMode == "HEADED" ? "flex" : "hidden"}`} onClick={() => copyMapUrl()}>
+            {/* <Button isIconOnly variant="bordered" className={`bg-blue-900 ${mapViewMode == "HEADED" ? "flex" : "hidden"}`} onClick={() => copyMapUrl()}>
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="WHITE" className="bi bi-copy" viewBox="0 0 16 16">
                 <path fill-rule="evenodd" d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1z" />
                 className={`cursor-pointer text-white h-6 w-6 ${isSideNavOpen ? "" : "rotate-180"
@@ -1676,39 +1702,39 @@ export const AreaMap = () => {
           </div>
         </div>
         <div className="flex items-end fixed   bottom-1 z-50  " >
-        <ButtonGroup
-          variant="faded"
-          // className="fixed  bottom-1 z-50  "
-          color="primary"
-        >
-          <Button
-            onClick={() => setLyrs("m")}
-            className={`${mapLyrs == "m"
-              ? "bg-blue-900 text-white"
-              : "bg-blue-700 text-white"
-              }  w-22`}
+          <ButtonGroup
+            variant="faded"
+            // className="fixed  bottom-1 z-50  "
+            color="primary"
           >
-            Map
-          </Button>
-          <Button
-            onClick={() => setLyrs("s")}
-            className={`${mapLyrs == "s"
-              ? "bg-blue-900 text-white"
-              : "bg-blue-700 text-white"
-              }  w-22`}
-          >
-            Satellite
-          </Button>
-          <Button
-            onClick={() => setLyrs("p")}
-            className={`${mapLyrs == "p"
-              ? "bg-blue-900 text-white"
-              : "bg-blue-700 text-white"
-              }  w-22`}
-          >
-            Terrain
-          </Button>
-          {/* <Button
+            <Button
+              onClick={() => setLyrs("m")}
+              className={`${mapLyrs == "m"
+                ? "bg-blue-900 text-white"
+                : "bg-blue-700 text-white"
+                }  w-22`}
+            >
+              Map
+            </Button>
+            <Button
+              onClick={() => setLyrs("s")}
+              className={`${mapLyrs == "s"
+                ? "bg-blue-900 text-white"
+                : "bg-blue-700 text-white"
+                }  w-22`}
+            >
+              Satellite
+            </Button>
+            <Button
+              onClick={() => setLyrs("p")}
+              className={`${mapLyrs == "p"
+                ? "bg-blue-900 text-white"
+                : "bg-blue-700 text-white"
+                }  w-22`}
+            >
+              Terrain
+            </Button>
+            {/* <Button
             onClick={() => setLyrs("p")}
             className={`${
               mapLyrs == "p"
@@ -1718,7 +1744,7 @@ export const AreaMap = () => {
           >
             {areaSelectedAreaId}
           </Button> */}
-        </ButtonGroup>
+          </ButtonGroup>
           <div><p>{copyRight}</p></div>
         </div>
         <ButtonGroup
@@ -1794,10 +1820,10 @@ export const AreaMap = () => {
           style={{
             width: isSideNavOpen
               ? isAreaSideNavOpen
-                ? mapViewMode == "HEADED" ? "65vw": "100vw"
-                : mapViewMode == "HEADED" ? "83vw": "100vw"
-              :  "100vw",
-            
+                ? mapViewMode == "HEADED" ? "65vw" : "100vw"
+                : mapViewMode == "HEADED" ? "83vw" : "100vw"
+              : "100vw",
+
             height: mapViewMode == "HEADED" ? "90vh" : "100vh",
           }}
           // style={{
@@ -1806,7 +1832,7 @@ export const AreaMap = () => {
           //       ?  "65vw"
           //       : "83vw"
           //     : "100vw",
-            
+
           //   height: "90vh",
           // }}
           controls={[]}
