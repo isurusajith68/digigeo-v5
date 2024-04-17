@@ -332,6 +332,7 @@ export const AreaMap = () => {
   const router = useRouter();
   const [center, setCenter] = useState("");
   const [zoom, setZoom] = useState("");
+  const [prevSelAreaFeature, setprevSelAreaFeature] = useState();
 
   const [clickDataLoaded, setclickDataLoaded] = useState(false);
 
@@ -1550,6 +1551,45 @@ export const AreaMap = () => {
 
       //console.log("xx-99mapViewScale1-set",mapViewScale1)
 
+      //set style of selected area
+      const afs = areaBoundaryImgSourceRef.current?.getFeatures();
+      console.log("ww1-afs",afs)
+      const selAreaF = afs?.find(af => af.get("area_id") == areaSelectedAreaId)
+
+      if (selAreaF) {
+       
+        console.log("ww1-sel", selAreaF)
+        
+        const s = new Style({
+          stroke: new Stroke({
+            color: "yellow",
+            width: 5,
+          }),
+          text: new Text({
+            //       // textAlign: align == "" ? undefined : align,
+            //       // textBaseline: baseline,
+            font: "20px serif",
+            text: selAreaF.get("area_name"),
+            fill: new Fill({ color: "green" }),
+            // stroke: new Stroke({ color: outlineColor, width: outlineWidth }),
+            offsetX: 2,
+            offsetY: -13,
+            // placement: placement,
+            // maxAngle: maxAngle,
+            // overflow: overflow,
+            // rotation: rotation,
+          }),
+        });
+
+        //clear prev style
+        if (prevSelAreaFeature) {
+          prevSelAreaFeature.setStyle(undefined)
+        }
+        setprevSelAreaFeature(selAreaF)
+        selAreaF.setStyle(s);
+
+      }
+
     } else {
       console.log("xx-xxnotmapViewScale1-set", areaSelectedAreaId)
     }
@@ -1559,6 +1599,8 @@ export const AreaMap = () => {
 
   
   const copyRight = `©2024 DigiGeoData`
+
+
 
   return (
     <div className="flex">
