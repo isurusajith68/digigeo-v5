@@ -153,7 +153,7 @@ const createTextStyle = function (feature, resolution) {
 
   return new Text({
     font: "bold 14px serif",
-    text: "Asset:" + getText(feature, resolution),
+    text:  getText(feature, resolution),
 
     offsetX: 0,
     offsetY: +25,

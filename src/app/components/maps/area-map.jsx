@@ -1189,9 +1189,9 @@ export const AreaMap = () => {
   // }
 
   const styleFunctionAreaBoundary = (feature, resolution) => {
-    console.log("ww2-resolution", resolution)
     
-    let text=""
+    
+    
     let txtObjAreaName
     if (resolution < 3000) {
       txtObjAreaName = new Text({
@@ -1583,23 +1583,29 @@ export const AreaMap = () => {
       const selAreaF = afs?.find(af => af.get("area_id") == areaSelectedAreaId)
 
       if (selAreaF) {
-
-        console.log("ww1-sel", selAreaF)
+        // const geometry = selAreaF.getGeometry()
+        // const extent =  geometry.getExtent()
+        // const center  = getCenter(extent)
+        // const topcenterxOffset = (extent[0] + extent[2]) / 2 - center[0]
+        // const topcenteryOffset = extent[4]  - center[1]
+        
+        
 
         const s = new Style({
           stroke: new Stroke({
-            color: "yellow",
-            width: 5,
+            color: "black",
+            width: 6,
           }),
           text: new Text({
             //       // textAlign: align == "" ? undefined : align,
             //       // textBaseline: baseline,
-            font: "20px serif",
+            font: "25px serif",
             text: selAreaF.get("area_name"),
-            fill: new Fill({ color: "green" }),
+            fill: new Fill({ color: "black" }),
             // stroke: new Stroke({ color: outlineColor, width: outlineWidth }),
-            offsetX: 2,
-            offsetY: -13,
+            offsetX: 0,
+            offsetY: -10,
+            placement:"line",
             // placement: placement,
             // maxAngle: maxAngle,
             // overflow: overflow,

@@ -182,7 +182,7 @@ export const commodityMap_tbl_syncProperty_commodity_VectorLayerStyleFunction =
 
     let textObj;
     const size = feature.get("features").length;
-    if (size == 1) {
+    if (size == 1 && resolution < 5000) {
       const propName = feature.get("features")[0].get("prop_name");
       textObj = new Text({
         //       // textAlign: align == "" ? undefined : align,

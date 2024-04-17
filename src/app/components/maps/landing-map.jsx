@@ -1370,27 +1370,32 @@ export const LandingMap = () => {
   //     });
   // }
 
-  const styleFunctionAreaBoundary = (feature) => {
+  const styleFunctionAreaBoundary = (feature, resolution) => {
+
+    let txtObjAreaName
+    if (resolution < 3000) {
+      txtObjAreaName = new Text({
+        //       // textAlign: align == "" ? undefined : align,
+        //       // textBaseline: baseline,
+        font: "20px serif",
+        text: feature.get("area_name"),
+        fill: new Fill({ color: "red" }),
+        // stroke: new Stroke({ color: outlineColor, width: outlineWidth }),
+        offsetX: 0,
+        offsetY: 0,
+        // placement: placement,
+        // maxAngle: maxAngle,
+        overflow: true,
+        // rotation: rotation,
+      })
+    }  
+
     const s = new Style({
       stroke: new Stroke({
         color: "blue",
         width: 1,
       }),
-      text: new Text({
-        //       // textAlign: align == "" ? undefined : align,
-        //       // textBaseline: baseline,
-        font: "20px serif",
-        text: feature.get("area_name")  ,
-        // text: feature.get("area_name") + "-" + feature.get("area_id"),
-        fill: new Fill({ color: "red" }),
-        // stroke: new Stroke({ color: outlineColor, width: outlineWidth }),
-        offsetX: 2,
-        offsetY: -13,
-        // placement: placement,
-        // maxAngle: maxAngle,
-        // overflow: overflow,
-        // rotation: rotation,
-      }),
+      text: txtObjAreaName,
     });
 
     return s;
