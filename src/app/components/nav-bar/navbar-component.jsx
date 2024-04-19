@@ -100,11 +100,11 @@ const HomeNavbar = () => {
       >
         <div className="flex items-center gap-2">
           <div className="flex gap-4 justify-center">
-          <Link href="/" className="flex items-center">
+            <Link href="https://digigeodata.com" target="_blank" className="flex items-center">
             <Image
               src="/DigiGeoData_white.webp"
-              width={130}
-              height={35}
+              width={140}
+              height={55}
               alt="logo DigiGeoData"
             />
 
@@ -112,7 +112,7 @@ const HomeNavbar = () => {
               DigiGeo<span className="text-white">Maps</span>
             </span> */}
           </Link>
-          <Link href="/" className="flex items-center">
+            <Link href="https://northernminer.com" target="_blank" className="flex items-center">
             <Image
               src="/TNM_logo_large.webp"
               width={200}
@@ -169,7 +169,7 @@ const HomeNavbar = () => {
                   )
                 }
               >
-                <Link href="https://digigeodata.com" target="_blank">
+                <Link href="https://digigeodata.com/digigeomaps-landing-page" target="_blank">
                   <AiFillHome className="h-6 w-6 dark:text-white text-white" />
                 </Link>
               </Button>
