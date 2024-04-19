@@ -6,8 +6,11 @@ import Image from 'next/image'
 import { FaLock,FaLockOpen  } from "react-icons/fa6";
 import { TbEye } from "react-icons/tb";
 import { TbEyeOff } from "react-icons/tb";
+import { MdOutlineLabel } from "react-icons/md";
+import { MdOutlineLabelOff } from "react-icons/md";
 
-const LayerVisibleLockDiv = ({ title, children, onClick, eyeState, onLockClick, lockState  }) => {
+
+const LayerVisibleLockLabelDiv = ({ title, children, onClick, eyeState, onLockClick, lockState, labelState, setLabelState }) => {
   return (
     <div>
       <div
@@ -21,7 +24,10 @@ const LayerVisibleLockDiv = ({ title, children, onClick, eyeState, onLockClick, 
             {isOpen ? <FaChevronDown /> : <FaChevronLeft />}
           </span> */}
           {/* lock-open-closw */}
-         
+          <span>
+            {labelState && (<MdOutlineLabel onClick={() => setLabelState(false)} className=" cursor-pointer hover:scale-125" />)}
+            {!labelState && <MdOutlineLabelOff onClick={() => setLabelState(true)} className=" cursor-pointer hover:scale-125" />}
+          </span>
            <span className="">
             {!lockState && eyeState && (
               <TbEye
@@ -60,4 +66,4 @@ const LayerVisibleLockDiv = ({ title, children, onClick, eyeState, onLockClick, 
   );
 };
 
-export default LayerVisibleLockDiv;
+export default LayerVisibleLockLabelDiv;

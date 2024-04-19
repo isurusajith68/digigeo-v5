@@ -4,9 +4,11 @@ import { FaChevronDown, FaChevronLeft, FaChevronUp } from "react-icons/fa";
 import { VscEye, VscEyeClosed } from "react-icons/vsc";
 import { TbEye } from "react-icons/tb";
 import { TbEyeOff } from "react-icons/tb";
- 
+import { MdOutlineLabel } from "react-icons/md";
+import { MdOutlineLabelOff } from "react-icons/md";
 
-const LayerVisibleDiv = ({ title, children, onClick, eyeState  }) => {
+const LayerVisibleWithLabelDiv = ({ title, children, onClick, eyeState, labelState, setLabelState }) => {
+
   return (
     <div>
       <div
@@ -14,11 +16,15 @@ const LayerVisibleDiv = ({ title, children, onClick, eyeState  }) => {
       >
         <span className="mr-2">{children}</span>
         <h3 className="  text-black m-0 mr-[10px]">{title}</h3>
-        <div className="flex absolute right-0 mr-4 gap-4">
+        <div className="flex absolute right-0 mr-4 gap-2">
           {/* <span onClick={toggleAccordion} className="cursor-pointer"> 
             {isOpen ? <FaChevronDown /> : <FaChevronLeft />}
           </span> */}
-       
+         
+          <span>
+            {labelState && (<MdOutlineLabel onClick={()=>setLabelState(false)} className=" cursor-pointer hover:scale-125" />)}
+            {!labelState && <MdOutlineLabelOff onClick={() => setLabelState(true)}  className=" cursor-pointer hover:scale-125" />}
+          </span>
           <span className="">
             {eyeState && (
               <TbEye className=" cursor-pointer hover:scale-125" onClick={onClick} />
@@ -33,4 +39,4 @@ const LayerVisibleDiv = ({ title, children, onClick, eyeState  }) => {
   );
 };
 
-export default LayerVisibleDiv;
+export default LayerVisibleWithLabelDiv;

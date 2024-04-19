@@ -21,12 +21,14 @@ import {
 import { useRouter, useSearchParams } from "next/navigation";
 import { MdLocationOn } from "react-icons/md";
 import AreaFilter from "../../filter-popups/area-filters";
- 
+
 import {
   setIsLandingMapSideNavOpen,
- 
+
   setlandingMapFpropLayerVisible,
- 
+  setlmapAreaLableVisible,
+  setlmapFpropLableVisible,
+
 } from "../../../../store/landing-map/landing-map-slice";
 // import TreeView from "../../common-comp/treeview";
 import Accordion from "../../common-comp/accordion";
@@ -36,6 +38,7 @@ import LmapFeaturedCompanyDetailDiv from "./featured-company-detail-div";
 import GeoJSON from "ol/format/GeoJSON";
 import LmapFCompanyPopup from "./lmap-fcompany-popup";
 import { updateWindowsHistory } from "@/app/utils/helpers/window-history-replace";
+import AccordionItemWithEyeLabel from "../../common-comp/accordion-eye-label";
 
 const LandingMapSideNavbar = () => {
   let pathname = "";
@@ -43,7 +46,7 @@ const LandingMapSideNavbar = () => {
   const router = useRouter();
   try {
     pathname = window.location.href;
-  } catch (error) {}
+  } catch (error) { }
 
   if (pathname) {
     const r = pathname.indexOf("/", 9);
@@ -51,21 +54,21 @@ const LandingMapSideNavbar = () => {
       pathname = pathname.substring(0, r);
     }
   }
-  
+
   const [isSecondSideOpen, setIsSecondSideOpen] = useState(false);
   const [treeViewData, settreeViewData] = useState();
-  
+
   const selectedMap = useSelector(
     (state) => state.mapSelectorReducer.selectedMap
   );
-  
+
   const isSideNavOpen = useSelector(
     (state) => state.mapSelectorReducer.isSideNavOpen
   );
   const isLandingMapSideNavOpen = useSelector(
     (state) => state.landingMapReducer.isLandingMapSideNavOpen
   );
-  
+
   const landingMapLyrs = useSelector(
     (state) => state.mapSelectorReducer.landingMapLyrs
   );
@@ -84,25 +87,25 @@ const LandingMapSideNavbar = () => {
     (state) => state.landingMapReducer.syncPropertyFeatures
   );
 
-   const featuredPropertyFeatures = useSelector(
-     (state) => state.landingMapReducer.featuredPropertyFeatures
+  const featuredPropertyFeatures = useSelector(
+    (state) => state.landingMapReducer.featuredPropertyFeatures
   );
 
 
-  
 
-   const [featuredCompanies, setFeaturedCompanies] = useState([]);
 
-   useEffect(()=>{
-     if (featuredPropertyFeatures) {
-       const result = Object.groupBy(featuredPropertyFeatures, ({ companyid }) => companyid);
-       //console.log("result11", result);
-       const a = Object.keys(result).map(k => result[k][0]);
-       console.log("result12", a);
-       setFeaturedCompanies(a);
-     }
+  const [featuredCompanies, setFeaturedCompanies] = useState([]);
+
+  useEffect(() => {
+    if (featuredPropertyFeatures) {
+      const result = Object.groupBy(featuredPropertyFeatures, ({ companyid }) => companyid);
+      //console.log("result11", result);
+      const a = Object.keys(result).map(k => result[k][0]);
+      console.log("result12", a);
+      setFeaturedCompanies(a);
+    }
     // console.log("ppo",featuredPropertyFeatures)
-   },[featuredPropertyFeatures])
+  }, [featuredPropertyFeatures])
   //areal load
   //   useEffect(() => {
   //     if (areaName) {
@@ -122,7 +125,7 @@ const LandingMapSideNavbar = () => {
 
   const closeSecondNavBar = () => {
     // setIsSecondSideOpen(false);
-       console.log("yy-hit-2sidenavbar-lmap-compo")
+    console.log("yy-hit-2sidenavbar-lmap-compo")
 
     let newUrl;
     if (areaName == "") {
@@ -131,7 +134,7 @@ const LandingMapSideNavbar = () => {
       newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=false&lyrs=${landingMapLyrs}&z=${landingMapZoomLevel}&c=${landingMapInitialCenter}&co=${areaCountry}&ma=${areaName}`;
     }
     // window.history.replaceState({}, "", newUrl);
-     updateWindowsHistory(newUrl);
+    updateWindowsHistory(newUrl);
     dispatch(setIsLandingMapSideNavOpen(false));
   };
 
@@ -212,7 +215,7 @@ const LandingMapSideNavbar = () => {
   //       { cache: "no-store" }
   //     );
   //     const d = await res.json();
-    
+
 
   //     const gj = {
   //       type: "FeatureCollection",
@@ -239,7 +242,7 @@ const LandingMapSideNavbar = () => {
   //     // console.log("fps", d);
   //     console.log("assets", d.data);
 
-     
+
 
   //     const gj = {
   //       type: "FeatureCollection",
@@ -273,31 +276,33 @@ const LandingMapSideNavbar = () => {
   // useEffect(()=>{
 
   // },[featuredPropertyFeatures])
-
+  const setsetlmapFpropLableVisibility = (state) => {
+    dispatch(setlmapFpropLableVisible(state));
+  };
+  const lmapFpropLableVisible = useSelector(
+    (state) => state.landingMapReducer.lmapFpropLableVisible
+  );
   return (
     <section className="flex gap-6 h-[90vh]">
       <div className={`duration-500 flex w-auto h-full`}>
         <div
           className={`
-          ${
-            isLandingMapSideNavOpen && isSideNavOpen
+          ${isLandingMapSideNavOpen && isSideNavOpen
               ? "bg-white dark:bg-black border-2 rounded-md border-blue-700"
               : ""
-          } 
+            } 
             
-          ${
-            isLandingMapSideNavOpen && isSideNavOpen
+          ${isLandingMapSideNavOpen && isSideNavOpen
               ? "w-80 sm:w-72 mr-2"
               : "w-0"
-          } 
+            } 
           duration-500`}
         >
           <div
-            className={`${
-              isLandingMapSideNavOpen && isSideNavOpen
-                ? "py-0.1 flex flex-col  "
-                : "hidden"
-            }`}
+            className={`${isLandingMapSideNavOpen && isSideNavOpen
+              ? "py-0.1 flex flex-col  "
+              : "hidden"
+              }`}
           >
             <div className="ml-2 mr-2 mt-1 mb-1 flex items-center justify-center border-b-2 relative">
               <div className="flex flex-col">
@@ -319,18 +324,21 @@ const LandingMapSideNavbar = () => {
             <div>
               <Accordion>
                 <div className="flex flex-col gap-6  ">
-                  <AccordionItemWithEye
+                  <AccordionItemWithEyeLabel
                     title="Featured Companies"
                     onClick={setlandingMapFpropLayerVisibility}
                     eyeState={landingMapFpropLayerVisible}
+                    labelState={lmapFpropLableVisible}
+                    setLabelState={setsetlmapFpropLableVisibility}
                   >
                     <div className="flex flex-col gap-1 overflow-y-scroll h-[75vh] mb-1">
                       {featuredCompanies?.map((i) => (
                         <LmapFeaturedCompanyDetailDiv
                           key={i.id}
-                          title={i.company2 + i.companyid + "-" +i.id }
+                          title={i.company2}
+                          // title={i.company2 + i.companyid + "-" +i.id }
                           companyid={i.companyid}
-                          // onClick={() => console.log(featuredCompanies)}
+                        // onClick={() => console.log(featuredCompanies)}
                         >
                           <div
                             className={`w-4 h-4`}
@@ -339,7 +347,7 @@ const LandingMapSideNavbar = () => {
                         </LmapFeaturedCompanyDetailDiv>
                       ))}
                     </div>
-                  </AccordionItemWithEye>
+                  </AccordionItemWithEyeLabel>
                   {/* <AccordionItemWithEye title="All Companies">
                     <div className="overflow-y-auto max-h-[25vh]">
                        <AreaTreeView syncPropFeatues={syncPropertyFeatures} /> 
@@ -350,7 +358,7 @@ const LandingMapSideNavbar = () => {
                     </AccordionItemWithEye> */}
                 </div>
               </Accordion>
-              
+
             </div>
           </div>
         </div>

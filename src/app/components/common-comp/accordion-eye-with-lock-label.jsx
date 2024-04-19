@@ -9,7 +9,7 @@ import { MdOutlineLabel } from "react-icons/md";
 import { MdOutlineLabelOff } from "react-icons/md";
 
 
-const AccordionItemWithEyeWithLock = ({ title, children, onClick, eyeState, onLockClick, lockState, labelState }) => {
+const AccordionItemWithEyeWithLockLabel = ({ title, children, onClick, eyeState, onLockClick, lockState, labelState, setLabelState }) => {
   const [isOpen, setIsOpen] = useState(true);
   
   const toggleAccordion = () => {
@@ -32,10 +32,9 @@ const AccordionItemWithEyeWithLock = ({ title, children, onClick, eyeState, onLo
             {isOpen ? <FaChevronDown /> : <FaChevronLeft />}
           </span>
           <span>
-            {labelState && (<MdOutlineLabel className=" cursor-pointer hover:scale-125" />)}
-            {!labelState && <MdOutlineLabelOff className=" cursor-pointer hover:scale-125" />}
+            {labelState && (<MdOutlineLabel onClick={() => setLabelState(false)} className=" cursor-pointer hover:scale-125" />)}
+            {!labelState && <MdOutlineLabelOff onClick={() => setLabelState(true)} className=" cursor-pointer hover:scale-125" />}
           </span>
-
             <span className="">
             {eyeState && (
               <TbEye className="cursor-pointer hover:scale-125" onClick={eyeClickHandler} />
@@ -67,4 +66,4 @@ const AccordionItemWithEyeWithLock = ({ title, children, onClick, eyeState, onLo
   );
 };
 
-export default AccordionItemWithEyeWithLock;
+export default AccordionItemWithEyeWithLockLabel;

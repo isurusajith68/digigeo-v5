@@ -25,12 +25,19 @@ import {
   setlandingMapSyncClaimLinkLayerVisible,
   setlandingMapSyncPropLayerVisible,
   setlandingAssetLayerAlwaysVisible,
+  setlmapClaimLableVisible,
+  setlmapsyncPropLableVisible,
+  setlmapAreaLableVisible,
+  setlmapAssetLableVisible
 } from "@/store/landing-map/landing-map-slice";
 import Image from "next/image";
 
 import LayerVisibleVisibilityStateDiv from './../../common-comp/layer-visible-eye-visibility-state';
 import LayerVisibleLockVisibilityDiv from './../../common-comp/layer-visible-eye-with-lock-with-visibility';
 import AccordionItemWithEyeWithLockVisibility from './../../common-comp/accordion-eye-with-lock-with-visibilty';
+import AccordionItemWithEyeWithLockVisibilityLabel from "../../common-comp/accordion-eye-with-lock-with-visibilty-label";
+import LayerVisibleWithLabelDiv from "../../common-comp/layer-visible-eye-with-label";
+import LayerVisibleVisibilityStateLabelDiv from "../../common-comp/layer-visible-eye-visibility-state-label";
 
 
 
@@ -38,9 +45,9 @@ const LandingBottomSideComp = () => {
   let pathname = "";
   const dispatch = useDispatch();
 
-  const [claimsVisibilityState, setclaimsVisibilityState] =  useState(true);
-  const [propertyOutLineVisibilityState, setpropertyOutLineVisibilityState] =  useState(false);
-  const [assetVisibilityState, setassetVisibilityState] =  useState(true);
+  const [claimsVisibilityState, setclaimsVisibilityState] = useState(true);
+  const [propertyOutLineVisibilityState, setpropertyOutLineVisibilityState] = useState(false);
+  const [assetVisibilityState, setassetVisibilityState] = useState(true);
 
 
 
@@ -50,7 +57,7 @@ const LandingBottomSideComp = () => {
   const router = useRouter();
   try {
     pathname = window.location.href;
-  } catch (error) {}
+  } catch (error) { }
 
   if (pathname) {
     const r = pathname.indexOf("/", 9);
@@ -59,7 +66,7 @@ const LandingBottomSideComp = () => {
     }
   }
 
- 
+
   const accordionItems = [
     {
       title: "Assets",
@@ -131,7 +138,7 @@ const LandingBottomSideComp = () => {
     (state) => state.landingMapReducer.landingMapAssetOccurrenceVisible
   );
 
-    const landingAssetLayerAlwaysVisible = useSelector(
+  const landingAssetLayerAlwaysVisible = useSelector(
     (state) => state.landingMapReducer.landingAssetLayerAlwaysVisible
   );
 
@@ -152,7 +159,7 @@ const LandingBottomSideComp = () => {
   const setlandingMapAssetOccurrenceVisibility = (e) => {
     dispatch(setlandingMapAssetOccurrenceVisible(!landingMapAssetOccurrenceVisible));
   };
-    const setlandingAssetLayerAlwaysVisibility = (e) => {
+  const setlandingAssetLayerAlwaysVisibility = (e) => {
     dispatch(setlandingAssetLayerAlwaysVisible(!landingAssetLayerAlwaysVisible));
   };
 
@@ -199,16 +206,16 @@ const LandingBottomSideComp = () => {
     }
   };
 
-    const landingCurrentScale = useSelector(
+  const landingCurrentScale = useSelector(
     (state) => state.landingMapReducer.landingCurrentScale
   );
-    const landingMapViewScales = useSelector(
+  const landingMapViewScales = useSelector(
     (state) => state.landingMapReducer.landingMapViewScales
   );
- 
-  
-  useEffect(()=>{
-    console.log("xx1-landingCurrentScale",landingCurrentScale,landingMapViewScales)
+
+
+  useEffect(() => {
+    console.log("xx1-landingCurrentScale", landingCurrentScale, landingMapViewScales)
     // mapViewScaleReducer.mapViewScales?.[0]?.claimscale > areaCurrentScale ?  setclaimsVisibilityState(true): setclaimsVisibilityState(false)
     if (landingMapViewScales) {
       //console.log("xx-if bot-compo-landingMapViewScales")
@@ -216,10 +223,38 @@ const LandingBottomSideComp = () => {
       landingMapViewScales.propoutlinescale > landingCurrentScale ? setpropertyOutLineVisibilityState(true) : setpropertyOutLineVisibilityState(false)
       landingMapViewScales.assetscale > landingCurrentScale ? setassetVisibilityState(true) : setassetVisibilityState(false)
     }
-    
-   // console.log("areaCurrentScale-mapViewScaleReducer ",mapViewScaleReducer.mapViewScales?.[0]?.claimscale)
 
-  },[landingCurrentScale,landingMapViewScales])
+    // console.log("areaCurrentScale-mapViewScaleReducer ",mapViewScaleReducer.mapViewScales?.[0]?.claimscale)
+
+  }, [landingCurrentScale, landingMapViewScales])
+
+  const setClaimLabelVisibility = (state) => {
+    dispatch(setlmapClaimLableVisible(state));
+  };
+  const lmapClaimLableVisible = useSelector(
+    (state) => state.landingMapReducer.lmapClaimLableVisible
+  );
+
+  const setlmapsyncPropLableVisibility = (state) => {
+    dispatch(setlmapsyncPropLableVisible(state));
+  };
+  const lmapsyncPropLableVisible = useSelector(
+    (state) => state.landingMapReducer.lmapsyncPropLableVisible
+  );
+
+  const setlmapAreaLableVisibility = (state) => {
+    dispatch(setlmapAreaLableVisible(state));
+  };
+  const lmapAreaLableVisible = useSelector(
+    (state) => state.landingMapReducer.lmapAreaLableVisible
+  );
+
+  const setlmapAssetLableVisibility = (state) => {
+    dispatch(setlmapAssetLableVisible(state));
+  };
+  const lmapAssetLableVisible = useSelector(
+    (state) => state.landingMapReducer.lmapAssetLableVisible
+  );
 
   return (
     <div className="flex flex-col w-full h-full grow">
@@ -229,13 +264,16 @@ const LandingBottomSideComp = () => {
       <div className="overflow-y-auto max-h-[53vh]">
         <Accordion>
           <div className="flex flex-col gap-1">
-            <AccordionItemWithEyeWithLockVisibility
+            <AccordionItemWithEyeWithLockVisibilityLabel
               title="Assets"
               onClick={setlandingMapAssetLayerVisibility}
               eyeState={landingMapAssetLayerVisible}
               onLockClick={setlandingAssetLayerAlwaysVisibility}
               lockState={landingAssetLayerAlwaysVisible}
               visibilityState={assetVisibilityState}
+              labelState={lmapAssetLableVisible}
+              setLabelState={setlmapAssetLableVisibility}
+
             >
               <div className="flex flex-col gap-1">
                 <LayerVisibleVisibilityStateDiv
@@ -304,17 +342,19 @@ const LandingBottomSideComp = () => {
                   />
                 </LayerVisibleVisibilityStateDiv>
               </div>
-            </AccordionItemWithEyeWithLockVisibility>
+            </AccordionItemWithEyeWithLockVisibilityLabel>
             <AccordionItemWithEye
               title="Properties"
               onClick={setPropertiesGroupEye}
               eyeState={landing_claimLinkGroupVisible}
             >
               <div className="flex flex-col gap-1">
-                <LayerVisibleDiv
+                <LayerVisibleWithLabelDiv
                   title="Property Points"
                   onClick={setlandingMapSyncPropLayerVisibility}
                   eyeState={landingMapSyncPropLayerVisible}
+                  labelState={lmapsyncPropLableVisible}
+                  setLabelState={setlmapsyncPropLableVisibility}
                 >
                   <Image
                     src="./sync-prop.svg"
@@ -322,7 +362,7 @@ const LandingBottomSideComp = () => {
                     height={10}
                     alt="prop"
                   />
-                </LayerVisibleDiv>
+                </LayerVisibleWithLabelDiv>
                 <LayerVisibleVisibilityStateDiv
                   onClick={setlandingMapSyncClaimLinkLayerVisibility}
                   title="Property Outlines"
@@ -344,11 +384,13 @@ const LandingBottomSideComp = () => {
               eyeState={landingMapClaimLayerVisible}
             >
               <div className="flex flex-col gap-1">
-                <LayerVisibleVisibilityStateDiv
+                <LayerVisibleVisibilityStateLabelDiv
                   title="Claims"
                   onClick={setlandingMapClaimLayerVisibility}
                   eyeState={landingMapClaimLayerVisible}
                   visibilityState={claimsVisibilityState}
+                  labelState={lmapClaimLableVisible}
+                  setLabelState={setClaimLabelVisibility}
                 >
                   <Image
                     src="./claims-layer.svg"
@@ -356,11 +398,13 @@ const LandingBottomSideComp = () => {
                     height={10}
                     alt="prop"
                   />
-                </LayerVisibleVisibilityStateDiv>
-                <LayerVisibleDiv
+                </LayerVisibleVisibilityStateLabelDiv>
+                <LayerVisibleWithLabelDiv
                   title="Mining Areas"
                   onClick={setlandingMapAreaBoundaryLayerVisibility}
                   eyeState={landingMapAreaBoundaryLayerVisible}
+                  labelState={lmapAreaLableVisible}
+                  setLabelState={setlmapAreaLableVisibility}
                 >
                   <Image
                     src="./minning-areas-layer.svg"
@@ -368,7 +412,7 @@ const LandingBottomSideComp = () => {
                     height={10}
                     alt="prop"
                   />
-                </LayerVisibleDiv>
+                </LayerVisibleWithLabelDiv>
               </div>
             </AccordionItemWithEye>
           </div>

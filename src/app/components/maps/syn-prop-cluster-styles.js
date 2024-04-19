@@ -5,6 +5,10 @@ import { getBottomLeft, getCenter, getWidth } from "ol/extent";
 import { getHeight } from "ol/extent";
 import { toContext } from "ol/render";
 
+import { useDispatch, useSelector } from "react-redux";
+
+ 
+  
 export const commodityMap_tbl_syncProperty_commodity_VectorLayerStyleFunction =
   (feature, resolution) => {
    

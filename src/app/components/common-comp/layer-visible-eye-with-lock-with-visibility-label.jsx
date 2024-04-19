@@ -8,8 +8,10 @@ import { FaLock,FaLockOpen  } from "react-icons/fa6";
 import { TbEye } from "react-icons/tb";
 import { TbEyeOff } from "react-icons/tb";
 import { TbEyePause } from "react-icons/tb";
+import { MdOutlineLabel } from "react-icons/md";
+import { MdOutlineLabelOff } from "react-icons/md";
 
-const LayerVisibleLockVisibilityDiv = ({ title, children, onClick, eyeState, onLockClick, lockState, visibilityState }) => {
+const LayerVisibleLockVisibilityLabelDiv = ({ title, children, onClick, eyeState, onLockClick, lockState, visibilityState, labelState, setLabelState }) => {
   
   // useEffect(( )=>
   // {
@@ -28,6 +30,10 @@ const LayerVisibleLockVisibilityDiv = ({ title, children, onClick, eyeState, onL
             {isOpen ? <FaChevronDown /> : <FaChevronLeft />}
           </span> */}
           {/* lock-open-closw */}
+          <span>
+            {labelState && (<MdOutlineLabel onClick={() => setLabelState(false)}  className=" cursor-pointer hover:scale-125" />)}
+            {!labelState && <MdOutlineLabelOff onClick={() => setLabelState(true)} className=" cursor-pointer hover:scale-125" />}
+          </span>
            <span className="">
             {!lockState &&  eyeState && visibilityState && (
               <TbEye
@@ -70,4 +76,4 @@ const LayerVisibleLockVisibilityDiv = ({ title, children, onClick, eyeState, onL
   );
 };
 
-export default LayerVisibleLockVisibilityDiv;
+export default LayerVisibleLockVisibilityLabelDiv;

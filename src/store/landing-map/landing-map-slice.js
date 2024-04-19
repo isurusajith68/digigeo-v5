@@ -32,6 +32,11 @@ const initialState = {
   landingPropOutlineLayerAlwaysVisible: false,
   landingCurrentScale: 5,
   landingMapViewScales: {},
+  lmapsyncPropLableVisible:true,
+  lmapFpropLableVisible:true,
+  lmapAssetLableVisible:true,
+  lmapClaimLableVisible:true,
+  lmapAreaLableVisible:true,
 };
 
 const landingMapMapSlice = createSlice({
@@ -119,7 +124,7 @@ const landingMapMapSlice = createSlice({
     setpopupFcompanyId: (state, action) => {
       state.popupFcompanyId = action.payload;
     },
-     setlandingSyncPropLayerAlwaysVisible: (state, action) => {
+    setlandingSyncPropLayerAlwaysVisible: (state, action) => {
       state.landingSyncPropLayerAlwaysVisible = action.payload;
     },
     setlandingAssetLayerAlwaysVisible: (state, action) => {
@@ -127,18 +132,38 @@ const landingMapMapSlice = createSlice({
     },
 
     setlandingCurrentScale: (state, action) => {
-     
       state.landingCurrentScale = action.payload;
     },
-   
+
     setlandingMapViewScales: (state, action) => {
-     
       state.landingMapViewScales = action.payload;
     },
+    setlmapsyncPropLableVisible: (state, action) => {
+      state.lmapsyncPropLableVisible = action.payload;
+    },
+    setlmapFpropLableVisible: (state, action) => {
+      state.lmapFpropLableVisible = action.payload;
+    },
+    setlmapAssetLableVisible: (state, action) => {
+      state.lmapAssetLableVisible = action.payload;
+    },
+    setlmapClaimLableVisible: (state, action) => {
+      state.lmapClaimLableVisible = action.payload;
+    },
+    setlmapAreaLableVisible: (state, action) => {
+      state.lmapAreaLableVisible = action.payload;
+    },
+     
+  
   },
 });
 
 export const {
+  setlmapsyncPropLableVisible,
+  setlmapFpropLableVisible,
+  setlmapAssetLableVisible,
+  setlmapClaimLableVisible,
+  setlmapAreaLableVisible,
   setAreaCountry,
   setAreaMiningArea,
   setIsLandingMapSideNavOpen,
