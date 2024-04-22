@@ -9,7 +9,7 @@ const initialState = {
   syncClaimLinkPropertyFeatures: undefined,
   assetFeatures: undefined,
   landingMapZoomMode: "custom",
-  landingMapFpropLayerVisible: true,  
+  landingMapFpropLayerVisible: true,
   landingMapAssetLayerVisible: true,
   landingMapSyncPropLayerVisible: true,
   landingMapSyncClaimLinkLayerVisible: true,
@@ -32,11 +32,11 @@ const initialState = {
   landingPropOutlineLayerAlwaysVisible: false,
   landingCurrentScale: 5,
   landingMapViewScales: {},
-  lmapsyncPropLableVisible:true,
-  lmapFpropLableVisible:true,
-  lmapAssetLableVisible:true,
-  lmapClaimLableVisible:true,
-  lmapAreaLableVisible:true,
+  lmapsyncPropLableVisible: true,
+  lmapFpropLableVisible: true,
+  lmapAssetLableVisible: true,
+  lmapClaimLableVisible: true,
+  lmapAreaLableVisible: true,
 };
 
 const landingMapMapSlice = createSlice({
@@ -153,8 +153,6 @@ const landingMapMapSlice = createSlice({
     setlmapAreaLableVisible: (state, action) => {
       state.lmapAreaLableVisible = action.payload;
     },
-     
-  
   },
 });
 
@@ -190,7 +188,7 @@ export const {
   setclicksyncPropertyObject,
   setnavigatedFPropId,
   setpopupFcompanyId,
-   setlandingSyncPropLayerAlwaysVisible,
+  setlandingSyncPropLayerAlwaysVisible,
   setlandingAssetLayerAlwaysVisible,
   setlandingCurrentScale,
   setlandingMapViewScales,

@@ -26,6 +26,7 @@ import {
   setFPropertyFeatures,
   setIsCompanySideNavOpen,
   setSyncPropertyFeatures,
+  setcmapFpropLableVisible,
   setcompanyFpropLayerVisible,
   setsyncClaimLinkPropertyFeatures,
 } from "../../../../store/company-map/company-map-slice";
@@ -42,6 +43,7 @@ import CompanyTreeView from "./company-tree-view";
 import CMapFCompanyAddlock from './company-fcompany-popup';
 import AccordionItemWithOutEye from "../../common-comp/accordion-without-eye";
 import { updateWindowsHistory } from "@/app/utils/helpers/window-history-replace";
+import AccordionItemWithEyeLabel from "../../common-comp/accordion-eye-label";
 
 
 const CompanySideNavbar = () => {
@@ -304,6 +306,15 @@ const CompanySideNavbar = () => {
     const setFpropLayerVisibility = (e) => {
       dispatch(setcompanyFpropLayerVisible(!companyFpropLayerVisible));
   }
+
+  const setcmapFpropLableVisibility = (state) => {
+    dispatch(setcmapFpropLableVisible(state));
+  };
+  const cmapFpropLableVisible = useSelector(
+    (state) => state.companyMapReducer.cmapFpropLableVisible
+  );
+
+
   return (
     <section className="flex gap-6">
       <div className={`duration-500 flex w-auto`}>
@@ -349,10 +360,12 @@ const CompanySideNavbar = () => {
           <div className="mt-4  flex flex-col gap-4 relative">
             <Accordion>
               <div className="flex flex-col gap-6">
-                <AccordionItemWithEye
+                <AccordionItemWithEyeLabel
                   title="Featured Properties"
                   onClick={setFpropLayerVisibility}
                   eyeState={companyFpropLayerVisible}
+                  labelState={cmapFpropLableVisible}
+                  setLabelState={ setcmapFpropLableVisibility}
                 >
                   <div className="flex flex-col gap-1 overflow-y-auto overflow-x-hidden max-h-[40vh]">
                     {namedFeaturedPropertiesLocal.map(
@@ -407,7 +420,7 @@ const CompanySideNavbar = () => {
               
                   
                   
-                </AccordionItemWithEye>
+                </AccordionItemWithEyeLabel>
                 <AccordionItemWithOutEye title="All Properties">
                   <div className="overflow-y-auto max-h-[25vh]">
                     <CompanyTreeView syncPropFeatures={syncPropertyFeatures} />

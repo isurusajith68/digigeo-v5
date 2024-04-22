@@ -3,7 +3,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 const initialState = {
   isPropertiesSideNavOpen: false,
   propertySearchQuery: "",
-  propertyMapPropertyAssetIdCsv: {propertyids:[],assetids:[]},
+  propertyMapPropertyAssetIdCsv: { propertyids: [], assetids: [] },
   propertyMapAssetCsv: "",
   syncPropertyFeatures: undefined,
   featuredPropertyFeatures: undefined,
@@ -26,18 +26,23 @@ const initialState = {
   clickfPropertyObject: undefined,
   clickassetObject: undefined,
   clicksyncPropertyObject: undefined,
-  searchParamPropertyName:"",
-  searchParamCountry:"",
-  searchParamStateProv:"",
-  searchParamMiningArea:"",
-  searchParamAssetTypeList:[],
+  searchParamPropertyName: "",
+  searchParamCountry: "",
+  searchParamStateProv: "",
+  searchParamMiningArea: "",
+  searchParamAssetTypeList: [],
   searchParamCommodityList: [],
   navigatedFPropId: 0,
-  popupFcompanyId:0,
+  popupFcompanyId: 0,
   propertySyncPropLayerAlwaysVisible: false,
   propertyAssetLayerAlwaysVisible: false,
   propertyCurrentScale: 5,
   propertyMapViewScales: {},
+  pmapsyncPropLableVisible:true,
+  pmapFpropLableVisible:true,
+  pmapAssetLableVisible:true,
+  pmapClaimLableVisible:true,
+  pmapAreaLableVisible:true,
 };
 
 const propertiesMapSlice = createSlice({
@@ -122,7 +127,7 @@ const propertiesMapSlice = createSlice({
     setclicksyncPropertyObject: (state, action) => {
       state.clicksyncPropertyObject = action.payload;
     },
- 
+
     setsearchParamPropertyName: (state, action) => {
       state.searchParamPropertyName = action.payload;
     },
@@ -141,26 +146,39 @@ const propertiesMapSlice = createSlice({
     setsearchParamCommodityList: (state, action) => {
       state.searchParamCommodityList = action.payload;
     },
-     setnavigatedFPropId: (state, action) => {
+    setnavigatedFPropId: (state, action) => {
       state.navigatedFPropId = action.payload;
     },
-     setpopupFcompanyId: (state, action) => {
+    setpopupFcompanyId: (state, action) => {
       state.popupFcompanyId = action.payload;
     },
-     setpropertySyncPropLayerAlwaysVisible: (state, action) => {
+    setpropertySyncPropLayerAlwaysVisible: (state, action) => {
       state.propertySyncPropLayerAlwaysVisible = action.payload;
     },
     setpropertyAssetLayerAlwaysVisible: (state, action) => {
       state.propertyAssetLayerAlwaysVisible = action.payload;
     },
     setpropertyCurrentScale: (state, action) => {
-     
       state.propertyCurrentScale = action.payload;
     },
-   
+
     setpropertyMapViewScales: (state, action) => {
-     
       state.propertyMapViewScales = action.payload;
+    },
+    setpmapsyncPropLableVisible: (state,action) =>{
+      state.pmapsyncPropLableVisible = action.payload;
+    },
+    setpmapFpropLableVisible: (state,action) =>{
+      state.pmapFpropLableVisible = action.payload;
+    },
+    setpmapAssetLableVisible: (state,action) =>{
+      state.pmapAssetLableVisible = action.payload;
+    },
+    setpmapClaimLableVisible: (state,action) =>{
+      state.pmapClaimLableVisible = action.payload;
+    },
+    setpmapAreaLableVisible: (state,action) =>{
+      state.pmapAreaLableVisible = action.payload;
     },
   },
 });
@@ -199,10 +217,15 @@ export const {
   setsearchParamCommodityList,
   setnavigatedFPropId,
   setpopupFcompanyId,
-   setpropertySyncPropLayerAlwaysVisible,
+  setpropertySyncPropLayerAlwaysVisible,
   setpropertyAssetLayerAlwaysVisible,
   setpropertyCurrentScale,
   setpropertyMapViewScales,
+  setpmapsyncPropLableVisible,
+  setpmapFpropLableVisible,
+  setpmapAssetLableVisible,
+  setpmapClaimLableVisible,
+  setpmapAreaLableVisible,
 } = propertiesMapSlice.actions;
 
 export default propertiesMapSlice.reducer;

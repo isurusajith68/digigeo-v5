@@ -31,6 +31,11 @@ const initialState = {
   companyAssetLayerAlwaysVisible: false,
   companyCurrentScale: 5,
   companyMapViewScales: {},
+  cmapsyncPropLableVisible: true,
+  cmapFpropLableVisible: true,
+  cmapAssetLableVisible: true,
+  cmapClaimLableVisible: true,
+  cmapAreaLableVisible: true,
 };
 
 const companyMapSlice = createSlice({
@@ -40,7 +45,7 @@ const companyMapSlice = createSlice({
     setIsCompanySideNavOpen: (state, action) => {
       state.isCompanySideNavOpen = action.payload;
     },
-     setcompanyName: (state, action) => {
+    setcompanyName: (state, action) => {
       state.companyName = action.payload;
     },
     setcompanyId: (state, action) => {
@@ -125,18 +130,32 @@ const companyMapSlice = createSlice({
       state.companyAssetLayerAlwaysVisible = action.payload;
     },
     setcompanyCurrentScale: (state, action) => {
-     
       state.companyCurrentScale = action.payload;
     },
-   
+
     setcompanyMapViewScales: (state, action) => {
-     
       state.companyMapViewScales = action.payload;
+    },
+    setcmapsyncPropLableVisible: (state, action) => {
+      state.cmapsyncPropLableVisible = action.payload;
+    },
+    setcmapFpropLableVisible: (state, action) => {
+      state.cmapFpropLableVisible = action.payload;
+    },
+    setcmapAssetLableVisible: (state, action) => {
+      state.cmapAssetLableVisible = action.payload;
+    },
+    setcmapClaimLableVisible: (state, action) => {
+      state.cmapClaimLableVisible = action.payload;
+    },
+    setcmapAreaLableVisible: (state, action) => {
+      state.cmapAreaLableVisible = action.payload;
     },
   },
 });
 
-export const { setIsCompanySideNavOpen,
+export const {
+  setIsCompanySideNavOpen,
   setcompanyName,
   setcompanyId,
   setcompanyStockcode,
@@ -162,10 +181,15 @@ export const { setIsCompanySideNavOpen,
   setclickassetObject,
   setclicksyncPropertyObject,
   setnavigatedFPropId,
-   setcompanySyncPropLayerAlwaysVisible,
+  setcompanySyncPropLayerAlwaysVisible,
   setcompanyAssetLayerAlwaysVisible,
   setcompanyCurrentScale,
   setcompanyMapViewScales,
+  setcmapsyncPropLableVisible,
+  setcmapFpropLableVisible,
+  setcmapAssetLableVisible,
+  setcmapClaimLableVisible,
+  setcmapAreaLableVisible,
 } = companyMapSlice.actions;
 
 export default companyMapSlice.reducer;

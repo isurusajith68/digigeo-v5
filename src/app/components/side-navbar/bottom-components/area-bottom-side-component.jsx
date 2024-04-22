@@ -29,11 +29,18 @@ import {
   setareaSyncPropLayerVisible,
   setareaSyncPropLayerAlwaysVisible,
   setareaAssetLayerAlwaysVisible,
+  setamapClaimLableVisible,
+  setamapAssetLableVisible,
+  setamapAreaLableVisible,
+  setamapsyncPropLableVisible,
 } from "@/store/area-map/area-map-slice";
 import Image from "next/image";
 import LayerVisibleVisibilityStateDiv from './../../common-comp/layer-visible-eye-visibility-state';
 import LayerVisibleLockVisibilityDiv from './../../common-comp/layer-visible-eye-with-lock-with-visibility';
 import AccordionItemWithEyeWithLockVisibility from './../../common-comp/accordion-eye-with-lock-with-visibilty';
+import AccordionItemWithEyeWithLockVisibilityLabel from "../../common-comp/accordion-eye-with-lock-with-visibilty-label";
+import LayerVisibleWithLabelDiv from "../../common-comp/layer-visible-eye-with-label";
+import LayerVisibleVisibilityStateLabelDiv from "../../common-comp/layer-visible-eye-visibility-state-label";
 
 const AreaBottomSideComp = () => {
   let pathname = "";
@@ -233,6 +240,35 @@ const AreaBottomSideComp = () => {
     }
   };
 
+
+  const setClaimLabelVisibility = (state) => {
+    dispatch(setamapClaimLableVisible(state));
+  };
+  const amapClaimLableVisible = useSelector(
+    (state) => state.areaMapReducer.amapClaimLableVisible
+  );
+
+  const setsyncPropLableVisibility = (state) => {
+    dispatch(setamapsyncPropLableVisible(state));
+  };
+  const amapsyncPropLableVisible = useSelector(
+    (state) => state.areaMapReducer.amapsyncPropLableVisible
+  );
+
+  const setAreaLableVisibility = (state) => {
+    dispatch(setamapAreaLableVisible(state));
+  };
+  const amapAreaLableVisible = useSelector(
+    (state) => state.areaMapReducer.amapAreaLableVisible
+  );
+
+  const setAssetLableVisibility = (state) => {
+    dispatch(setamapAssetLableVisible(state));
+  };
+  const amapAssetLableVisible = useSelector(
+    (state) => state.areaMapReducer.amapAssetLableVisible
+  );
+
   return (
     <div className="flex flex-col w-full h-full grow">
       <div className="ml-2 mr-2 flex items-center justify-center border-b-2 dark:text-white text-black">
@@ -241,13 +277,15 @@ const AreaBottomSideComp = () => {
       <div className="overflow-y-auto max-h-[53vh]">
         <Accordion>
           <div className="flex flex-col gap-1">
-            <AccordionItemWithEyeWithLockVisibility
+            <AccordionItemWithEyeWithLockVisibilityLabel
               title="Assets"
               onClick={setareaAssetLayerVisibility}
               eyeState={areaAssetLayerVisible}
               onLockClick={setareaAssetLayerAlwaysVisibility}
               lockState={areaAssetLayerAlwaysVisible}
               visibilityState={assetVisibilityState}
+              labelState={amapAssetLableVisible}
+              setLabelState={setAssetLableVisibility}
             >
               <div className="flex flex-col gap-1">
                 <LayerVisibleVisibilityStateDiv
@@ -316,20 +354,22 @@ const AreaBottomSideComp = () => {
                   />
                 </LayerVisibleVisibilityStateDiv>
               </div>
-            </AccordionItemWithEyeWithLockVisibility>
+            </AccordionItemWithEyeWithLockVisibilityLabel>
             <AccordionItemWithEye
               title="Properties"
               onClick={setPropertiesGroupEye}
               eyeState={property_claimLinkGroupVisible}
             >
               <div className="flex flex-col gap-1">
-                <LayerVisibleLockVisibilityDiv
+                <LayerVisibleWithLabelDiv
                   title="Property Points"
                   onClick={setareaSyncPropLayerVisibility}
                   eyeState={areaSyncPropLayerVisible}
                   onLockClick={setareaSyncPropLayerAlwaysVisibility}
                   lockState={areaSyncPropLayerAlwaysVisible}
                   visibilityState={propertyVisibilityState}
+                  labelState={amapsyncPropLableVisible}
+                  setLabelState={setsyncPropLableVisibility}
                 >
                   <Image
                     src="./sync-prop.svg"
@@ -337,7 +377,7 @@ const AreaBottomSideComp = () => {
                     height={10}
                     alt="prop"
                   />
-                </LayerVisibleLockVisibilityDiv>
+                </LayerVisibleWithLabelDiv>
                 <LayerVisibleDiv
                   onClick={setareaSyncClaimLinkLayerVisibility}
                   title="Property Outlines"
@@ -358,11 +398,13 @@ const AreaBottomSideComp = () => {
               eyeState={areaClaimLayerVisible}
             >
               <div className="flex flex-col gap-1">
-                <LayerVisibleVisibilityStateDiv
+                <LayerVisibleVisibilityStateLabelDiv
                   title="Claims"
                   onClick={setareaClaimLayerVisibility}
                   eyeState={areaClaimLayerVisible}
                   visibilityState={claimsVisibilityState}
+                  labelState={amapClaimLableVisible}
+                  setLabelState={setClaimLabelVisibility}
                 >
                   <Image
                     src="./claims-layer.svg"
@@ -370,11 +412,13 @@ const AreaBottomSideComp = () => {
                     height={10}
                     alt="prop"
                   />
-                </LayerVisibleVisibilityStateDiv>
-                <LayerVisibleDiv
+                </LayerVisibleVisibilityStateLabelDiv>
+                <LayerVisibleWithLabelDiv
                   title="Mining Areas"
                   onClick={setareaAreaBoundaryLayerVisibility}
                   eyeState={areaAreaBoundaryLayerVisible}
+                  labelState={amapAreaLableVisible}
+                  setLabelState={setAreaLableVisibility}
                 >
                   <Image
                     src="./minning-areas-layer.svg"
@@ -382,7 +426,7 @@ const AreaBottomSideComp = () => {
                     height={10}
                     alt="prop"
                   />
-                </LayerVisibleDiv>
+                </LayerVisibleWithLabelDiv>
               </div>
             </AccordionItemWithEye>
           </div>

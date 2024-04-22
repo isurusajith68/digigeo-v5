@@ -26,6 +26,7 @@ import {
   setFPropertyFeatures,
   setIsAreaSideNavOpen,
   setSyncPropertyFeatures,
+   setamapFpropLableVisible,
    setareaFpropLayerVisible,
   setsyncClaimLinkPropertyFeatures,
 } from "../../../../store/area-map/area-map-slice";
@@ -38,6 +39,7 @@ import FeaturedCompanyDetailDiv from "./featured-company-detail-div";
 import GeoJSON from "ol/format/GeoJSON";
 import AreaFCompanyPopup from "./area-fcompany-popup";
 import { updateWindowsHistory } from "@/app/utils/helpers/window-history-replace";
+import AccordionItemWithEyeLabel from "../../common-comp/accordion-eye-label";
 
 const AreaSideNavbar = () => {
   let pathname = "";
@@ -261,6 +263,14 @@ const AreaSideNavbar = () => {
       (state) => state.areaMapReducer.popupFcompanyId
     );
 
+  
+  const setFpropLableVisibility = (state) => {
+    dispatch(setamapFpropLableVisible(state));
+  };
+  const amapFpropLableVisible = useSelector(
+    (state) => state.areaMapReducer.amapFpropLableVisible
+  );
+
   return (
     <>
       <div className={` flex `}>
@@ -302,10 +312,12 @@ const AreaSideNavbar = () => {
 
             {/* <Accordion> */}
               <div className="flex flex-col gap-2 justify-between ">
-                <AccordionItemWithEye
+            <AccordionItemWithEyeLabel
                   title="Featured Companies"
                   onClick={setareaFpropLayerVisibility}
-                  eyeState={areaFpropLayerVisible}
+              eyeState={areaFpropLayerVisible}
+              labelState={amapFpropLableVisible}
+              setLabelState={setFpropLableVisibility}
                 >
                   <div className="flex flex-col gap-1 overflow-y-auto grow max-h-[50vh]">
                     {/* <div className="flex flex-col gap-1 overflow-y-auto max-h-[40vh]"> */}
@@ -323,7 +335,7 @@ const AreaSideNavbar = () => {
                       </FeaturedCompanyDetailDiv>
                     ))}
                   </div>
-                </AccordionItemWithEye>
+            </AccordionItemWithEyeLabel>
                 <AccordionItemWithOutEye title="All Companies">
                   <div className="overflow-y-auto grow max-h-[62vh]">
                     {/* <div className="overflow-y-auto max-h-[25vh]"> */}

@@ -26,6 +26,7 @@ import {
   setFPropertyFeatures,
   setIsPropertiesSideNavOpen,
   setSyncPropertyFeatures,
+  setpmapFpropLableVisible,
   setpropertyMapFpropLayerVisible,
   setsyncClaimLinkPropertyFeatures
 } from "../../../../store/properties-map/properties-map-slice";
@@ -39,6 +40,7 @@ import {Breadcrumbs, BreadcrumbItem} from "@nextui-org/react";
 import PropertyFCompanyPopup from "./property-fcompany-popup";
 import AccordionItemWithOutEye from "../../common-comp/accordion-without-eye";
 import { updateWindowsHistory } from "@/app/utils/helpers/window-history-replace";
+import AccordionItemWithEyeLabel from "../../common-comp/accordion-eye-label";
 
 
 
@@ -308,6 +310,13 @@ const PropertiesSideNavbar = () => {
   (state) => state.propertiesMapReducer.popupFcompanyId
   );
 
+  const  setpmapFpropLableVisibility = (state) => {
+    dispatch(setpmapFpropLableVisible(state));
+  };
+  const pmapFpropLableVisible = useSelector(
+    (state) => state.propertiesMapReducer.pmapFpropLableVisible
+  );
+
   return (
     <section className="flex gap-6">
       <div className={`duration-500 flex w-auto`}>
@@ -383,10 +392,13 @@ const PropertiesSideNavbar = () => {
           <div className="mt-4 flex flex-col gap-4 relative">
             <Accordion>
               <div className="flex flex-col gap-6">
-                <AccordionItemWithEye
+                <AccordionItemWithEyeLabel
                   title="Featured Companies"
                   onClick={setareaFpropLayerVisibility}
                   eyeState={propertyMapFpropLayerVisible}
+                  labelState={pmapFpropLableVisible}
+                  setLabelState={setpmapFpropLableVisibility}
+
                 >
                   <div className="flex flex-col gap-1 overflow-y-auto max-h-[40vh]">
                     {featuredCompanies?.map((i) => (
@@ -403,7 +415,7 @@ const PropertiesSideNavbar = () => {
                       </PropertyFeaturedCompanyDetailDiv>
                     ))}
                   </div>
-                </AccordionItemWithEye>
+                </AccordionItemWithEyeLabel>
                 <AccordionItemWithOutEye title="All Properties">
                   <div className="overflow-y-auto max-h-[25vh]">
                     <PropertyTreeView syncPropFeatures={syncPropertyFeatures} />

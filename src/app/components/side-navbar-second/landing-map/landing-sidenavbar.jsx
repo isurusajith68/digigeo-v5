@@ -265,7 +265,7 @@ const LandingMapSideNavbar = () => {
   );
 
   const setlandingMapFpropLayerVisibility = (e) => {
-    console.log("setareaFpropLayerVisibility");
+    
     dispatch(setlandingMapFpropLayerVisible(!landingMapFpropLayerVisible));
   };
 

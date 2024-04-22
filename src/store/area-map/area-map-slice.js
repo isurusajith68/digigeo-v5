@@ -33,6 +33,11 @@ const initialState = {
   areaCurrentScale: 5,
   areaSelectedAreaId: 0,
   areaMapViewScales: {},
+  amapsyncPropLableVisible: true,
+  amapFpropLableVisible: true,
+  amapAssetLableVisible: true,
+  amapClaimLableVisible: true,
+  amapAreaLableVisible: true,
 };
 
 const areaMapSlice = createSlice({
@@ -135,6 +140,21 @@ const areaMapSlice = createSlice({
     setareaMapViewScales: (state, action) => {
       state.areaMapViewScales = action.payload;
     },
+    setamapsyncPropLableVisible: (state, action) => {
+      state.amapsyncPropLableVisible = action.payload;
+    },
+    setamapFpropLableVisible: (state, action) => {
+      state.amapFpropLableVisible = action.payload;
+    },
+    setamapAssetLableVisible: (state, action) => {
+      state.amapAssetLableVisible = action.payload;
+    },
+    setamapClaimLableVisible: (state, action) => {
+      state.amapClaimLableVisible = action.payload;
+    },
+    setamapAreaLableVisible: (state, action) => {
+      state.amapAreaLableVisible = action.payload;
+    },
   },
 });
 
@@ -170,6 +190,11 @@ export const {
   setareaCurrentScale,
   setareaSelectedAreaId,
   setareaMapViewScales,
+  setamapsyncPropLableVisible,
+  setamapFpropLableVisible,
+  setamapAssetLableVisible,
+  setamapClaimLableVisible,
+  setamapAreaLableVisible,
 } = areaMapSlice.actions;
 
 export default areaMapSlice.reducer;

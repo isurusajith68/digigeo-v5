@@ -13,36 +13,44 @@ import Accordion from "../../common-comp/accordion";
 import AccordionItemWithEye from "../../common-comp/accordion-eye";
 import LayerVisibleDiv from "../../common-comp/layer-visible-eye";
 import { AiFillAppstore } from "react-icons/ai";
-import { setcompanyAreaBoundaryLayerVisible, 
+import {
+  setcompanyAreaBoundaryLayerVisible,
   setcompanyAssetDepositsVisible,
-   setcompanyAssetHistoricalVisible, 
-   setcompanyAssetLayerVisible,
-   setcompanyAssetOccurrenceVisible,
-    setcompanyAssetOpMineVisible,
-     setcompanyAssetZoneVisible, 
-     setcompanyClaimLayerVisible, 
-     setcompanyFpropLayerVisible, 
-     setcompanySyncClaimLinkLayerVisible,
-     setcompanySyncPropLayerVisible,
-     setcompanySyncPropLayerAlwaysVisible,
-     setcompanyAssetLayerAlwaysVisible,
-     } from "@/store/company-map/company-map-slice";
+  setcompanyAssetHistoricalVisible,
+  setcompanyAssetLayerVisible,
+  setcompanyAssetOccurrenceVisible,
+  setcompanyAssetOpMineVisible,
+  setcompanyAssetZoneVisible,
+  setcompanyClaimLayerVisible,
+  setcompanyFpropLayerVisible,
+  setcompanySyncClaimLinkLayerVisible,
+  setcompanySyncPropLayerVisible,
+  setcompanySyncPropLayerAlwaysVisible,
+  setcompanyAssetLayerAlwaysVisible,
+  setcmapClaimLableVisible,
+  setcmapsyncPropLableVisible,
+  setcmapAreaLableVisible,
+  setcmapAssetLableVisible,
+} from "@/store/company-map/company-map-slice";
 import Image from "next/image";
 
 import LayerVisibleVisibilityStateDiv from './../../common-comp/layer-visible-eye-visibility-state';
 import LayerVisibleLockVisibilityDiv from './../../common-comp/layer-visible-eye-with-lock-with-visibility';
 import AccordionItemWithEyeWithLockVisibility from './../../common-comp/accordion-eye-with-lock-with-visibilty';
+import LayerVisibleWithLabelDiv from "../../common-comp/layer-visible-eye-with-label";
+import LayerVisibleVisibilityStateLabelDiv from "../../common-comp/layer-visible-eye-visibility-state-label";
+import AccordionItemWithEyeWithLockVisibilityLabel from "../../common-comp/accordion-eye-with-lock-with-visibilty-label";
 
 
 
 const CompanyBottomSideComp = () => {
   let pathname = "";
   const dispatch = useDispatch();
- 
-  const [claimsVisibilityState, setclaimsVisibilityState] =  useState(true);
-  const [propertyOutLineVisibilityState, setpropertyOutLineVisibilityState] =  useState(false);
-  const [propertyPointLineVisibilityState, setpropertyPointLineVisibilityState] =  useState(false);
-  const [assetVisibilityState, setassetVisibilityState] =  useState(true);
+
+  const [claimsVisibilityState, setclaimsVisibilityState] = useState(true);
+  const [propertyOutLineVisibilityState, setpropertyOutLineVisibilityState] = useState(false);
+  const [propertyPointLineVisibilityState, setpropertyPointLineVisibilityState] = useState(false);
+  const [assetVisibilityState, setassetVisibilityState] = useState(true);
 
   const [company_claimLinkGroupVisible, setcompany_claimLinkGroupVisible] =
     useState(true);
@@ -58,7 +66,7 @@ const CompanyBottomSideComp = () => {
     }
   }
 
-   
+
   const isAreaSideNavOpen = useSelector(
     (state) => state.mapSelectorReducer.isAreaSideNavOpen
   );
@@ -85,10 +93,10 @@ const CompanyBottomSideComp = () => {
   const companyAssetLayerVisible = useSelector(
     (state) => state.companyMapReducer.companyAssetLayerVisible
   );
-    const setareaAssetLayerAlwaysVisibility = (e) => {
+  const setareaAssetLayerAlwaysVisibility = (e) => {
     dispatch(setareaAssetLayerAlwaysVisible(!areaAssetLayerAlwaysVisible));
   };
-  
+
   const companySyncPropLayerVisible = useSelector(
     (state) => state.companyMapReducer.companySyncPropLayerVisible
   );
@@ -107,7 +115,7 @@ const CompanyBottomSideComp = () => {
   }
   const setcompanyAssetLayerVisibility = (e) => {
     dispatch(setcompanyAssetLayerVisible(!companyAssetLayerVisible));
-   
+
   }
   const setcompanySyncPropLayerVisibility = (e) => {
     dispatch(setcompanySyncPropLayerVisible(!companySyncPropLayerVisible));
@@ -119,97 +127,97 @@ const CompanyBottomSideComp = () => {
     dispatch(setcompanyClaimLayerVisible(!companyClaimLayerVisible));
   }
   const setcompanyAreaBoundaryLayerVisibility = (e) => {
-    dispatch(setcompanyAreaBoundaryLayerVisible(!companyAreaBoundaryLayerVisible)); 
+    dispatch(setcompanyAreaBoundaryLayerVisible(!companyAreaBoundaryLayerVisible));
   }
-    //asset visibility redux states 
-    const companyAssetOpMineVisible = useSelector(
-      (state) => state.companyMapReducer.companyAssetOpMineVisible
-    );
-    const companyAssetDepositsVisible = useSelector(
-      (state) => state.companyMapReducer.companyAssetDepositsVisible
-    );
-    const companyAssetZoneVisible = useSelector(
-      (state) => state.companyMapReducer.companyAssetZoneVisible
-    );
-    const companyAssetHistoricalVisible = useSelector(
-      (state) => state.companyMapReducer.companyAssetHistoricalVisible
-    );
-    const companyAssetOccurrenceVisible = useSelector(
-      (state) => state.companyMapReducer.companyAssetOccurrenceVisible
-    );
+  //asset visibility redux states 
+  const companyAssetOpMineVisible = useSelector(
+    (state) => state.companyMapReducer.companyAssetOpMineVisible
+  );
+  const companyAssetDepositsVisible = useSelector(
+    (state) => state.companyMapReducer.companyAssetDepositsVisible
+  );
+  const companyAssetZoneVisible = useSelector(
+    (state) => state.companyMapReducer.companyAssetZoneVisible
+  );
+  const companyAssetHistoricalVisible = useSelector(
+    (state) => state.companyMapReducer.companyAssetHistoricalVisible
+  );
+  const companyAssetOccurrenceVisible = useSelector(
+    (state) => state.companyMapReducer.companyAssetOccurrenceVisible
+  );
 
-        const companyAssetLayerAlwaysVisible = useSelector(
+  const companyAssetLayerAlwaysVisible = useSelector(
     (state) => state.companyMapReducer.companyAssetLayerAlwaysVisible
   );
 
-    //asset type visibility functions
-    const setcompanyAssetOpMineVisibility = (e) => {
-      dispatch(setcompanyAssetOpMineVisible(!companyAssetOpMineVisible));
-    }
-    const setcompanyAssetDepositVisibility = (e) => {
-      dispatch(setcompanyAssetDepositsVisible(!companyAssetDepositsVisible));
-    }
-    const setcompanyAssetZoneVisibility = (e) => {
-      dispatch(setcompanyAssetZoneVisible(!companyAssetZoneVisible));
-    }
-    const setcompanyAssetHistoricalVisibility = (e) => {
-      dispatch(setcompanyAssetHistoricalVisible(!companyAssetHistoricalVisible));
-    }
-    const setcompanyAssetOccurrenceVisibility = (e) => {
-      dispatch(setcompanyAssetOccurrenceVisible(!companyAssetOccurrenceVisible));
-    }
-    const setcompanyAssetLayerAlwaysVisibility = (e) => {
+  //asset type visibility functions
+  const setcompanyAssetOpMineVisibility = (e) => {
+    dispatch(setcompanyAssetOpMineVisible(!companyAssetOpMineVisible));
+  }
+  const setcompanyAssetDepositVisibility = (e) => {
+    dispatch(setcompanyAssetDepositsVisible(!companyAssetDepositsVisible));
+  }
+  const setcompanyAssetZoneVisibility = (e) => {
+    dispatch(setcompanyAssetZoneVisible(!companyAssetZoneVisible));
+  }
+  const setcompanyAssetHistoricalVisibility = (e) => {
+    dispatch(setcompanyAssetHistoricalVisible(!companyAssetHistoricalVisible));
+  }
+  const setcompanyAssetOccurrenceVisibility = (e) => {
+    dispatch(setcompanyAssetOccurrenceVisible(!companyAssetOccurrenceVisible));
+  }
+  const setcompanyAssetLayerAlwaysVisibility = (e) => {
     dispatch(setcompanyAssetLayerAlwaysVisible(!companyAssetLayerAlwaysVisible));
-    };
+  };
 
 
-    useEffect(() => {
+  useEffect(() => {
 
-      if (companySyncPropLayerVisible && companySyncClaimLinkLayerVisible) {
-        setcompany_claimLinkGroupVisible(true)
-      } else {
-        setcompany_claimLinkGroupVisible(false)
-      }
-    
-  
-  
-    }, [companySyncPropLayerVisible, companySyncClaimLinkLayerVisible])
-  
-
-    //handle Properties Group Eye
-    const setPropertiesGroupEye = () => {
-
-      if (companySyncPropLayerVisible || companySyncClaimLinkLayerVisible) {
-
-        dispatch(setcompanySyncPropLayerVisible(false));
-        dispatch(setcompanySyncClaimLinkLayerVisible(false));
-      } else {
-        dispatch(setcompanySyncPropLayerVisible(true));
-        dispatch(setcompanySyncClaimLinkLayerVisible(true));
-      }
+    if (companySyncPropLayerVisible && companySyncClaimLinkLayerVisible) {
+      setcompany_claimLinkGroupVisible(true)
+    } else {
+      setcompany_claimLinkGroupVisible(false)
     }
 
-  
-    //handle Asset Group Eye
-    const setAssetGroupEye = () => {
 
-      if (companyAssetOpMineVisible || companyAssetDepositsVisible || companyAssetZoneVisible || companyAssetHistoricalVisible || companyAssetOccurrenceVisible) {
 
-        dispatch(setcompanyAssetOpMineVisible(false));
-        dispatch(setcompanyAssetDepositsVisible(false));
-        dispatch(setcompanyAssetZoneVisible(false));
-        dispatch(setcompanyAssetHistoricalVisible(false));
-        dispatch(setcompanyAssetOccurrenceVisible(false));
-      } else {
-        dispatch(setcompanyAssetOpMineVisible(true));
-        dispatch(setcompanyAssetDepositsVisible(true));
-        dispatch(setcompanyAssetZoneVisible(true));
-        dispatch(setcompanyAssetHistoricalVisible(true));
-        dispatch(setcompanyAssetOccurrenceVisible(true));
-      }
+  }, [companySyncPropLayerVisible, companySyncClaimLinkLayerVisible])
+
+
+  //handle Properties Group Eye
+  const setPropertiesGroupEye = () => {
+
+    if (companySyncPropLayerVisible || companySyncClaimLinkLayerVisible) {
+
+      dispatch(setcompanySyncPropLayerVisible(false));
+      dispatch(setcompanySyncClaimLinkLayerVisible(false));
+    } else {
+      dispatch(setcompanySyncPropLayerVisible(true));
+      dispatch(setcompanySyncClaimLinkLayerVisible(true));
     }
+  }
 
-      useEffect(() => {
+
+  //handle Asset Group Eye
+  const setAssetGroupEye = () => {
+
+    if (companyAssetOpMineVisible || companyAssetDepositsVisible || companyAssetZoneVisible || companyAssetHistoricalVisible || companyAssetOccurrenceVisible) {
+
+      dispatch(setcompanyAssetOpMineVisible(false));
+      dispatch(setcompanyAssetDepositsVisible(false));
+      dispatch(setcompanyAssetZoneVisible(false));
+      dispatch(setcompanyAssetHistoricalVisible(false));
+      dispatch(setcompanyAssetOccurrenceVisible(false));
+    } else {
+      dispatch(setcompanyAssetOpMineVisible(true));
+      dispatch(setcompanyAssetDepositsVisible(true));
+      dispatch(setcompanyAssetZoneVisible(true));
+      dispatch(setcompanyAssetHistoricalVisible(true));
+      dispatch(setcompanyAssetOccurrenceVisible(true));
+    }
+  }
+
+  useEffect(() => {
     if (companySyncPropLayerVisible && companySyncClaimLinkLayerVisible) {
       setcompany_claimLinkGroupVisible(true);
     } else {
@@ -217,11 +225,11 @@ const CompanyBottomSideComp = () => {
     }
   }, [companySyncPropLayerVisible, companySyncClaimLinkLayerVisible]);
 
-    
-    const companyCurrentScale = useSelector(
+
+  const companyCurrentScale = useSelector(
     (state) => state.companyMapReducer.companyCurrentScale
   );
-    const companyMapViewScales = useSelector(
+  const companyMapViewScales = useSelector(
     (state) => state.companyMapReducer.companyMapViewScales
   );
 
@@ -240,163 +248,199 @@ const CompanyBottomSideComp = () => {
 
   }, [companyCurrentScale, companyMapViewScales])
 
-  
-    
-    return (
-      <div className="flex flex-col w-full  h-full grow">
-        <div className="ml-2 mr-2  flex items-center justify-center border-b-2 dark:text-white text-black">
-          <span className="font-bold">Map Layers</span>
-        </div>
-        <div className="overflow-y-auto max-h-[52vh]">
-          <Accordion>
-            <div className="flex flex-col gap-1">
-              <AccordionItemWithEyeWithLockVisibility
-                title="Assets"
-                onClick={setcompanyAssetLayerVisibility}
-                eyeState={companyAssetLayerVisible}
-               onLockClick={setcompanyAssetLayerAlwaysVisibility}
+
+  const setClaimLabelVisibility = (state) => {
+    dispatch(setcmapClaimLableVisible(state));
+  };
+  const cmapClaimLableVisible = useSelector(
+    (state) => state.companyMapReducer.cmapClaimLableVisible
+  );
+
+  const setsyncPropLableVisibility = (state) => {
+    dispatch(setcmapsyncPropLableVisible(state));
+  };
+  const cmapsyncPropLableVisible = useSelector(
+    (state) => state.companyMapReducer.cmapsyncPropLableVisible
+  );
+
+  const setAreaLableVisibility = (state) => {
+    dispatch(setcmapAreaLableVisible(state));
+  };
+  const cmapAreaLableVisible = useSelector(
+    (state) => state.companyMapReducer.cmapAreaLableVisible
+  );
+
+  const setAssetLableVisibility = (state) => {
+    dispatch(setcmapAssetLableVisible(state));
+  };
+  const cmapAssetLableVisible = useSelector(
+    (state) => state.companyMapReducer.cmapAssetLableVisible
+  );
+
+  return (
+    <div className="flex flex-col w-full  h-full grow">
+      <div className="ml-2 mr-2  flex items-center justify-center border-b-2 dark:text-white text-black">
+        <span className="font-bold">Map Layers</span>
+      </div>
+      <div className="overflow-y-auto max-h-[52vh]">
+        <Accordion>
+          <div className="flex flex-col gap-1">
+            <AccordionItemWithEyeWithLockVisibilityLabel
+              title="Assets"
+              onClick={setcompanyAssetLayerVisibility}
+              eyeState={companyAssetLayerVisible}
+              onLockClick={setcompanyAssetLayerAlwaysVisibility}
               lockState={companyAssetLayerAlwaysVisible}
               visibilityState={assetVisibilityState}
-              >
-                <div className="flex flex-col gap-1">
-                  <LayerVisibleVisibilityStateDiv
-                    title="Operating Mines"
-                    onClick={setcompanyAssetOpMineVisibility}
-                    eyeState={companyAssetOpMineVisible}
-                    visibilityState={assetVisibilityState}
-                  >
-                    <Image
-                      src="./asset-opmine.svg"
-                      width={25}
-                      height={10}
-                      alt="prop"
-                    />
-                  </LayerVisibleVisibilityStateDiv>
-                  <LayerVisibleVisibilityStateDiv
-                    title="Deposits"
-                    onClick={setcompanyAssetDepositVisibility}
-                    eyeState={companyAssetDepositsVisible}
-                    visibilityState={assetVisibilityState}
-                  >
-                    <Image
-                      src="./asset-deposit.svg"
-                      width={25}
-                      height={10}
-                      alt="prop"
-                    />
-                  </LayerVisibleVisibilityStateDiv>
-                  <LayerVisibleVisibilityStateDiv
-                    title="Zone"
-                    onClick={setcompanyAssetZoneVisibility}
-                    eyeState={companyAssetZoneVisible}
-                    visibilityState={assetVisibilityState}
-                  >
-                    <Image
-                      src="./asset-zone.svg"
-                      width={25}
-                      height={10}
-                      alt="prop"
-                    />
-                  </LayerVisibleVisibilityStateDiv>
-                  <LayerVisibleVisibilityStateDiv
-                    title="Historical Mines"
-                    onClick={setcompanyAssetHistoricalVisibility}
-                    eyeState={companyAssetHistoricalVisible}
-                    visibilityState={assetVisibilityState}
-                  >
-                    <Image
-                      src="./asset-historical.svg"
-                      width={25}
-                      height={10}
-                      alt="prop"
-                    />
-                  </LayerVisibleVisibilityStateDiv>
-                  <LayerVisibleVisibilityStateDiv
-                    title="Occurrences"
-                    onClick={setcompanyAssetOccurrenceVisibility}
-                    eyeState={companyAssetOccurrenceVisible}
-                    visibilityState={assetVisibilityState}
-                  >
-                    <Image
-                      src="./asset-occurrence.svg"
-                      width={25}
-                      height={10}
-                      alt="prop"
-                    />
-                  </LayerVisibleVisibilityStateDiv>
-                </div>
-              </AccordionItemWithEyeWithLockVisibility>
-              <AccordionItemWithEye
-                title="Properties"
-                onClick={setPropertiesGroupEye}
-                eyeState={company_claimLinkGroupVisible}
-              >
-                <div className="flex flex-col gap-1">
-                  <LayerVisibleVisibilityStateDiv
-                    title="Property Points"
-                    onClick={setcompanySyncPropLayerVisibility}
-                    eyeState={companySyncPropLayerVisible}
-                    visibilityState={propertyPointLineVisibilityState}
-                  >
-                    <Image
-                      src="./sync-prop.svg"
-                      width={25}
-                      height={10}
-                      alt="prop"
-                    />
-                  </LayerVisibleVisibilityStateDiv>
-                  <LayerVisibleVisibilityStateDiv
-                    onClick={setcompanySyncClaimLinkLayerVisibility}
-                    title="Property Outlines"
-                    eyeState={companySyncClaimLinkLayerVisible}
-                     visibilityState={propertyOutLineVisibilityState}
-                  >
-                    <Image
-                      src="./sync-prop-outline.svg"
-                      width={25}
-                      height={10}
-                      alt="prop"
-                    />
-                  </LayerVisibleVisibilityStateDiv>
-                </div>
-              </AccordionItemWithEye>
-              <AccordionItemWithEye
-                title="Base Layers"
-                onClick={setcompanyClaimLayerVisibility}
-                eyeState={companyClaimLayerVisible}
-              >
-                <div className="flex flex-col gap-1">
-                  <LayerVisibleVisibilityStateDiv
-                    title="Claims"
-                    onClick={setcompanyClaimLayerVisibility}
-                    eyeState={companyClaimLayerVisible}
-                     visibilityState={claimsVisibilityState}
-                  >
-                    <Image
-                      src="./claims-layer.svg"
-                      width={25}
-                      height={10}
-                      alt="prop"
-                    />
-                  </LayerVisibleVisibilityStateDiv>
-                  <LayerVisibleDiv
-                    title="Mining Areas"
-                    onClick={setcompanyAreaBoundaryLayerVisibility}
-                    eyeState={companyAreaBoundaryLayerVisible}
-                  >
-                    <Image
+              labelState={cmapAssetLableVisible}
+              setLabelState={setAssetLableVisibility}
+            >
+              <div className="flex flex-col gap-1">
+                <LayerVisibleVisibilityStateDiv
+                  title="Operating Mines"
+                  onClick={setcompanyAssetOpMineVisibility}
+                  eyeState={companyAssetOpMineVisible}
+                  visibilityState={assetVisibilityState}
+                >
+                  <Image
+                    src="./asset-opmine.svg"
+                    width={25}
+                    height={10}
+                    alt="prop"
+                  />
+                </LayerVisibleVisibilityStateDiv>
+                <LayerVisibleVisibilityStateDiv
+                  title="Deposits"
+                  onClick={setcompanyAssetDepositVisibility}
+                  eyeState={companyAssetDepositsVisible}
+                  visibilityState={assetVisibilityState}
+                >
+                  <Image
+                    src="./asset-deposit.svg"
+                    width={25}
+                    height={10}
+                    alt="prop"
+                  />
+                </LayerVisibleVisibilityStateDiv>
+                <LayerVisibleVisibilityStateDiv
+                  title="Zone"
+                  onClick={setcompanyAssetZoneVisibility}
+                  eyeState={companyAssetZoneVisible}
+                  visibilityState={assetVisibilityState}
+                >
+                  <Image
+                    src="./asset-zone.svg"
+                    width={25}
+                    height={10}
+                    alt="prop"
+                  />
+                </LayerVisibleVisibilityStateDiv>
+                <LayerVisibleVisibilityStateDiv
+                  title="Historical Mines"
+                  onClick={setcompanyAssetHistoricalVisibility}
+                  eyeState={companyAssetHistoricalVisible}
+                  visibilityState={assetVisibilityState}
+                >
+                  <Image
+                    src="./asset-historical.svg"
+                    width={25}
+                    height={10}
+                    alt="prop"
+                  />
+                </LayerVisibleVisibilityStateDiv>
+                <LayerVisibleVisibilityStateDiv
+                  title="Occurrences"
+                  onClick={setcompanyAssetOccurrenceVisibility}
+                  eyeState={companyAssetOccurrenceVisible}
+                  visibilityState={assetVisibilityState}
+                >
+                  <Image
+                    src="./asset-occurrence.svg"
+                    width={25}
+                    height={10}
+                    alt="prop"
+                  />
+                </LayerVisibleVisibilityStateDiv>
+              </div>
+            </AccordionItemWithEyeWithLockVisibilityLabel>
+            <AccordionItemWithEye
+              title="Properties"
+              onClick={setPropertiesGroupEye}
+              eyeState={company_claimLinkGroupVisible}
+            >
+              <div className="flex flex-col gap-1">
+                <LayerVisibleWithLabelDiv
+                  title="Property Points"
+                  onClick={setcompanySyncPropLayerVisibility}
+                  eyeState={companySyncPropLayerVisible}
+                  visibilityState={propertyPointLineVisibilityState}
+                  labelState={cmapsyncPropLableVisible}
+                  setLabelState={setsyncPropLableVisibility}
+                >
+                  <Image
+                    src="./sync-prop.svg"
+                    width={25}
+                    height={10}
+                    alt="prop"
+                  />
+                </LayerVisibleWithLabelDiv>
+                <LayerVisibleVisibilityStateDiv
+                  onClick={setcompanySyncClaimLinkLayerVisibility}
+                  title="Property Outlines"
+                  eyeState={companySyncClaimLinkLayerVisible}
+                  visibilityState={propertyOutLineVisibilityState}
+                >
+                  <Image
+                    src="./sync-prop-outline.svg"
+                    width={25}
+                    height={10}
+                    alt="prop"
+                  />
+                </LayerVisibleVisibilityStateDiv>
+              </div>
+            </AccordionItemWithEye>
+            <AccordionItemWithEye
+              title="Base Layers"
+              onClick={setcompanyClaimLayerVisibility}
+              eyeState={companyClaimLayerVisible}
+            >
+              <div className="flex flex-col gap-1">
+                <LayerVisibleVisibilityStateLabelDiv
+                  title="Claims"
+                  onClick={setcompanyClaimLayerVisibility}
+                  eyeState={companyClaimLayerVisible}
+                  visibilityState={claimsVisibilityState}
+                  labelState={cmapClaimLableVisible}
+                  setLabelState={setClaimLabelVisibility}
+                >
+                  <Image
+                    src="./claims-layer.svg"
+                    width={25}
+                    height={10}
+                    alt="prop"
+                  />
+                </LayerVisibleVisibilityStateLabelDiv>
+                <LayerVisibleWithLabelDiv
+                  title="Mining Areas"
+                  onClick={setcompanyAreaBoundaryLayerVisibility}
+                  eyeState={companyAreaBoundaryLayerVisible}
+                  labelState={cmapAreaLableVisible}
+                  setLabelState={setAreaLableVisibility}
+
+                >
+                  <Image
                     src="./minning-areas-layer.svg"
                     width={25}
                     height={10}
                     alt="prop"
                   />
-                  </LayerVisibleDiv>
-                </div>
-              </AccordionItemWithEye>
-            </div>
-          </Accordion>
-        </div>
-        {/* <Accordion variant="splitted" className="w-full">
+                </LayerVisibleWithLabelDiv>
+              </div>
+            </AccordionItemWithEye>
+          </div>
+        </Accordion>
+      </div>
+      {/* <Accordion variant="splitted" className="w-full">
         <AccordionItem
         key="1"
           aria-label="Accordion 1"
@@ -413,9 +457,9 @@ const CompanyBottomSideComp = () => {
           <span className="font-bold">Map Layers 3</span>
         </AccordionItem>
       </Accordion> */}
-      </div>
-    ); 
-  
+    </div>
+  );
+
 }
 
 export default CompanyBottomSideComp;
