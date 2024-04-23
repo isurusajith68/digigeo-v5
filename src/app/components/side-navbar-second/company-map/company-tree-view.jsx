@@ -95,6 +95,14 @@ const CompanyTreeView = ({ syncPropFeatures }) => {
        
       }
 
+      //move unnamed propos to end
+
+      if (nodes[0]?.label == null) {
+
+        const n = nodes.shift();
+        nodes.push(n)
+      }     
+
 
 
       //     const treeData = [ map_area

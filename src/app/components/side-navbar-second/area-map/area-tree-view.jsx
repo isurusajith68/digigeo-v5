@@ -73,7 +73,13 @@ const AreaTreeView = ({ syncPropFeatues }) => {
         comp.children.sort((a, b) => { return a.label.toUpperCase() > b.label.toUpperCase() ? 1:-1 })
       }
 
-
+      //move unnamed propos to end
+      
+      if (nodes[0]?.label == null) {
+        
+        const n = nodes.shift();
+        nodes.push(n)
+      }     
 
 
 

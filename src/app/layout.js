@@ -6,7 +6,7 @@ import HomeNavbar from "./components/nav-bar/navbar-component";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "Mini Atlas",
+  title: "TNM Maps",
   description: "Digigeodata",
 };
 

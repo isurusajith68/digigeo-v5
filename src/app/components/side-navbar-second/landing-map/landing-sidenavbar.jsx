@@ -99,9 +99,14 @@ const LandingMapSideNavbar = () => {
   useEffect(() => {
     if (featuredPropertyFeatures) {
       const result = Object.groupBy(featuredPropertyFeatures, ({ companyid }) => companyid);
-      //console.log("result11", result);
       const a = Object.keys(result).map(k => result[k][0]);
-      console.log("result12", a);
+
+     // const result = Object.groupBy(featuredPropertyFeatures, ({ map_area }) => map_area);
+      
+      
+      //const a = Object.keys(result).map(k => result[k][0]);
+
+
       setFeaturedCompanies(a);
     }
     // console.log("ppo",featuredPropertyFeatures)

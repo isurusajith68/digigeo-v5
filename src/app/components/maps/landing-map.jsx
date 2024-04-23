@@ -963,6 +963,7 @@ export const LandingMap = () => {
           companyid: f.get("companyid"),
           colour: f.get("colour"),
           company2: f.get("company2"),
+          map_area: f.get("map_area"),
         };
       });
       console.log("qq2-vfObjs?.length", ...vfObjs,)
@@ -2179,8 +2180,8 @@ export const LandingMap = () => {
             <Button
               onClick={() => setLyrs("m")}
               className={`${mapLyrs == "m"
-                  ? "bg-blue-900 text-white"
-                  : "bg-blue-700 text-white"
+                ? "bg-blue-900 text-white"
+                : "bg-blue-700 text-white"
                 }  w-22`}
             >
               Map
@@ -2188,8 +2189,8 @@ export const LandingMap = () => {
             <Button
               onClick={() => setLyrs("s")}
               className={`${mapLyrs == "s"
-                  ? "bg-blue-900 text-white"
-                  : "bg-blue-700 text-white"
+                ? "bg-blue-900 text-white"
+                : "bg-blue-700 text-white"
                 }  w-22`}
             >
               Satellite
@@ -2197,8 +2198,8 @@ export const LandingMap = () => {
             <Button
               onClick={() => setLyrs("p")}
               className={`${mapLyrs == "p"
-                  ? "bg-blue-900 text-white"
-                  : "bg-blue-700 text-white"
+                ? "bg-blue-900 text-white"
+                : "bg-blue-700 text-white"
                 }  w-22`}
             >
               Terrain
