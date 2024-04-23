@@ -98,16 +98,24 @@ const LandingMapSideNavbar = () => {
 
   useEffect(() => {
     if (featuredPropertyFeatures) {
-      const result = Object.groupBy(featuredPropertyFeatures, ({ companyid }) => companyid);
-      const a = Object.keys(result).map(k => result[k][0]);
+      // const result = Object.groupBy(featuredPropertyFeatures, ({ companyid }) => companyid);
+      // const a = Object.keys(result).map(k => result[k][0]);
+      // setFeaturedCompanies(a);
+      const finalResult = []
+      const resultByArea = Object.groupBy(featuredPropertyFeatures, ({ map_area }) => map_area);
+      console.log("resultByArea", resultByArea,)
+      for (const area in resultByArea) {
 
-     // const result = Object.groupBy(featuredPropertyFeatures, ({ map_area }) => map_area);
-      
-      
+        const resultByCompany = Object.groupBy(resultByArea[area], ({ companyid }) => companyid);
+        console.log("resultByCompany", resultByCompany,)
+        const a = Object.keys(resultByCompany).map(k => resultByCompany[k][0]);
+        finalResult.push({ map_area: area,companies:a})
+      }
+      console.log("finalResult",finalResult,)
       //const a = Object.keys(result).map(k => result[k][0]);
 
 
-      setFeaturedCompanies(a);
+      setFeaturedCompanies(finalResult);
     }
     // console.log("ppo",featuredPropertyFeatures)
   }, [featuredPropertyFeatures])
@@ -337,19 +345,24 @@ const LandingMapSideNavbar = () => {
                     setLabelState={setsetlmapFpropLableVisibility}
                   >
                     <div className="flex flex-col gap-1 overflow-y-scroll h-[75vh] mb-1">
-                      {featuredCompanies?.map((i) => (
-                        <LmapFeaturedCompanyDetailDiv
-                          key={i.id}
-                          title={i.company2}
-                          // title={i.company2 + i.companyid + "-" +i.id }
-                          companyid={i.companyid}
-                        // onClick={() => console.log(featuredCompanies)}
-                        >
-                          <div
-                            className={`w-4 h-4`}
-                            style={{ backgroundColor: `${i.colour}` }}
-                          ></div>
-                        </LmapFeaturedCompanyDetailDiv>
+                      {featuredCompanies?.map((ii) => (
+                        <>
+                          <div className="font-semibold" >{ii.map_area}</div> 
+                          {ii.companies.map((i) => (<LmapFeaturedCompanyDetailDiv
+                            key={i.id}
+                            title={i.company2}
+                            // title={i.company2 + i.companyid + "-" +i.id }
+                            companyid={i.companyid}
+                          // onClick={() => console.log(featuredCompanies)}
+                          >
+                            <div
+                              className={`w-4 h-4`}
+                              style={{ backgroundColor: `${i.colour}` }}
+                            ></div>
+                          </LmapFeaturedCompanyDetailDiv>))
+                           
+                          }
+                        </>
                       ))}
                     </div>
                   </AccordionItemWithEyeLabel>
