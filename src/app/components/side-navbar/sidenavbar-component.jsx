@@ -178,6 +178,15 @@ const SideNavbar = () => {
   //   window.history.replaceState({}, "", newUrl);
   //   dispatch(setIsAreaSideNavOpen(true));
   // };
+
+  const areaName = useSelector((state) => state.areaMapReducer.areaMiningArea);
+  const propertySearchQuery = useSelector(
+    (state) => state.propertiesMapReducer.propertySearchQuery
+  );
+  const companyId = useSelector(
+    (state) => state.companyMapReducer.companyId
+  );
+
   return (
     // <section className="flex gap-6 ">
     // <div className={`duration-500 flex w-auto items-stretch`}>
@@ -265,15 +274,16 @@ const SideNavbar = () => {
         <div className="w-full pb-1 pl-2 pr-2 pt-2">
           <div className="flex justify-center">
             {/* <Link href="/"> */}
-              <button
-                className=" flex items-center justify-center border rounded-lg border-blue-700 focus:outline-none bg-blue-900 text-white text-sm sm:text-sm hover:bg-blue-400 py-2 w-full transition duration-150 ease-in"
+            {(areaName || propertySearchQuery || companyId ) ? <button
+              className=" flex items-center justify-center border rounded-lg border-blue-700 focus:outline-none bg-blue-900 text-white text-sm sm:text-sm hover:bg-blue-400 py-2 w-full transition duration-150 ease-in"
               onClick={resetAllFilters}
               active={true}
-              >
-                <span className="uppercase font-semibold">
-                  Reset all filters
-                </span>
-              </button>
+            >
+              <span className="uppercase font-semibold">
+                Reset all filters
+              </span>
+            </button> : null
+            }
             {/* </Link> */}
           </div>
         </div>

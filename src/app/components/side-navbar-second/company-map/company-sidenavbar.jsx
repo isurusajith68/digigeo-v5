@@ -449,7 +449,7 @@ const CompanySideNavbar = () => {
                             }
                           )
                           }
-                        <div className="font-semibold">{"unnamed properties"}</div>
+                        <div className="font-semibold">{"Unnamed Properties"}</div>
                           {area.unnamedProps.map((i) => {
                             return (
                               <FeaturedPropertyDetailDiv

@@ -761,6 +761,7 @@ export const PropertiesMap = () => {
         mapRef.current?.getView()?.fit(syncPropSourceRef.current?.getExtent(), {
           padding: [200, 200, 200, 200],
           duration: 3000,
+          minResolution:500,
         });
       }
     }
