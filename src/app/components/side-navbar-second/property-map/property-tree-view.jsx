@@ -100,6 +100,7 @@ const PropertyTreeView = ({ syncPropFeatures }) => {
       if (nodes[0]?.label == null) {
 
         const n = nodes.shift();
+        n.label = "No ownership!"
         nodes.push(n)
       }
 

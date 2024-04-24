@@ -13,6 +13,10 @@ const arimo = Arimo({
 })
 
 const AreaMapClickPopup = ({ claimObj, fpropObj, assetObj, syncPropObj }) => {
+
+  console.log("syncPropObj",syncPropObj,)
+
+
   //clickObjects
   // const claimObj = useSelector(
   //   (state) => state.areaMapReducer.clickclaimObject

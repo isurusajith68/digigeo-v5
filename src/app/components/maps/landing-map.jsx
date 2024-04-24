@@ -570,7 +570,7 @@ export const LandingMap = () => {
     useState(300);
   const [curcenteredareaid, setcurcenteredareaid] = useState(0);
 
-  const syncPropSourceRef = useRef(null);
+ 
   const syncPropVectorLayerRef = useRef(null);
   const fPropSourceRef = useRef(null);
   const fPropVectorLayerRef = useRef(null);
@@ -1144,16 +1144,7 @@ export const LandingMap = () => {
       allSyncPropSourceRef?.current?.addFeatures(e);
       setsyncPropsLoaded(true);
     }
-
-    // if (allSyncPropSourceRef.current) {
-    //   const p1 = syncPropSourceRef.current?.getExtent()[0];
-    //   if (p1 != Infinity) {
-    //     mapRef.current?.getView()?.fit(syncPropSourceRef.current?.getExtent(), {
-    //       padding: [200, 200, 200, 200],
-    //       duration: 3000,
-    //     });
-    //   }
-    // }
+ 
   }, [syncPropertyFeatures]);
 
   // useEffect(() => {
@@ -1909,7 +1900,7 @@ export const LandingMap = () => {
       //   boundarySource?.getFeaturesAtCoordinate(evt.coordinate) ?? [];
 
       const selSyncPropFeatures =
-        syncPropSourceRef?.current?.getFeaturesInExtent(ext) ?? [];
+        allSyncPropSourceRef?.current?.getFeaturesInExtent(ext) ?? [];
 
       // console.log("selSyncPropFeatures?.[0]", selSyncPropFeatures?.[0]);
       if (selSyncPropFeatures.length > 0) {
@@ -2466,7 +2457,6 @@ export const LandingMap = () => {
               commodityMap_tbl_syncProperty_commodity_VectorLayerStyleFunction
             }
           >
-            {/* <olSourceVector ref={syncPropSourceRef}></olSourceVector> */}
 
             <olSourceCluster distance={distance} minDistance={minDistance}>
               <olSourceVector ref={allSyncPropSourceRef}>
