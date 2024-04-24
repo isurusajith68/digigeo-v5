@@ -97,6 +97,7 @@ const LandingMapSideNavbar = () => {
   const [featuredCompanies, setFeaturedCompanies] = useState([]);
 
   useEffect(() => {
+    console.log("qq2-2sn-uef-enter-vfObjs?.length",  )
     if (featuredPropertyFeatures) {
       // const result = Object.groupBy(featuredPropertyFeatures, ({ companyid }) => companyid);
       // const a = Object.keys(result).map(k => result[k][0]);
@@ -116,6 +117,8 @@ const LandingMapSideNavbar = () => {
 
 
       setFeaturedCompanies(finalResult);
+      console.log("qq2-3sn-uef-end-fclist set-vfObjs?.length",  )
+
     }
     // console.log("ppo",featuredPropertyFeatures)
   }, [featuredPropertyFeatures])

@@ -515,6 +515,8 @@ export const LandingMap = () => {
   const router = useRouter();
   const [center, setCenter] = useState("");
   const [zoom, setZoom] = useState("");
+  // const [viewChangeCount, setviewChangeCount] = useState(0);
+  const [fPropRenderCount, setfPropRenderCount] = useState(0);
 
   const [clickDataLoaded, setclickDataLoaded] = useState(false);
 
@@ -686,7 +688,8 @@ export const LandingMap = () => {
             fPropSourceLabelRef?.current?.clear();
             fPropSourceRef.current.addFeatures(features);
             fPropSourceLabelRef.current.addFeatures(features);
-
+            setfPropRenderCount((p)=> p+1)
+            console.log("qq2-loader-ext", extent)
             //console.log("bbsync uni tbl01_claims   features count", features.count);
           }
         }
@@ -944,7 +947,59 @@ export const LandingMap = () => {
   });
 
   const onViewChange = useCallback((e) => {
+    //setviewChangeCount((p)=> p+1)
     const scale = mapRatioScale({ map: mapRef.current });
+    console.log("qq2-0lmap-scale", scale)
+    // setmapScale(scale.toLocaleString( ));
+    setmapScale(scale.toLocaleString());
+    dispatch(setlandingCurrentScale(scale));
+    setfPropRenderCount((p)=> p+1)
+    //mapRef.current.render()
+  }, []);
+
+
+  useEffect(() => {
+ 
+    if (fPropVectorLayerRef?.current?.isVisible()) {
+      console.log("qq2-scale-uef-", )
+      //fPropSourceRef.current.refresh()
+      // if (fPropSourceRef?.current?.getFeatures().length > 0) {
+      //   console.log("setIsLandingMapSideNavOpen(true",)
+      //   dispatch(setIsLandingMapSideNavOpen(true));
+      // }
+      const vf = fPropSourceRef.current.getFeaturesInExtent(
+        mapRef.current.getView().calculateExtent()
+      );
+      const vfObjs = vf?.map((f) => {
+        return {
+          id: f.get("id"),
+          companyid: f.get("companyid"),
+          colour: f.get("colour"),
+          company2: f.get("company2"),
+          map_area: f.get("map_area"),
+        };
+      });
+      console.log("qq2-1lmap-", vfObjs.length,)
+      dispatch(setFPropertyFeatures(vfObjs));
+
+      if (vfObjs?.length > 0) {
+        // console.log("setIsLandingMapSideNavOpen(true",)
+        console.log("qq2-1.1-lmap-dispatch-sn",)
+        dispatch(setIsLandingMapSideNavOpen(true));
+      } else {
+        console.log("qq2-1.2-lmap-dispatch-sn",)
+        dispatch(setIsLandingMapSideNavOpen(false));
+      }
+    } else {
+      dispatch(setIsLandingMapSideNavOpen(false));
+    }
+    
+  }, [fPropRenderCount])
+
+  const xonViewChange0 = useCallback((e) => {
+   
+    const scale = mapRatioScale({ map: mapRef.current });
+    console.log("qq2-0lmap-scale", scale)
     // setmapScale(scale.toLocaleString( ));
     setmapScale(scale.toLocaleString());
     dispatch(setlandingCurrentScale(scale));
@@ -966,20 +1021,22 @@ export const LandingMap = () => {
           map_area: f.get("map_area"),
         };
       });
-      console.log("qq2-vfObjs?.length", ...vfObjs,)
+      console.log("qq2-1lmap-",  vfObjs.length,)
       dispatch(setFPropertyFeatures(vfObjs));
 
       if (vfObjs?.length > 0) {
         // console.log("setIsLandingMapSideNavOpen(true",)
+        console.log("qq2-1.1-lmap-dispatch-sn",  )
         dispatch(setIsLandingMapSideNavOpen(true));
       } else {
+        console.log("qq2-1.2-lmap-dispatch-sn",  )
         dispatch(setIsLandingMapSideNavOpen(false));
       }
     } else {
       dispatch(setIsLandingMapSideNavOpen(false));
     }
     //mapRef.current.render()
-  });
+  }, [ ]);
 
   useEffect(() => {
     if (mapViewRef.current) {
@@ -988,6 +1045,7 @@ export const LandingMap = () => {
       //setmapunits
       const unit = mapRef.current.getView().getProjection().getUnits();
       setmapUnits(unit);
+     // console.log("qq2-9-view",)
     }
   }, [mapViewRef.current]);
 
