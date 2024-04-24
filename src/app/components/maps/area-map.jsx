@@ -1393,7 +1393,7 @@ export const AreaMap = () => {
       txtObjAreaName = new Text({
         //       // textAlign: align == "" ? undefined : align,
         //       // textBaseline: baseline,
-        font:  "15px serif",
+        font:  "18px serif",
         text: amapAreaLableVisible ? feature.get("area_name") :"",
         fill: new Fill({ color: "red" }),
         // stroke: new Stroke({ color: outlineColor, width: outlineWidth }),
@@ -1799,12 +1799,12 @@ export const AreaMap = () => {
           text: new Text({
             //       // textAlign: align == "" ? undefined : align,
             //       // textBaseline: baseline,
-            font: "25px serif",
+            font: "45px serif",
             text: selAreaF.get("area_name"),
             fill: new Fill({ color: "black" }),
             // stroke: new Stroke({ color: outlineColor, width: outlineWidth }),
             offsetX: 0,
-            offsetY: -10,
+            offsetY: -20,
             placement:"line",
             // placement: placement,
             // maxAngle: maxAngle,
