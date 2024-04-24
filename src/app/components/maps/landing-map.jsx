@@ -22,7 +22,7 @@ import {
   setclickclaimObject,
   setclickfPropertyObject,
   setclicksyncPropertyObject,
-} from "../../../store/area-map/area-map-slice";
+} from "../../../store/landing-map/landing-map-slice";
 import {
   setIsLandingMapSideNavOpen,
   setFPropertyFeatures,
@@ -51,7 +51,7 @@ import { toContext } from "ol/render";
 import { all, bbox, bbox as bboxStrategy } from "ol/loadingstrategy";
 import { flyTo } from "./fly";
 
-import AreaMapClickPopup from "./area-map-popup/area-map-click-popup";
+import LandingMapClickPopup from "./landing-map-popup/landing-map-click-popup";
 import {
   areaMApPropertyVectorRendererFuncV2Highlight,
   areaMApPropertyVectorRendererFuncV2_labels,
@@ -1358,13 +1358,13 @@ export const LandingMap = () => {
     // window.history.replaceState({}, "", newUrl);
     updateWindowsHistoryLmap({ isSideNavOpen, lyrs: lyrs, zoom: landingMapZoomLevel, center: landingMapInitialCenter, sidenav2: isLandingMapSideNavOpen });
   };
-  const openAreaNav = () => {
-    console.log("yy-lmap-url4")
-    const newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=true&lyrs=${mapLyrs}&z=${landingMapZoomLevel}&c=${landingMapInitialCenter}`;
-    // window.history.replaceState({}, "", newUrl);
-    updateWindowsHistory(newUrl);
-    dispatch(setIsAreaSideNavOpen(true));
-  };
+  // const openAreaNav = () => {
+  //   console.log("yy-lmap-url4")
+  //   const newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=true&lyrs=${mapLyrs}&z=${landingMapZoomLevel}&c=${landingMapInitialCenter}`;
+  //   // window.history.replaceState({}, "", newUrl);
+  //   updateWindowsHistory(newUrl);
+  //   dispatch(setIsAreaSideNavOpen(true));
+  // };
 
   const image = new Icon({
     src: "./sync-prop.svg",
@@ -1902,6 +1902,8 @@ export const LandingMap = () => {
       const selSyncPropFeatures =
         allSyncPropSourceRef?.current?.getFeaturesInExtent(ext) ?? [];
 
+      
+
       // console.log("selSyncPropFeatures?.[0]", selSyncPropFeatures?.[0]);
       if (selSyncPropFeatures.length > 0) {
         clickedOnFeatureTmp = true;
@@ -1923,7 +1925,73 @@ export const LandingMap = () => {
         };
         setsyncPropertyObject(syncPropertyObject1);
       } else {
-        dispatch(setclicksyncPropertyObject(undefined));
+        //if sync_prop  is not selected try claimlink prop outline
+        // 
+        const getClinkData = async (propid) => {
+          const url =
+            "https://atlas.ceyinfo.cloud/matlas/syncclaimlink_details/" +
+            propid;
+          //load data from api - changed to return array
+
+          let sponsors = await fetch(url, {
+            method: "GET", // *GET, POST, PUT, DELETE, etc.
+            mode: "cors", // no-cors, *cors, same-origin
+            cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+            credentials: "same-origin", // include, *same-origin, omit
+            headers: {
+              "Content-Type": "application/json",
+              // 'Content-Type': 'application/x-www-form-urlencoded',
+            },
+          })
+            .then((response) => response.json())
+            .then((res) => {
+              // let sponsors = "";
+              // res.data.forEach((element) => {
+              //   sponsors += element.sponsor + "/";
+              // });
+              return res.data;
+            });
+
+          // sponsors = sponsors.slice(0, -1);
+          // console.log("sponsors", sponsors);
+          return sponsors;
+        };
+
+        const selPropertyOutlineFeatures =
+          claimLinkSourceRef?.current?.getFeaturesAtCoordinate(coordinates) ?? [];
+        if (selPropertyOutlineFeatures.length > 0) {
+          const propId = selPropertyOutlineFeatures?.[0]?.get("propertyid")
+          const clinkDetails = await getClinkData(propId)
+
+          console.log("clinkDetails", clinkDetails, propId)
+
+
+
+          clickedOnFeatureTmp = true;
+          const prop_name = clinkDetails?.[0]?.prop_name ?? "";
+          const owners = clinkDetails?.[0]?.owners ?? "";
+          let name1 = clinkDetails?.[0]?.name ?? "";
+          const stateProv = clinkDetails?.[0]?.state_prov ?? "";
+          const country = clinkDetails?.[0]?.country ?? "";
+          const area = clinkDetails?.[0]?.area ?? "";
+          // const selSynClaimLinkFeatures =
+          //   sync_claimLinkLayerSource?.getFeaturesAtCoordinate(evt.coordinate) ?? [];
+          const syncPropertyObject1 = {
+            prop_name,
+            owners,
+            name: name1,
+            stateProv,
+            country,
+            area,
+          };
+          setsyncPropertyObject(syncPropertyObject1);
+        } else {
+          setsyncPropertyObject(undefined);
+          dispatch(setclicksyncPropertyObject(undefined));
+        }
+        
+
+     
       }
       const claimFeatures =
         claimVectorImgSourceRef?.current?.getFeaturesAtCoordinate(
@@ -2317,7 +2385,7 @@ export const LandingMap = () => {
           <div id="popup-contenta">
             {/* <p>Info:</p> */}
             {clickDataLoaded && (
-              <AreaMapClickPopup
+              <LandingMapClickPopup
                 claimObj={claimObject}
                 fpropObj={fPropertyObject}
                 assetObj={assetObject}
