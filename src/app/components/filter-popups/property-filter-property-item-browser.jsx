@@ -16,7 +16,8 @@ const PropertyFilterPropertyItemBrowser = ({properties,totalResultCount,curPageH
     [selectedKeys]
     );
   useEffect(() => {
-   selectionHandler(selectedValue)
+    selectionHandler(selectedValue)
+    //console.log("selectedValue",selectedValue,)
   }, [selectedKeys])
 
   useEffect(() => {

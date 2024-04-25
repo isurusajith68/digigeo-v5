@@ -121,6 +121,10 @@ const LandingBottomSideComp = () => {
     dispatch(setlandingMapAreaBoundaryLayerVisible(!landingMapAreaBoundaryLayerVisible));
   };
 
+  const setlandingMapFPropLayerVisibility = (e) => {
+    dispatch(setlandingMapFpropLayerVisible(!landingMapFpropLayerVisible));
+  };
+
   //asset visibility redux states
   const landingMapAssetOpMineVisible = useSelector(
     (state) => state.landingMapReducer.landingMapAssetOpMineVisible
@@ -376,6 +380,20 @@ const LandingBottomSideComp = () => {
                     alt="prop"
                   />
                 </LayerVisibleVisibilityStateDiv>
+                <LayerVisibleWithLabelDiv
+                  title="Featured Properties"
+                  onClick={setlandingMapFPropLayerVisibility}
+                  eyeState={landingMapFpropLayerVisible}
+                  labelState={lmapsyncPropLableVisible}
+                  setLabelState={setlmapsyncPropLableVisibility}
+                >
+                  <Image
+                    src="./sync-prop.svg"
+                    width={25}
+                    height={10}
+                    alt="prop"
+                  />
+                </LayerVisibleWithLabelDiv>
               </div>
             </AccordionItemWithEye>
             <AccordionItemWithEye

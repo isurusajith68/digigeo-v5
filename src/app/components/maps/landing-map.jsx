@@ -22,6 +22,7 @@ import {
   setclickclaimObject,
   setclickfPropertyObject,
   setclicksyncPropertyObject,
+  setlandingMapFpropLayerVisible,
 } from "../../../store/landing-map/landing-map-slice";
 import {
   setIsLandingMapSideNavOpen,
@@ -960,7 +961,8 @@ export const LandingMap = () => {
 
   useEffect(() => {
  
-    if (fPropVectorLayerRef?.current?.isVisible()) {
+    if (fPropVectorLayerRef?.current?.isVisible())
+    {
       console.log("qq2-scale-uef-", )
       //fPropSourceRef.current.refresh()
       // if (fPropSourceRef?.current?.getFeatures().length > 0) {
@@ -2036,6 +2038,8 @@ export const LandingMap = () => {
     mapViewRef.current.setCenter([-10694872.010699773, 7434223.337137634]);
     const scale = mapRatioScale({ map: mapRef.current });
     setmapScale(scale.toLocaleString());
+    //dispatch(setlandingMapFpropLayerVisible(false));
+    dispatch(setIsLandingMapSideNavOpen(false));
   };
 
   const copyRight = `©2024 DigiGeoData`
@@ -2251,7 +2255,7 @@ export const LandingMap = () => {
       <div className="relative">
         <div className="w-12 absolute left-0 top-0 z-50  ">
           <div className="flex flex-col gap-4 mt-2">
-            <Button isIconOnly variant="bordered" className={`bg-blue-900 ${mapViewMode == " HEADED" ? "block" : "hidden"}`}>
+            <Button isIconOnly variant="bordered" className={`bg-blue-900 ${mapViewMode == "HEADED" ? "flex" : "hidden"}`}>
               <BsFillArrowLeftSquareFill
                 // size={26}
                 className={`cursor-pointer text-white h-6 w-6 ${isSideNavOpen ? "" : "rotate-180"

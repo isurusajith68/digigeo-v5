@@ -298,6 +298,17 @@ const LandingMapSideNavbar = () => {
   const lmapFpropLableVisible = useSelector(
     (state) => state.landingMapReducer.lmapFpropLableVisible
   );
+
+  // useEffect(() => {
+
+  //   if (!landingMapFpropLayerVisible) {
+  //     dispatch(setIsLandingMapSideNavOpen(false));
+  //   } else {
+  //     dispatch(setIsLandingMapSideNavOpen(true));
+  //   }
+
+
+  //  }, [landingMapFpropLayerVisible])
   return (
     <section className="flex gap-6 h-[90vh]">
       <div className={`duration-500 flex w-auto h-full`}>

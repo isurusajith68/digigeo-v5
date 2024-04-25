@@ -42,13 +42,17 @@ const initialState = {
   pmapFpropLableVisible:true,
   pmapAssetLableVisible:true,
   pmapClaimLableVisible:true,
-  pmapAreaLableVisible:true,
+  pmapAreaLableVisible: true,
+  pmapSelectedPropertyIds :[],
 };
 
 const propertiesMapSlice = createSlice({
   name: "PropertiesaMap",
   initialState,
   reducers: {
+    setpmapSelectedPropertyIds: (state, action) => {
+      state.pmapSelectedPropertyIds = action.payload;
+    },
     setIsPropertiesSideNavOpen: (state, action) => {
       state.isPropertiesSideNavOpen = action.payload;
     },
@@ -165,19 +169,19 @@ const propertiesMapSlice = createSlice({
     setpropertyMapViewScales: (state, action) => {
       state.propertyMapViewScales = action.payload;
     },
-    setpmapsyncPropLableVisible: (state,action) =>{
+    setpmapsyncPropLableVisible: (state, action) => {
       state.pmapsyncPropLableVisible = action.payload;
     },
-    setpmapFpropLableVisible: (state,action) =>{
+    setpmapFpropLableVisible: (state, action) => {
       state.pmapFpropLableVisible = action.payload;
     },
-    setpmapAssetLableVisible: (state,action) =>{
+    setpmapAssetLableVisible: (state, action) => {
       state.pmapAssetLableVisible = action.payload;
     },
-    setpmapClaimLableVisible: (state,action) =>{
+    setpmapClaimLableVisible: (state, action) => {
       state.pmapClaimLableVisible = action.payload;
     },
-    setpmapAreaLableVisible: (state,action) =>{
+    setpmapAreaLableVisible: (state, action) => {
       state.pmapAreaLableVisible = action.payload;
     },
   },
@@ -226,6 +230,7 @@ export const {
   setpmapAssetLableVisible,
   setpmapClaimLableVisible,
   setpmapAreaLableVisible,
+  setpmapSelectedPropertyIds,
 } = propertiesMapSlice.actions;
 
 export default propertiesMapSlice.reducer;

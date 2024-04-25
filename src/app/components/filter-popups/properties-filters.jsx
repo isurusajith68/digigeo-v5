@@ -17,6 +17,7 @@ import {
   setsearchParamCommodityList,
   setIsPropertiesSideNavOpen,
   setpropertySearchQuery,
+  setpmapSelectedPropertyIds,
 } from "../../../store/properties-map/properties-map-slice";
 
 import { Autocomplete, AutocompleteItem } from "@nextui-org/react";
@@ -392,7 +393,10 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
      dispatch(setsearchParamStateProv(stateProv));
      dispatch(setsearchParamMiningArea(area));
      dispatch(setsearchParamAssetTypeList(assetTypeList));
-     dispatch(setsearchParamCommodityList(commodityList));
+    dispatch(setsearchParamCommodityList(commodityList));
+    
+     
+    dispatch(setpmapSelectedPropertyIds(selectedItems));
 
     closePopup();
   };

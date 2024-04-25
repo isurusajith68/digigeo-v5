@@ -36,7 +36,7 @@ import AccordionItemWithEye from "../../common-comp/accordion-eye";
 import AreaTreeView from "../area-map/area-tree-view";
 import PropertyFeaturedCompanyDetailDiv from "./property-featured-company-detail-div";
 import PropertyTreeView from "./property-tree-view";
-import {Breadcrumbs, BreadcrumbItem} from "@nextui-org/react";
+import { Breadcrumbs, BreadcrumbItem } from "@nextui-org/react";
 import PropertyFCompanyPopup from "./property-fcompany-popup";
 import AccordionItemWithOutEye from "../../common-comp/accordion-without-eye";
 import { updateWindowsHistory } from "@/app/utils/helpers/window-history-replace";
@@ -53,7 +53,7 @@ const PropertiesSideNavbar = () => {
   const router = useRouter();
   try {
     pathname = window.location.href;
-  } catch (error) {}
+  } catch (error) { }
 
   if (pathname) {
     const r = pathname.indexOf("/", 9);
@@ -119,33 +119,36 @@ const PropertiesSideNavbar = () => {
   const searchParamCommodityList = useSelector(
     (state) => state.propertiesMapReducer.searchParamCommodityList
   );
+  const pmapSelectedPropertyIds = useSelector(
+    (state) => state.propertiesMapReducer.pmapSelectedPropertyIds
+  );
 
-  useEffect(()=>{
+  useEffect(() => {
 
-    if(searchParamAssetTypeList?.length>0){
+    if (searchParamAssetTypeList?.length > 0) {
       setselectedAssetTypes(searchParamAssetTypeList.join(","))
     }
 
-  },[searchParamAssetTypeList])
+  }, [searchParamAssetTypeList])
 
-  useEffect(()=>{
+  useEffect(() => {
 
-    if(searchParamCommodityList?.length>0){
+    if (searchParamCommodityList?.length > 0) {
 
       setselectedCommodities(searchParamCommodityList.join(","))
     }
 
-  },[searchParamCommodityList])
+  }, [searchParamCommodityList])
   //data load
   useEffect(() => {
-   
-      getFeaturedCompanyDetails();
-      getSyncPropertiesGeometry();
-      getClaimLinkPropertiesGeometry();
-      getAssetsGeometry();
-      getFeaturedPropertyGeom();
-   
-  }, [propertySearchQuery]);
+
+    getFeaturedCompanyDetails();
+    getSyncPropertiesGeometry();
+    getClaimLinkPropertiesGeometry();
+    getAssetsGeometry();
+    getFeaturedPropertyGeom();
+
+  }, [propertySearchQuery, pmapSelectedPropertyIds]);
 
   const closeSecondNavBar = () => {
     // setIsSecondSideOpen(false);
@@ -153,36 +156,57 @@ const PropertiesSideNavbar = () => {
     newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=false&lyrs=${propertiesLyrs}&z=${propertiesZoomLevel}&c=${propertiesInitialCenter}`;
 
     // window.history.replaceState({}, "", newUrl);
-     updateWindowsHistory(newUrl);
+    updateWindowsHistory(newUrl);
     dispatch(setIsPropertiesSideNavOpen(false));
   };
 
   const getFeaturedPropertyGeom = async () => {
     const f = async () => {
-      if(propertySearchQuery){
-          const res = await fetch(
-            `https://atlas.ceyinfo.cloud/matlas/fpropertygeomuniversal/${propertySearchQuery}`,
-            { cache: "no-store" }
-          );
-          const d = await res.json();
-          
-          const gj = {
-            type: "FeatureCollection",
-            crs: {
-              type: "name",
-              properties: {
-                name: "EPSG:3857",
-              },
-            },
-            features: d.data[0].json_build_object.features,
-          };
+      if (pmapSelectedPropertyIds.length > 0) {
+        const res = await fetch(
+          `https://atlas.ceyinfo.cloud/matlas/fpropertygeomuniversal_byIds/${pmapSelectedPropertyIds.join(",")}`,
+          { cache: "no-store" }
+        );
+        const d = await res.json();
 
-         
-          dispatch(setFPropertyFeatures(gj));
-        
+        const gj = {
+          type: "FeatureCollection",
+          crs: {
+            type: "name",
+            properties: {
+              name: "EPSG:3857",
+            },
+          },
+          features: d.data[0].json_build_object.features,
+        };
+
+
+        dispatch(setFPropertyFeatures(gj));
+      }
+      else if (propertySearchQuery) {
+        const res = await fetch(
+          `https://atlas.ceyinfo.cloud/matlas/fpropertygeomuniversal/${propertySearchQuery}`,
+          { cache: "no-store" }
+        );
+        const d = await res.json();
+
+        const gj = {
+          type: "FeatureCollection",
+          crs: {
+            type: "name",
+            properties: {
+              name: "EPSG:3857",
+            },
+          },
+          features: d.data[0].json_build_object.features,
+        };
+
+
+        dispatch(setFPropertyFeatures(gj));
+
       } else {
-          dispatch(setFPropertyFeatures({}));
-        }
+        dispatch(setFPropertyFeatures({}));
+      }
     };
 
     f().catch(console.error);
@@ -190,79 +214,133 @@ const PropertiesSideNavbar = () => {
 
   const getFeaturedCompanyDetails = async () => {
     const f = async () => {
-      if(propertySearchQuery){
-            const res = await fetch(
-              `https://atlas.ceyinfo.cloud/matlas/hotplayfcompanylist_pmap/${propertySearchQuery}`,
-              { cache: "no-store" }
-            );
-            const d = await res.json();
-            let i=0
-            for(const o of d.data){
-              o.id=i
-              i++
-            }  
+      if (pmapSelectedPropertyIds.length > 0) {
+        const res = await fetch(
+          `https://atlas.ceyinfo.cloud/matlas/hotplayfcompanylist_pmapby_ids/${pmapSelectedPropertyIds.join(",")}`,
+          { cache: "no-store" }
+        );
+        const d = await res.json();
+        let i = 0
+        for (const o of d.data) {
+          o.id = i
+          i++
+        }
 
-            setFeaturedCompanies(d.data);
+        setFeaturedCompanies(d.data);
       }
-      else{
-            setFeaturedCompanies([]);
+      else if (propertySearchQuery) {
+        const res = await fetch(
+          `https://atlas.ceyinfo.cloud/matlas/hotplayfcompanylist_pmap/${propertySearchQuery}`,
+          { cache: "no-store" }
+        );
+        const d = await res.json();
+        let i = 0
+        for (const o of d.data) {
+          o.id = i
+          i++
+        }
+
+        setFeaturedCompanies(d.data);
       }
-     
+      else {
+        setFeaturedCompanies([]);
+      }
+
     };
 
     f().catch(console.error);
   };
 
   const getSyncPropertiesGeometry = async () => {
-   
-    const f = async () => {
-       if(propertySearchQuery){
-          const res = await fetch(
-            `https://atlas.ceyinfo.cloud/matlas/propertygeomuniversal/${propertySearchQuery}`,
-            { cache: "no-store" }
-          );
-          const d = await res.json();
 
-          const gj = {
-            type: "FeatureCollection",
-            crs: {
-              type: "name",
-              properties: {
-                name: "EPSG:3857",
-              },
+    const f = async () => {
+      if (pmapSelectedPropertyIds.length > 0) {
+        //
+        const res = await fetch(
+          `https://atlas.ceyinfo.cloud/matlas/propertygeomlist/${pmapSelectedPropertyIds.join(",")}`,
+          { cache: "no-store" }
+        );
+        const d = await res.json();
+
+        const gj = {
+          type: "FeatureCollection",
+          crs: {
+            type: "name",
+            properties: {
+              name: "EPSG:3857",
             },
-            features: d.data[0].json_build_object.features,
-          };
-          dispatch(setSyncPropertyFeatures(gj));
-        }else{
-          dispatch(setSyncPropertyFeatures({}));
-        }
+          },
+          features: d.data[0].json_build_object.features,
+        };
+        dispatch(setSyncPropertyFeatures(gj));
+
+      }
+      else if (propertySearchQuery) {
+        const res = await fetch(
+          `https://atlas.ceyinfo.cloud/matlas/propertygeomuniversal/${propertySearchQuery}`,
+          { cache: "no-store" }
+        );
+        const d = await res.json();
+
+        const gj = {
+          type: "FeatureCollection",
+          crs: {
+            type: "name",
+            properties: {
+              name: "EPSG:3857",
+            },
+          },
+          features: d.data[0].json_build_object.features,
+        };
+        dispatch(setSyncPropertyFeatures(gj));
+      } else {
+        dispatch(setSyncPropertyFeatures({}));
+      }
     };
     f().catch(console.error);
   };
   const getAssetsGeometry = async () => {
     const f = async () => {
-       if(propertySearchQuery){
-            const res = await fetch(
-              `https://atlas.ceyinfo.cloud/matlas/pmapassetgeomuniversal/${propertySearchQuery}`,
-              { cache: "no-store" }
-            );
-            const d = await res.json();
+      if (pmapSelectedPropertyIds.length > 0) {
+        const res = await fetch(
+          `https://atlas.ceyinfo.cloud/matlas/pmapassetgeomuniversal_byids/${pmapSelectedPropertyIds.join(",") }`,
+          { cache: "no-store" }
+        );
+        const d = await res.json();
 
-            const gj = {
-              type: "FeatureCollection",
-              crs: {
-                type: "name",
-                properties: {
-                  name: "EPSG:3857",
-                },
-              },
-              features: d.data[0].json_build_object.features,
-            };
-            dispatch(setAssetFeatures(gj));
-          }else{
-              dispatch(setAssetFeatures({}));
-          }
+        const gj = {
+          type: "FeatureCollection",
+          crs: {
+            type: "name",
+            properties: {
+              name: "EPSG:3857",
+            },
+          },
+          features: d.data[0].json_build_object.features,
+        };
+        dispatch(setAssetFeatures(gj));
+      }
+      else if (propertySearchQuery) {
+        const res = await fetch(
+          `https://atlas.ceyinfo.cloud/matlas/pmapassetgeomuniversal/${propertySearchQuery}`,
+          { cache: "no-store" }
+        );
+        const d = await res.json();
+
+        const gj = {
+          type: "FeatureCollection",
+          crs: {
+            type: "name",
+            properties: {
+              name: "EPSG:3857",
+            },
+          },
+          features: d.data[0].json_build_object.features,
+        };
+        dispatch(setAssetFeatures(gj));
+      } else {
+        dispatch(setAssetFeatures({}));
+      }
       //console.log("gj", gj);
     };
     f().catch(console.error);
@@ -270,28 +348,49 @@ const PropertiesSideNavbar = () => {
 
   const getClaimLinkPropertiesGeometry = async () => {
     const f = async () => {
-       if(propertySearchQuery){
-          const res = await fetch(
-            `https://atlas.ceyinfo.cloud/matlas/pmapclinkgeomuniversal/${propertySearchQuery}`,
-            { cache: "no-store" }
-          );
-          const d = await res.json();
+      //pmapclinkgeomuniversal_byids
+      if (pmapSelectedPropertyIds.length > 0) {
+        const res = await fetch(
+          `https://atlas.ceyinfo.cloud/matlas/pmapclinkgeomuniversal_byids/${pmapSelectedPropertyIds.join(",") }`,
+          { cache: "no-store" }
+        );
+        const d = await res.json();
 
-          const gj = {
-            type: "FeatureCollection",
-            crs: {
-              type: "name",
-              properties: {
-                name: "EPSG:3857",
-              },
+        const gj = {
+          type: "FeatureCollection",
+          crs: {
+            type: "name",
+            properties: {
+              name: "EPSG:3857",
             },
-            features: d.data[0].json_build_object.features,
-          };
-          dispatch(setsyncClaimLinkPropertyFeatures(gj));
-        }
-        else{
-           dispatch(setsyncClaimLinkPropertyFeatures({}));
-        }
+          },
+          features: d.data[0].json_build_object.features,
+        };
+        dispatch(setsyncClaimLinkPropertyFeatures(gj));
+
+      }
+      else if (propertySearchQuery) {
+        const res = await fetch(
+          `https://atlas.ceyinfo.cloud/matlas/pmapclinkgeomuniversal/${propertySearchQuery}`,
+          { cache: "no-store" }
+        );
+        const d = await res.json();
+
+        const gj = {
+          type: "FeatureCollection",
+          crs: {
+            type: "name",
+            properties: {
+              name: "EPSG:3857",
+            },
+          },
+          features: d.data[0].json_build_object.features,
+        };
+        dispatch(setsyncClaimLinkPropertyFeatures(gj));
+      }
+      else {
+        dispatch(setsyncClaimLinkPropertyFeatures({}));
+      }
     };
 
     f().catch(console.error);
@@ -302,15 +401,15 @@ const PropertiesSideNavbar = () => {
   );
 
   const setareaFpropLayerVisibility = (e) => {
-    
+
     dispatch(setpropertyMapFpropLayerVisible(!propertyMapFpropLayerVisible));
   };
 
   const popupFcompanyId = useSelector(
-  (state) => state.propertiesMapReducer.popupFcompanyId
+    (state) => state.propertiesMapReducer.popupFcompanyId
   );
 
-  const  setpmapFpropLableVisibility = (state) => {
+  const setpmapFpropLableVisibility = (state) => {
     dispatch(setpmapFpropLableVisible(state));
   };
   const pmapFpropLableVisible = useSelector(
@@ -322,23 +421,20 @@ const PropertiesSideNavbar = () => {
       <div className={`duration-500 flex w-auto`}>
         <div
           className={`
-        ${
-          isPropertiesSideNavOpen && isSideNavOpen
-            ? "bg-white dark:bg-black border-2 rounded-md border-blue-700"
-            : ""
-        } 
+        ${isPropertiesSideNavOpen && isSideNavOpen
+              ? "bg-white dark:bg-black border-2 rounded-md border-blue-700"
+              : ""
+            } 
            
-        ${
-          isPropertiesSideNavOpen && isSideNavOpen ? "w-80 sm:w-72 mr-2" : "w-0"
-        } 
+        ${isPropertiesSideNavOpen && isSideNavOpen ? "w-80 sm:w-72 mr-2" : "w-0"
+            } 
         duration-500`}
         >
           <div
-            className={`${
-              isPropertiesSideNavOpen && isSideNavOpen
-                ? "py-0.1 flex flex-col "
-                : "hidden"
-            }`}
+            className={`${isPropertiesSideNavOpen && isSideNavOpen
+              ? "py-0.1 flex flex-col "
+              : "hidden"
+              }`}
           >
             <div className="ml-2 mr-2 mt-1 mb-1 flex items-center justify-center border-b-2 relative">
               <span className="font-bold dark:text-white text-black">Property List </span>
@@ -406,7 +502,7 @@ const PropertiesSideNavbar = () => {
                         key={i.id}
                         title={i.company2}
                         companyid={i.companyid}
-                        // onClick={() => console.log(featuredCompanies)}
+                      // onClick={() => console.log(featuredCompanies)}
                       >
                         <div
                           className={`w-4 h-4`}
