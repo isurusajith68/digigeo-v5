@@ -1962,14 +1962,12 @@ export const LandingMap = () => {
         const selPropertyOutlineFeatures =
           claimLinkSourceRef?.current?.getFeaturesAtCoordinate(coordinates) ?? [];
         if (selPropertyOutlineFeatures.length > 0) {
+          clickedOnFeatureTmp = true;
           const propId = selPropertyOutlineFeatures?.[0]?.get("propertyid")
           const clinkDetails = await getClinkData(propId)
 
-          console.log("clinkDetails", clinkDetails, propId)
-
-
-
-          clickedOnFeatureTmp = true;
+         // console.log("clinkDetails", clinkDetails, propId)
+          
           const prop_name = clinkDetails?.[0]?.prop_name ?? "";
           const owners = clinkDetails?.[0]?.owners ?? "";
           let name1 = clinkDetails?.[0]?.name ?? "";
