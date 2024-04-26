@@ -71,6 +71,7 @@ import MovingBorder from "@/app/utils/moving-border/moving-border";
 import { updateWindowsHistoryLmap } from "@/app/utils/helpers/window-history-replace";
 import GetTopAds from "../advertisements/get-top-ads";
 import GetRightAds from "../advertisements/get-right-ads";
+import Draggable from "react-draggable";
 
 const fill = new Fill();
 const stroke = new Stroke({
@@ -2351,7 +2352,7 @@ export const LandingMap = () => {
             {`Long:${long}`}
           </Button>
         </ButtonGroup>
-
+        <Draggable>
         <div
           ref={setPopup}
           style={{
@@ -2395,7 +2396,8 @@ export const LandingMap = () => {
               />
             )}
           </div>
-        </div>
+          </div>
+          </Draggable>
         {/* <div className="absolute top-0  z-50 w-full   bg-red-200">
           {GetTopAds()}
 

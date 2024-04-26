@@ -56,6 +56,7 @@ import {
 import { toLonLat } from "ol/proj";
 import { METERS_PER_UNIT } from "ol/proj/Units";
 import { updateWindowsHistoryCmap } from "@/app/utils/helpers/window-history-replace";
+import Draggable from "react-draggable";
 
 
 export const svgZone = `<?xml version="1.0" encoding="utf-8"?>
@@ -1904,6 +1905,7 @@ export const CompanyMap = () => {
             {`Long:${long}`}
           </Button>
         </ButtonGroup>
+        <Draggable>
         <div
           ref={setPopup}
           style={{
@@ -1948,7 +1950,7 @@ export const CompanyMap = () => {
             {clickDataLoaded && <CompanyMapClickPopup />}
           </div>
         </div>
-
+          </Draggable>
         <Map
           ref={mapRef}
           style={{

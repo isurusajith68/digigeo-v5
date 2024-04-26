@@ -59,6 +59,7 @@ import { toLonLat } from "ol/proj";
 import { METERS_PER_UNIT } from "ol/proj/Units";
 // import { commodityMap_tbl_syncProperty_commodity_VectorLayerStyleFunction } from "./syn-prop-cluster-styles";
 import { updateWindowsHistoryCmap } from "@/app/utils/helpers/window-history-replace";
+import Draggable from "react-draggable";
 
 
 
@@ -2170,7 +2171,7 @@ updateWindowsHistoryCmap(  {isSideNavOpen,lyrs:propertiesLyrs,zoom:tmpZoomLevel,
             {`Long:${long}`}
           </Button>
         </ButtonGroup>
-
+        <Draggable>
         <div
           ref={setPopup}
           style={{
@@ -2214,7 +2215,8 @@ updateWindowsHistoryCmap(  {isSideNavOpen,lyrs:propertiesLyrs,zoom:tmpZoomLevel,
             {/* <p>Info:</p> */}
             {clickDataLoaded && <PropertyMapClickPopup />}
           </div>
-        </div>
+          </div>
+          </Draggable>
 
         <Map
           ref={mapRef}
