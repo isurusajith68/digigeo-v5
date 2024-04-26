@@ -549,6 +549,10 @@ export const AreaMap = () => {
     (state) => state.areaMapReducer.areaZoomMode
   );
 
+  const amapNavigationHighlightFProps = useSelector(
+    (state) => state.areaMapReducer.amapNavigationHighlightFProps
+  );
+
   const mapViewMode = useSelector((state) => state.mapSelectorReducer.mapViewMode);
 
 
@@ -569,7 +573,7 @@ export const AreaMap = () => {
   const [mapViewScales, setmapViewScales] = useState([]);
 
   // const pathname2 = usePathname()
-
+//highlight fprops
   useEffect(() => {
     if (navigatedFPropertyRef.current) {
       const fp = navigatedFPropertyRef.current.find(
@@ -582,6 +586,24 @@ export const AreaMap = () => {
       fp?.setStyle(selectStyle);
     }
   }, [navigatedFPropId]);
+
+  useEffect(() => {
+    console.log("style fp set0",)
+    if (amapNavigationHighlightFProps.length > 0) {
+      console.log("style fp set1",)
+      for (const fpid of amapNavigationHighlightFProps) {
+       const fp = fPropSourceRef?.current?.getFeatures().find(f => f.get("id") == fpid)
+        if (fp) {
+          console.log("style fp set2",)
+          const selectStyle = new Style({ zIndex: 1 });
+          selectStyle.setRenderer(areaMApPropertyVectorRendererFuncV2Highlight);
+
+          fp?.setStyle(selectStyle);
+        }
+      }
+    }
+  }, [amapNavigationHighlightFProps]);
+
 
   useEffect(() => {
     dispatch(setclickassetObject(assetObject));
@@ -868,6 +890,9 @@ export const AreaMap = () => {
   const amapFpropLableVisible = useSelector(
     (state) => state.areaMapReducer.amapFpropLableVisible
   );
+  const amapNavigationExtent = useSelector(
+    (state) => state.areaMapReducer.amapNavigationExtent
+  );
 
   //set styles
   useEffect(() => {
@@ -1001,6 +1026,20 @@ export const AreaMap = () => {
 
     // }
   }, [assetFeatures]);
+
+
+  useEffect(() => {
+     
+    if (  amapNavigationExtent.length>0) {
+      
+      mapRef.current?.getView()?.fit(amapNavigationExtent, {
+          padding: [100,100, 100, 100],
+          duration: 3000,
+        });
+      
+
+    }
+  }, [amapNavigationExtent])
 
   //init useeffect
   useEffect(() => {

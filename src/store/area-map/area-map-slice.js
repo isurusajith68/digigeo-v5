@@ -38,12 +38,20 @@ const initialState = {
   amapAssetLableVisible: true,
   amapClaimLableVisible: true,
   amapAreaLableVisible: true,
+  amapNavigationExtent:[],
+  amapNavigationHighlightFProps:[]
 };
 
 const areaMapSlice = createSlice({
   name: "xAreaMap",
   initialState,
   reducers: {
+    setamapNavigationExtent: (state, action) => {
+      state.amapNavigationExtent = action.payload;
+    },
+    setamapNavigationHighlightFProps: (state, action) => {
+      state.amapNavigationHighlightFProps = action.payload;
+    },
     setIsAreaSideNavOpen: (state, action) => {
       state.isAreaSideNavOpen = action.payload;
     },
@@ -159,6 +167,8 @@ const areaMapSlice = createSlice({
 });
 
 export const {
+  setamapNavigationHighlightFProps,
+  setamapNavigationExtent,
   setAreaCountry,
   setAreaMiningArea,
   setIsAreaSideNavOpen,

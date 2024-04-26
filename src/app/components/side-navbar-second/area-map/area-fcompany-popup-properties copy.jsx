@@ -6,13 +6,11 @@ import { useDispatch, useSelector } from "react-redux";
 import GeoJSON from "ol/format/GeoJSON";
 import { MdInfoOutline } from "react-icons/md";
 import { Circle as CircleStyle, Fill, Stroke, Style, Icon } from "ol/style";
-import { setamapNavigationExtent, setamapNavigationHighlightFProps, setareaFlyToLocation,setnavigatedFPropId } from "@/store/area-map/area-map-slice";
+import { setareaFlyToLocation,setnavigatedFPropId } from "@/store/area-map/area-map-slice";
 import { radioGroup } from "@nextui-org/react";
 import DialogComponent from './../../../utils/dialog/dialog';
 import AreaMapClickPopup from "../../maps/area-map-popup/area-map-click-popup";
 import { areaMApPropertyVectorRendererFuncV2Highlight } from "../../maps/area-map-styles/area-map-styles";
-import { boundingExtent } from 'ol/extent';
-import { getCenter } from 'ol/extent';
 
 const AreaFCompanyFProperties = ({ companyid }) => {
   const [featureObjects, setfeaturesObjects] = useState([]);
@@ -103,58 +101,6 @@ const AreaFCompanyFProperties = ({ companyid }) => {
     
   };
 
-  const flytoMultipleHandler = (features) => {
-    console.log("features", features,)
-    // const coords = features.map((f) => f.values_.geometry.flatCoordinates) 
-    const coords = []
-    for (const f of features) {
-      const polygon = f.getGeometry();
-     
-      if (polygon) {
-        const c = polygon.getCoordinates();
-        console.log("coords-c", c[0][0],)
-       coords.push(...c[0][0])
-        // c.forEach((i)=> coords.push(i[0]))
-         
-      }
-
-      
-        
-      
-    }
-    
-
-    console.log("coords", coords,)
-    const bounds = boundingExtent(coords)
-    console.log("bounds", bounds,)
-  //   console.log("bounds",bounds,)
-  //  // const polygon = feature.getGeometry();
-  //   let loc = [];
-  //   if (bounds) {
-     
-  //     loc = getCenter(bounds);
-  //     console.log("loc",loc,)
-  //   }
-    //flyTo
-    // dispatch(setareaFlyToLocation(loc));
-    dispatch(setamapNavigationExtent(bounds));
-    dispatch(setamapNavigationHighlightFProps(features.map(f=>f.get("id"))));
-
-    //set style
-    //dispatch(setnavigatedFPropId(features[0].get("id")));
-
-    //  console.log("kkk")
-    //  const selectStyle = new Style({ zIndex: 1 });
-    // selectStyle.setRenderer(areaMApPropertyVectorRendererFuncV2Highlight);
-
-    //  const e = new GeoJSON().readFeatures(featuredPropertyFeatures);
-
-    //  const fSelected = e.find(f=> f.get("id") == feature.get("id") )
-    //  console.log("fSelected",fSelected)
-    //  fSelected?.setStyle(selectStyle);
-
-  };
-
   const showProperties =async (e,companyid,propertyid,prop_name,hotplayid) => {
        
            const getData = async (hotplayid) => {
@@ -228,122 +174,71 @@ const AreaFCompanyFProperties = ({ companyid }) => {
    
   const getDomElements = useMemo(() => {
 
-    const companyProps = featureObjects.filter(p => p.get("companyid") == companyid)
+    const namedProps = featureObjects.filter(p => p.get("prop_name"))
 
-    const namedProps = companyProps.filter(p => p.get("prop_name"))
-
-
-    namedProps.sort((a, b) => { return a.get("prop_name").toUpperCase() > b.get("prop_name").toUpperCase() ? 1 : -1 })
+    namedProps.sort((a, b) => { return a.get("prop_name").toUpperCase() > b.get("prop_name").toUpperCase() ? 1 :-1 })
      
-    function myCallback({ values_ }) {
-      return values_.prop_name;
-    }
-    const groupByPropName = Object.groupBy(namedProps, myCallback);
-    
-    //for (const companyName in groupByPropName) {
-    const r= Object.keys(groupByPropName).map((propName) => {
+    const r = namedProps.map((fp) => {
+      // if (!fp.get("propertyid")) {
+      //   pidRef.current = pidRef.current - 1;
+      // }
       
-      const fps = groupByPropName[propName]
-      const fp = fps[0]
-    if (fps.length == 1) {
-     const fp = fps[0]
-      return (
-        <div
-          key={fp.get("propertyid")}
-          className="hover:bg-blue-200 odd:bg-slate-200  px-2 text-black"
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            width: "100%",
-          }}
-        >
-          <div className="flex">
-            <Image src="./sync-prop.svg" width={25} height={10} alt="prop" />
-            <div> {fp.get("prop_name") ?? "Block" + blocknoRef.current}</div>
-          </div>
-          <div className="flex gap-1">
-            <span className="">
-              <MdInfoOutline
-                className="cursor-pointer h-4 w-4 hover:scale-125 "
-                onClick={(e) =>
-                  showProperties(
-                    e,
-                    companyid,
-                    fp.get("propertyid"),
-                    fp.get("prop_name"),
-                    fp.get("id")
-                  )
-                }
-              //onClick={() => setIsOpenIn(true)}
-              // onClick={() => console.log("title", title)}
-              />
-            </span>
+      if (companyid == fp.get("companyid") && fp.get("prop_name")) {
+        // if (!fp.get("prop_name")) {
+        //   console.log("blocknoRef1", blocknoRef.current);
+        //   blocknoRef.current = blocknoRef.current + 1;
+        //   console.log("blocknoRef2", blocknoRef.current);
+        // }
 
-            <Image
-              src="./navigation.svg"
-              width={15}
-              height={15}
-              alt="prop"
-              className=" cursor-pointer hover:scale-125 "
-              onClick={(e) => {
-                flytoHandler(fp);
-              }}
-            />
-          </div>
-        </div>
-      );
-    } else {
-      return (
-        <div
-          key={fp.get("propertyid")}
-          className="hover:bg-blue-200 odd:bg-slate-200  px-2 text-black"
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            width: "100%",
-          }}
-        >
-          <div className="flex">
-            <Image src="./sync-prop.svg" width={25} height={10} alt="prop" />
-            <div> {fp.get("prop_name") + "(" + fps.length +") properties" }</div>
-          </div>
-          <div className="flex gap-1">
-            <span className="">
-              <MdInfoOutline
-                className="cursor-pointer h-4 w-4 hover:scale-125 "
-                onClick={(e) =>
-                  showProperties(
-                    e,
-                    companyid,
-                    fp.get("propertyid"),
-                    fp.get("prop_name"),
-                    fp.get("id")
-                  )
-                }
-              //onClick={() => setIsOpenIn(true)}
-              // onClick={() => console.log("title", title)}
-              />
-            </span>
+        // console.log("companyid",companyid,"pname",fp.properties )
+        return (
+          <div
+            key={fp.get("propertyid")  }
+            className="hover:bg-blue-200 odd:bg-slate-200  px-2 text-black"
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              width: "100%",
+            }}
+          >
+            <div className="flex">
+              <Image src="./sync-prop.svg" width={25} height={10} alt="prop" />
+              <div> {fp.get("prop_name") ?? "Block" + blocknoRef.current}</div>
+            </div>
+            <div className="flex gap-1">
+              <span className="">
+                <MdInfoOutline
+                  className="cursor-pointer h-4 w-4 hover:scale-125 "
+                  onClick={(e) =>
+                    showProperties(
+                      e,
+                      companyid,
+                      fp.get("propertyid"),
+                      fp.get("prop_name"),
+                      fp.get("id")
+                    )
+                  }
+                  //onClick={() => setIsOpenIn(true)}
+                  // onClick={() => console.log("title", title)}
+                />
+              </span>
 
-            <Image
-              src="./navigation.svg"
-              width={15}
-              height={15}
-              alt="prop"
-              className=" cursor-pointer hover:scale-125 "
-              onClick={(e) => {
-                flytoMultipleHandler(fps);
-              }}
-            />
+              <Image
+                src="./navigation.svg"
+                width={15}
+                height={15}
+                alt="prop"
+                className=" cursor-pointer hover:scale-125 "
+                onClick={(e) => {
+                  flytoHandler(fp);
+                }}
+              />
+            </div>
           </div>
-        </div>
-        
-        )
-    }
-      
-  });
+        );
+      }
+    });
      
     // const ee= unNamedFeatureObjects.filter(r=> !r.get("propertyid"))
 
