@@ -4,6 +4,7 @@ import { useRef, useEffect } from 'react'
 import { AiOutlineCloseCircle } from 'react-icons/ai';
 import { useDispatch, useSelector } from "react-redux";
 import { setpopupFcompanyId } from "../../../../store/area-map/area-map-slice";
+import Draggable from 'react-draggable';
 // type Props = {
 //     title: string,
 //     onClose: () => void,
@@ -67,7 +68,8 @@ export default function AMapDialogComponent({
     // closeDialog();
   };
 
-  const dialog =   (
+  const dialog = (
+     <Draggable >
       <dialog
         ref={dialogRef}
         className="fixed inset-0     rounded-xl backdrop:bg-gray-800/50 z-[60]"
@@ -101,6 +103,7 @@ export default function AMapDialogComponent({
           </div>
         </div>
       </dialog>
+    </Draggable>
     )  ;
 
   return dialog;

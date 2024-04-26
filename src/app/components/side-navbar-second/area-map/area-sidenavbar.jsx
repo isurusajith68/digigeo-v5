@@ -40,6 +40,7 @@ import GeoJSON from "ol/format/GeoJSON";
 import AreaFCompanyPopup from "./area-fcompany-popup";
 import { updateWindowsHistory } from "@/app/utils/helpers/window-history-replace";
 import AccordionItemWithEyeLabel from "../../common-comp/accordion-eye-label";
+import Draggable from "react-draggable";
 
 const AreaSideNavbar = () => {
   let pathname = "";
@@ -347,7 +348,9 @@ const AreaSideNavbar = () => {
           {/* </div> */}
         </div>
       </div>
-      {popupFcompanyId > 0 && <AreaFCompanyPopup />}
+       
+        {popupFcompanyId > 0 && <AreaFCompanyPopup />}
+     
     </>
   );
 };

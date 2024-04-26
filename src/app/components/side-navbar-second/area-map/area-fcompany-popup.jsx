@@ -13,6 +13,7 @@ import Link from "next/link";
 import AreaFCompanyFProperties from "./area-fcompany-popup-properties";
 import AMapDialogComponent from './area-fcompany-dialog';
 import {Spinner} from "@nextui-org/react";
+import Draggable from "react-draggable";
 
 const formatUrl = (url) => {
   //remove https:
@@ -240,6 +241,7 @@ const AreaFCompanyPopup = ({ }) => {
 
 
   return (
+   
     <div >
       {/* <Modal
         isOpen={isOpen}
@@ -315,7 +317,8 @@ const AreaFCompanyPopup = ({ }) => {
           </div>
         </div>
       </AMapDialogComponent>
-    </div>
+      </div>
+    
   );
 };
 export default AreaFCompanyPopup;

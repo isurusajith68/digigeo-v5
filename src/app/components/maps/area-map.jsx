@@ -64,6 +64,7 @@ import { Tooltip } from "@nextui-org/react";
 import { usePathname } from 'next/navigation'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Draggable from "react-draggable";
 // import { Style, Icon, Stroke, Fill, Circle, Text } from "ol/style";
 
 
@@ -2108,7 +2109,7 @@ export const AreaMap = () => {
             {`Long:${long}`}
           </Button>
         </ButtonGroup>
-
+        <Draggable>
         <div
           ref={setPopup}
           style={{
@@ -2152,7 +2153,8 @@ export const AreaMap = () => {
               />
             )}
           </div>
-        </div>
+          </div>
+          </Draggable>
         {/* <div  className="absolute top-0  z-50 w-full h-min-[500] bg-red-200"> 
         {GetTopAds()}
          
