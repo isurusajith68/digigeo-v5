@@ -40,6 +40,7 @@ import AccordionItemWithEyeWithLockVisibility from './../../common-comp/accordio
 import LayerVisibleWithLabelDiv from "../../common-comp/layer-visible-eye-with-label";
 import LayerVisibleVisibilityStateLabelDiv from "../../common-comp/layer-visible-eye-visibility-state-label";
 import AccordionItemWithEyeWithLockVisibilityLabel from "../../common-comp/accordion-eye-with-lock-with-visibilty-label";
+import LayerVisibleLockVisibilityLabelDiv from "../../common-comp/layer-visible-eye-with-lock-with-visibility-label";
 
 
 
@@ -277,6 +278,18 @@ const CompanyBottomSideComp = () => {
     (state) => state.companyMapReducer.cmapAssetLableVisible
   );
 
+  const setcompanySyncPropLayerAlwaysVisibility = (e) => {
+
+    dispatch(setcompanySyncPropLayerAlwaysVisible(!companySyncPropLayerAlwaysVisible));
+    if (!companySyncPropLayerAlwaysVisible) {
+      dispatch(setcompanySyncPropLayerVisible(true));
+    }
+  };
+
+  const companySyncPropLayerAlwaysVisible = useSelector(
+    (state) => state.companyMapReducer.companySyncPropLayerAlwaysVisible
+  );
+
   return (
     <div className="flex flex-col w-full  h-full grow">
       <div className="ml-2 mr-2  flex items-center justify-center border-b-2 dark:text-white text-black">
@@ -369,13 +382,16 @@ const CompanyBottomSideComp = () => {
               eyeState={company_claimLinkGroupVisible}
             >
               <div className="flex flex-col gap-1">
-                <LayerVisibleWithLabelDiv
+                <LayerVisibleLockVisibilityLabelDiv
                   title="Property Points"
                   onClick={setcompanySyncPropLayerVisibility}
                   eyeState={companySyncPropLayerVisible}
                   visibilityState={propertyPointLineVisibilityState}
                   labelState={cmapsyncPropLableVisible}
                   setLabelState={setsyncPropLableVisibility}
+                  onLockClick={setcompanySyncPropLayerAlwaysVisibility}
+                  lockState={companySyncPropLayerAlwaysVisible}
+
                 >
                   <Image
                     src="./sync-prop.svg"
@@ -383,7 +399,7 @@ const CompanyBottomSideComp = () => {
                     height={10}
                     alt="prop"
                   />
-                </LayerVisibleWithLabelDiv>
+                </LayerVisibleLockVisibilityLabelDiv>
                 <LayerVisibleVisibilityStateDiv
                   onClick={setcompanySyncClaimLinkLayerVisibility}
                   title="Property Outlines"

@@ -558,6 +558,10 @@ export const CompanyMap = () => {
     (state) => state.companyMapReducer.cmapAreaLableVisible
   );
 
+  const companySyncPropLayerAlwaysVisible = useSelector(
+    (state) => state.companyMapReducer.companySyncPropLayerAlwaysVisible
+  );
+   
 
   const [coordinates, setCoordinates] = useState(undefined);
   const [popup, setPopup] = useState();
@@ -2048,7 +2052,7 @@ export const CompanyMap = () => {
             ref={syncPropVectorLayerRef}
             style={styleFunctionSyncProperties}
             minResolution={0}
-            maxResolution={maxResolutionPropPoints}
+            maxResolution={companySyncPropLayerAlwaysVisible ? 40075016 : maxResolutionPropPoints  }
           >
             <olSourceVector ref={syncPropSourceRef}></olSourceVector>
           </olLayerVector>

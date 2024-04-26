@@ -41,6 +41,7 @@ import AccordionItemWithEyeWithLockVisibility from './../../common-comp/accordio
 import AccordionItemWithEyeWithLockVisibilityLabel from "../../common-comp/accordion-eye-with-lock-with-visibilty-label";
 import LayerVisibleWithLabelDiv from "../../common-comp/layer-visible-eye-with-label";
 import LayerVisibleVisibilityStateLabelDiv from "../../common-comp/layer-visible-eye-visibility-state-label";
+import LayerVisibleLockVisibilityLabelDiv from "../../common-comp/layer-visible-eye-with-lock-with-visibility-label";
 
 const AreaBottomSideComp = () => {
   let pathname = "";
@@ -361,7 +362,7 @@ const AreaBottomSideComp = () => {
               eyeState={property_claimLinkGroupVisible}
             >
               <div className="flex flex-col gap-1">
-                <LayerVisibleWithLabelDiv
+                <LayerVisibleLockVisibilityLabelDiv
                   title="Property Points"
                   onClick={setareaSyncPropLayerVisibility}
                   eyeState={areaSyncPropLayerVisible}
@@ -377,7 +378,7 @@ const AreaBottomSideComp = () => {
                     height={10}
                     alt="prop"
                   />
-                </LayerVisibleWithLabelDiv>
+                </LayerVisibleLockVisibilityLabelDiv>
                 <LayerVisibleDiv
                   onClick={setareaSyncClaimLinkLayerVisibility}
                   title="Property Outlines"
