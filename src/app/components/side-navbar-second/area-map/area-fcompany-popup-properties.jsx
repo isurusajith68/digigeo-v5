@@ -40,7 +40,7 @@ const AreaFCompanyFProperties = ({ companyid }) => {
 
   //set unnmaed props
   useEffect(() => {
-      console.log("unNamedFeatureObjects2",unNamedFeatureObjects)
+      //console.log("unNamedFeatureObjects2",unNamedFeatureObjects)
     
     if (featuredPropertyFeatures?.features) {
       const e = new GeoJSON().readFeatures(featuredPropertyFeatures);
@@ -56,7 +56,7 @@ const AreaFCompanyFProperties = ({ companyid }) => {
         if (!element.get("prop_name")) {
           if (companyid == element.get("companyid")) {
             b++;
-            element.set("prop_name_empty", "Block" + b);
+            element.set("prop_name_empty", "Block-" + b);
 
           
 
@@ -307,7 +307,7 @@ const AreaFCompanyFProperties = ({ companyid }) => {
         >
           <div className="flex">
             <Image src="./sync-prop.svg" width={25} height={10} alt="prop" />
-            <div> {fp.get("prop_name") + "(" + fps.length +") properties" }</div>
+            <div> {fp.get("prop_name") + "[" + fps.length +"]" }</div>
           </div>
           <div className="flex gap-1">
             <span className="">

@@ -145,6 +145,10 @@ const LandingBottomSideComp = () => {
   const landingAssetLayerAlwaysVisible = useSelector(
     (state) => state.landingMapReducer.landingAssetLayerAlwaysVisible
   );
+  const isLandingMapSideNavOpen = useSelector(
+    (state) => state.landingMapReducer.isLandingMapSideNavOpen
+  );
+ 
 
 
   //asset type visibility functions
@@ -380,7 +384,7 @@ const LandingBottomSideComp = () => {
                     alt="prop"
                   />
                 </LayerVisibleVisibilityStateDiv>
-                <LayerVisibleWithLabelDiv
+                {!landingMapFpropLayerVisible && !isLandingMapSideNavOpen && <LayerVisibleWithLabelDiv
                   title="Featured Properties"
                   onClick={setlandingMapFPropLayerVisibility}
                   eyeState={landingMapFpropLayerVisible}
@@ -393,7 +397,7 @@ const LandingBottomSideComp = () => {
                     height={10}
                     alt="prop"
                   />
-                </LayerVisibleWithLabelDiv>
+                </LayerVisibleWithLabelDiv>}
               </div>
             </AccordionItemWithEye>
             <AccordionItemWithEye
