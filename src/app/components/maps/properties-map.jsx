@@ -64,7 +64,7 @@ import Draggable from "react-draggable";
 
 
 
-  const svgZone = `<?xml version="1.0" encoding="utf-8"?>
+const svgZone = `<?xml version="1.0" encoding="utf-8"?>
 <!-- Generator: Adobe Illustrator 22.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 viewBox="0 0 20 20" style="enable-background:new 0 0 20 20;" xml:space="preserve" width="19.8px" height="19.8x">
@@ -247,7 +247,7 @@ const stroke = new Stroke({
   color: "rgba(0,0,0,0.8)",
   width: 2,
 });
- 
+
 
 
 
@@ -342,7 +342,7 @@ export const PropertiesMap = () => {
   let pathname = "";
   try {
     pathname = window.location.href;
-  } catch (error) {}
+  } catch (error) { }
 
   const router = useRouter();
   const [center, setCenter] = useState("");
@@ -382,11 +382,11 @@ export const PropertiesMap = () => {
   const [distance, setDistance] = useState(40);
   const [minDistance, setMinDistance] = useState(20);
 
-  
+
   const [mapUnits, setmapUnits] = useState("m");
 
   const [maxResolutionFProp, setmaxResolutionFProp] = useState(300);
- const [maxResolutionClaims, setmaxResolutionClaims] = useState(300);
+  const [maxResolutionClaims, setmaxResolutionClaims] = useState(300);
   const [maxResolutionAssets, setmaxResolutionAssets] = useState(300);
   const [maxResolutionSyncOutlines, setmaxResolutionSyncOutlines] =
     useState(300);
@@ -601,13 +601,13 @@ export const PropertiesMap = () => {
   const onViewChange = useCallback((e) => {
     const scale = mapRatioScale({ map: mapRef.current });
     setmapScale(scale.toLocaleString());
-    
-    dispatch(setpropertyCurrentScale(scale ));
+
+    dispatch(setpropertyCurrentScale(scale));
   });
 
   useEffect(() => {
     if (propertyFlyToLocation?.length > 0) {
-      flyTo(mapViewRef?.current, propertyFlyToLocation, () => {});
+      flyTo(mapViewRef?.current, propertyFlyToLocation, () => { });
     }
   }, [propertyFlyToLocation]);
 
@@ -661,7 +661,7 @@ export const PropertiesMap = () => {
     (state) => state.propertiesMapReducer.assetFeatures
   );
 
-     const propertyAssetLayerAlwaysVisible = useSelector(
+  const propertyAssetLayerAlwaysVisible = useSelector(
     (state) => state.propertiesMapReducer.propertyAssetLayerAlwaysVisible
   );
 
@@ -705,7 +705,7 @@ export const PropertiesMap = () => {
     else {
       fPropVectorLayerLabelRef.current?.setStyle(style);
     }
-    
+
   }, [fPropVectorLayerLabelRef.current, pmapFpropLableVisible]);
 
   useEffect(() => {
@@ -762,7 +762,7 @@ export const PropertiesMap = () => {
         mapRef.current?.getView()?.fit(syncPropSourceRef.current?.getExtent(), {
           padding: [200, 200, 200, 200],
           duration: 3000,
-          minResolution:500,
+          minResolution: 500,
         });
       }
     }
@@ -790,7 +790,7 @@ export const PropertiesMap = () => {
 
   //init useeffect
   useEffect(() => {
-    
+
 
     mouseScrollEvent();
   }, [mapViewScaleReducer.mapViewScales]);
@@ -828,55 +828,55 @@ export const PropertiesMap = () => {
   const mouseScrollEvent = useCallback((event) => {
     const map = mapRef.current;
 
-          const setCenteredAreaViewScales = (center) => {
-        // console.log("popl2", mapViewScaleReducer.mapViewScales )
-        let closestArea = { d: 999999999999 };
-        mapViewScaleReducer.mapViewScales.forEach((a) => {
-          //console.log("popl2-q1")
-          const dx = a.centroid_x - center[0];
-          const dy = a.centroid_y - center[1];
+    const setCenteredAreaViewScales = (center) => {
+      // console.log("popl2", mapViewScaleReducer.mapViewScales )
+      let closestArea = { d: 999999999999 };
+      mapViewScaleReducer.mapViewScales.forEach((a) => {
+        //console.log("popl2-q1")
+        const dx = a.centroid_x - center[0];
+        const dy = a.centroid_y - center[1];
 
-          const d = Math.sqrt(dx * dx + dy * dy);
+        const d = Math.sqrt(dx * dx + dy * dy);
 
-          if (closestArea.d > d) {
-             //console.log("popl2-q2")
-            closestArea = { area: a, d };
-          }
-        });
-          console.log("popl23-closestArea.area", closestArea.area )
-          dispatch(setpropertyMapViewScales(closestArea.area));
-          
-        setcurcenteredareaid(closestArea.area.area_id);
-        // console.log("aa-curAreaId",closestArea.area.area_id)
-        const r = getMapResolution(
-          closestArea.area.featuredpropscale,
-          mapUnits
-        );
-        // console.log("rrr",r,closestArea.area  )
-       
-        // console.log("aa-featuredpropscale",closestArea.area.featuredpropscale)
-        //featured prop max-scale
-        setmaxResolutionFProp(r);
+        if (closestArea.d > d) {
+          //console.log("popl2-q2")
+          closestArea = { area: a, d };
+        }
+      });
+      console.log("popl23-closestArea.area", closestArea.area)
+      dispatch(setpropertyMapViewScales(closestArea.area));
 
-        const r1 = getMapResolution(
-          closestArea.area.propoutlinescale,
-          mapUnits
-        );
-       // console.log("aa-propoutlinescale",closestArea.area.propoutlinescale)
-        //prop outline max-res
-        setmaxResolutionSyncOutlines(r1);
+      setcurcenteredareaid(closestArea.area.area_id);
+      // console.log("aa-curAreaId",closestArea.area.area_id)
+      const r = getMapResolution(
+        closestArea.area.featuredpropscale,
+        mapUnits
+      );
+      // console.log("rrr",r,closestArea.area  )
 
-        //asset max-res
-       // console.log("aa-assetscale",closestArea.area.assetscale)
-        const r2 = getMapResolution(closestArea.area.assetscale, mapUnits);
-        setmaxResolutionAssets(r2);
-        //asset max-res
-       // console.log("aa-claimscale",closestArea.area.claimscale)
-        const r3 = getMapResolution(closestArea.area.claimscale, mapUnits);
-        setmaxResolutionClaims(r3);
-        //
+      // console.log("aa-featuredpropscale",closestArea.area.featuredpropscale)
+      //featured prop max-scale
+      setmaxResolutionFProp(r);
+
+      const r1 = getMapResolution(
+        closestArea.area.propoutlinescale,
+        mapUnits
+      );
+      // console.log("aa-propoutlinescale",closestArea.area.propoutlinescale)
+      //prop outline max-res
+      setmaxResolutionSyncOutlines(r1);
+
+      //asset max-res
+      // console.log("aa-assetscale",closestArea.area.assetscale)
+      const r2 = getMapResolution(closestArea.area.assetscale, mapUnits);
+      setmaxResolutionAssets(r2);
+      //asset max-res
+      // console.log("aa-claimscale",closestArea.area.claimscale)
+      const r3 = getMapResolution(closestArea.area.claimscale, mapUnits);
+      setmaxResolutionClaims(r3);
+      //
     };
-    
+
     // console.log("mapRef", mapRef.current?.getZoom());
     const handleMoveEnd = () => {
       // console.log("map", map);
@@ -887,12 +887,12 @@ export const PropertiesMap = () => {
       setZoom(tmpZoomLevel);
       setCenter(tmpinitialCenter);
 
-       setCenteredAreaViewScales(tmpinitialCenter);
+      setCenteredAreaViewScales(tmpinitialCenter);
 
-    //       let newUrl;
-    // newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isPropertiesSideNavOpen}&lyrs=${propertiesLyrs}&z=${tmpZoomLevel}&c=${tmpinitialCenter}`;
+      //       let newUrl;
+      // newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isPropertiesSideNavOpen}&lyrs=${propertiesLyrs}&z=${tmpZoomLevel}&c=${tmpinitialCenter}`;
 
-updateWindowsHistoryCmap(  {isSideNavOpen,lyrs:propertiesLyrs,zoom:tmpZoomLevel,center:tmpinitialCenter,sidenav2:isPropertiesSideNavOpen});
+      updateWindowsHistoryCmap({ isSideNavOpen, lyrs: propertiesLyrs, zoom: tmpZoomLevel, center: tmpinitialCenter, sidenav2: isPropertiesSideNavOpen });
 
 
       // router.push(
@@ -902,11 +902,11 @@ updateWindowsHistoryCmap(  {isSideNavOpen,lyrs:propertiesLyrs,zoom:tmpZoomLevel,
       // const newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&lyrs=${mapLyrs}&z=${tmpZoomLevel}&c=${tmpinitialCenter}`;
       // window.history.replaceState({}, "", newUrl);
     };
-    
+
     if (mapViewScaleReducer.mapViewScales.length > 0) {
-       
+
       map?.on("moveend", handleMoveEnd);
-    } 
+    }
     return () => {
       map?.un("moveend", handleMoveEnd);
     };
@@ -916,11 +916,10 @@ updateWindowsHistoryCmap(  {isSideNavOpen,lyrs:propertiesLyrs,zoom:tmpZoomLevel,
     const tmpValue = String(isSideNavOpen).toLowerCase() === "true";
     dispatch(setIsSideNavOpen(!tmpValue));
     let newUrl;
-    newUrl = `${
-      window.location.pathname
-    }?t=${selectedMap}&sn=${!tmpValue}&sn2=${isPropertiesSideNavOpen}&lyrs=${propertiesLyrs}&z=${propertiesZoomLevel}&c=${propertiesInitialCenter}`;
+    newUrl = `${window.location.pathname
+      }?t=${selectedMap}&sn=${!tmpValue}&sn2=${isPropertiesSideNavOpen}&lyrs=${propertiesLyrs}&z=${propertiesZoomLevel}&c=${propertiesInitialCenter}`;
     // window.history.replaceState({}, "", newUrl);
-     updateWindowsHistory(newUrl);
+    updateWindowsHistory(newUrl);
     // dispatch(setUrlUpdate());
   };
 
@@ -929,7 +928,7 @@ updateWindowsHistoryCmap(  {isSideNavOpen,lyrs:propertiesLyrs,zoom:tmpZoomLevel,
     let newUrl;
     newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isPropertiesSideNavOpen}&lyrs=${lyrs}&z=${propertiesZoomLevel}&c=${propertiesInitialCenter}`;
     // window.history.replaceState({}, "", newUrl);
-     updateWindowsHistory(newUrl);
+    updateWindowsHistory(newUrl);
   };
 
   const image = new Icon({
@@ -946,7 +945,7 @@ updateWindowsHistoryCmap(  {isSideNavOpen,lyrs:propertiesLyrs,zoom:tmpZoomLevel,
     if (resolution < 300)
       t =
         feature.get("prop_name") +
-          (feature.get("prop_alias") ? "/" + feature.get("prop_alias") : "") ??
+        (feature.get("prop_alias") ? "/" + feature.get("prop_alias") : "") ??
         "";
     const s = new Style({
       text: new Text({
@@ -1522,6 +1521,7 @@ updateWindowsHistoryCmap(  {isSideNavOpen,lyrs:propertiesLyrs,zoom:tmpZoomLevel,
     return style;
   };
 
+  //single click
   useEffect(() => {
     let clickedOnFeatureTmp = false;
     const fetchData = async () => {
@@ -1680,7 +1680,76 @@ updateWindowsHistoryCmap(  {isSideNavOpen,lyrs:propertiesLyrs,zoom:tmpZoomLevel,
 
         dispatch(setclicksyncPropertyObject(syncPropertyObject));
       } else {
-        dispatch(setclicksyncPropertyObject(undefined));
+
+        //if sync_prop  is not selected try claimlink prop outline
+        // 
+        const getClinkData = async (propid) => {
+          const url =
+            "https://atlas.ceyinfo.cloud/matlas/syncclaimlink_details/" +
+            propid;
+          //load data from api - changed to return array
+
+          let sponsors = await fetch(url, {
+            method: "GET", // *GET, POST, PUT, DELETE, etc.
+            mode: "cors", // no-cors, *cors, same-origin
+            cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+            credentials: "same-origin", // include, *same-origin, omit
+            headers: {
+              "Content-Type": "application/json",
+              // 'Content-Type': 'application/x-www-form-urlencoded',
+            },
+          })
+            .then((response) => response.json())
+            .then((res) => {
+              // let sponsors = "";
+              // res.data.forEach((element) => {
+              //   sponsors += element.sponsor + "/";
+              // });
+              return res.data;
+            });
+
+          // sponsors = sponsors.slice(0, -1);
+          // console.log("sponsors", sponsors);
+          return sponsors;
+        };
+
+        const selPropertyOutlineFeatures =
+          claimLinkSourceRef?.current?.getFeaturesAtCoordinate(coordinates) ?? [];
+        console.log("selPropertyOutlineFeatures", selPropertyOutlineFeatures)
+        if (selPropertyOutlineFeatures.length > 0) {
+          clickedOnFeatureTmp = true;
+          const propId = selPropertyOutlineFeatures?.[0]?.get("propertyid")
+
+          const clinkDetails = await getClinkData(propId)
+
+          console.log("clinkDetails", clinkDetails, propId)
+
+          const prop_name = clinkDetails?.[0]?.prop_name ?? "";
+          const owners = clinkDetails?.[0]?.owners ?? "";
+          let name1 = clinkDetails?.[0]?.name ?? "";
+          const stateProv = clinkDetails?.[0]?.state_prov ?? "";
+          const country = clinkDetails?.[0]?.country ?? "";
+          const area = clinkDetails?.[0]?.area ?? "";
+          // const selSynClaimLinkFeatures =
+          //   sync_claimLinkLayerSource?.getFeaturesAtCoordinate(evt.coordinate) ?? [];
+          const syncPropertyObject1 = {
+            prop_name,
+            owners,
+            name: name1,
+            stateProv,
+            country,
+            area,
+          };
+
+
+          dispatch(setclicksyncPropertyObject(syncPropertyObject1));
+        } else {
+
+          dispatch(setclicksyncPropertyObject(undefined));
+        }
+
+
+
       }
       const claimFeatures =
         claimVectorImgSourceRef?.current?.getFeaturesAtCoordinate(
@@ -1981,7 +2050,7 @@ updateWindowsHistoryCmap(  {isSideNavOpen,lyrs:propertiesLyrs,zoom:tmpZoomLevel,
       return style;
     };
 
-  
+
   const areaMapAssetVectorLayerStyleFunction = (feature, resolution) => {
 
 
@@ -2090,9 +2159,8 @@ updateWindowsHistoryCmap(  {isSideNavOpen,lyrs:propertiesLyrs,zoom:tmpZoomLevel,
           <div className="flex flex-col gap-4 mt-2">
             <Button isIconOnly variant="bordered" className="bg-blue-900">
               <BsFillArrowLeftSquareFill
-                className={`cursor-pointer text-white h-6 w-6 ${
-                  isSideNavOpen ? "" : "rotate-180"
-                }`}
+                className={`cursor-pointer text-white h-6 w-6 ${isSideNavOpen ? "" : "rotate-180"
+                  }`}
                 onClick={() => collapsibleBtnHandler()}
               />
             </Button>
@@ -2118,41 +2186,38 @@ updateWindowsHistoryCmap(  {isSideNavOpen,lyrs:propertiesLyrs,zoom:tmpZoomLevel,
         </div>
         <div className="flex items-end absolute left-0 bottom-1 z-50  " >
 
-        <ButtonGroup
-          variant="faded"
-          // className="absolute left-0 bottom-1 z-50 "
-          color="primary"
-        >
-          <Button
-            onClick={() => setLyrs("m")}
-            className={`${
-              propertiesLyrs == "m"
-                ? "bg-blue-900 text-white"
-                : "bg-blue-700 text-white"
-            }  w-22`}
+          <ButtonGroup
+            variant="faded"
+            // className="absolute left-0 bottom-1 z-50 "
+            color="primary"
           >
-            Map
-          </Button>
-          <Button
-            onClick={() => setLyrs("s")}
-            className={`${
-              propertiesLyrs == "s"
-                ? "bg-blue-900 text-white"
-                : "bg-blue-700 text-white"
-            }  w-22`}
-          >
-            Satellite
-          </Button>
-          <Button
-            onClick={() => setLyrs("p")}
-            className={`${
-              propertiesLyrs == "p"
-                ? "bg-blue-900 text-white"
-                : "bg-blue-700 text-white"
-            }  w-22`}
-          >
-            Terrain
-          </Button>
+            <Button
+              onClick={() => setLyrs("m")}
+              className={`${propertiesLyrs == "m"
+                  ? "bg-blue-900 text-white"
+                  : "bg-blue-700 text-white"
+                }  w-22`}
+            >
+              Map
+            </Button>
+            <Button
+              onClick={() => setLyrs("s")}
+              className={`${propertiesLyrs == "s"
+                  ? "bg-blue-900 text-white"
+                  : "bg-blue-700 text-white"
+                }  w-22`}
+            >
+              Satellite
+            </Button>
+            <Button
+              onClick={() => setLyrs("p")}
+              className={`${propertiesLyrs == "p"
+                  ? "bg-blue-900 text-white"
+                  : "bg-blue-700 text-white"
+                }  w-22`}
+            >
+              Terrain
+            </Button>
           </ButtonGroup>
           <div><p>{copyRight}</p></div>
         </div>
@@ -2172,51 +2237,51 @@ updateWindowsHistoryCmap(  {isSideNavOpen,lyrs:propertiesLyrs,zoom:tmpZoomLevel,
           </Button>
         </ButtonGroup>
         <Draggable>
-        <div
-          ref={setPopup}
-          style={{
-            textDecoration: "none",
-            position: "absolute",
-            top: "2px",
-            right: "8px",
-            backgroundColor: "white",
-            boxShadow: "0 1px 4px rgba(0,0,0,0.2)",
-            padding: "15px",
-            borderRadius: "10px",
-            border: "1px solid #cccccc",
-            minWidth: "280px",
-            color: "black",
-            // backgroundColor: "white",
-            // boxShadow: "0 1px 4px rgba(0,0,0,0.2)",
-            // padding: "15px",
-            // borderRadius: "10px",
-            // border: "1px solid #cccccc",
-            // minWidth: "280px",
-            // color: "black",
-          }}
-        >
-          <button
-            type="button"
-            onClick={(e) => {
-              setCoordinates(undefined);
-              e.target.blur();
-              return false;
-            }}
+          <div
+            ref={setPopup}
             style={{
               textDecoration: "none",
               position: "absolute",
               top: "2px",
               right: "8px",
+              backgroundColor: "white",
+              boxShadow: "0 1px 4px rgba(0,0,0,0.2)",
+              padding: "15px",
+              borderRadius: "10px",
+              border: "1px solid #cccccc",
+              minWidth: "280px",
+              color: "black",
+              // backgroundColor: "white",
+              // boxShadow: "0 1px 4px rgba(0,0,0,0.2)",
+              // padding: "15px",
+              // borderRadius: "10px",
+              // border: "1px solid #cccccc",
+              // minWidth: "280px",
+              // color: "black",
             }}
           >
-            ✖
-          </button>
-          <div id="popup-contentp">
-            {/* <p>Info:</p> */}
-            {clickDataLoaded && <PropertyMapClickPopup />}
+            <button
+              type="button"
+              onClick={(e) => {
+                setCoordinates(undefined);
+                e.target.blur();
+                return false;
+              }}
+              style={{
+                textDecoration: "none",
+                position: "absolute",
+                top: "2px",
+                right: "8px",
+              }}
+            >
+              ✖
+            </button>
+            <div id="popup-contentp">
+              {/* <p>Info:</p> */}
+              {clickDataLoaded && <PropertyMapClickPopup />}
+            </div>
           </div>
-          </div>
-          </Draggable>
+        </Draggable>
 
         <Map
           ref={mapRef}
@@ -2300,7 +2365,7 @@ updateWindowsHistoryCmap(  {isSideNavOpen,lyrs:propertiesLyrs,zoom:tmpZoomLevel,
             ref={assetLayerRef}
             style={areaMapAssetVectorLayerStyleFunction}
             minResolution={0}
-             maxResolution={propertyAssetLayerAlwaysVisible ? 40075016 : maxResolutionAssets}
+            maxResolution={propertyAssetLayerAlwaysVisible ? 40075016 : maxResolutionAssets}
           >
             <olSourceVector ref={assetSourceRef}></olSourceVector>
           </olLayerVector>

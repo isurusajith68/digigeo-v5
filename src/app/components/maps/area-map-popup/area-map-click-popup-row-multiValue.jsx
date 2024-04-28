@@ -9,7 +9,7 @@ const AreaMapClickPopupRowMultiValue = ({label, value   }) => {
         {value.map(
           (v) =>
             v && (
-              <span key="v" className="w-64 block pl-2 pt-1 pb-1 pr-1">
+              <span key={v}  className="w-64 block pl-2 pt-1 pb-1 pr-1">
                 {v}
               </span>
             )

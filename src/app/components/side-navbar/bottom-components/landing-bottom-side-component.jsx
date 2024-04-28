@@ -148,7 +148,7 @@ const LandingBottomSideComp = () => {
   const isLandingMapSideNavOpen = useSelector(
     (state) => state.landingMapReducer.isLandingMapSideNavOpen
   );
- 
+
 
 
   //asset type visibility functions
@@ -392,7 +392,7 @@ const LandingBottomSideComp = () => {
                   setLabelState={setlmapsyncPropLableVisibility}
                 >
                   <Image
-                    src="./sync-prop.svg"
+                    src="/fprops.svg"
                     width={25}
                     height={10}
                     alt="prop"

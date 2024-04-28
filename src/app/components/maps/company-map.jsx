@@ -561,7 +561,7 @@ export const CompanyMap = () => {
   const companySyncPropLayerAlwaysVisible = useSelector(
     (state) => state.companyMapReducer.companySyncPropLayerAlwaysVisible
   );
-   
+
 
   const [coordinates, setCoordinates] = useState(undefined);
   const [popup, setPopup] = useState();
@@ -1503,6 +1503,7 @@ export const CompanyMap = () => {
       });
   }, []);
 
+  //single click
   useEffect(() => {
     let clickedOnFeatureTmp = false;
     const fetchData = async () => {
@@ -1661,7 +1662,78 @@ export const CompanyMap = () => {
 
         dispatch(setclicksyncPropertyObject(syncPropertyObject));
       } else {
-        dispatch(setclicksyncPropertyObject(undefined));
+
+        //if sync_prop  is not selected try claimlink prop outline
+        // 
+        const getClinkData = async (propid) => {
+          const url =
+            "https://atlas.ceyinfo.cloud/matlas/syncclaimlink_details/" +
+            propid;
+          //load data from api - changed to return array
+
+          let sponsors = await fetch(url, {
+            method: "GET", // *GET, POST, PUT, DELETE, etc.
+            mode: "cors", // no-cors, *cors, same-origin
+            cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+            credentials: "same-origin", // include, *same-origin, omit
+            headers: {
+              "Content-Type": "application/json",
+              // 'Content-Type': 'application/x-www-form-urlencoded',
+            },
+          })
+            .then((response) => response.json())
+            .then((res) => {
+              // let sponsors = "";
+              // res.data.forEach((element) => {
+              //   sponsors += element.sponsor + "/";
+              // });
+              return res.data;
+            });
+
+          // sponsors = sponsors.slice(0, -1);
+          // console.log("sponsors", sponsors);
+          return sponsors;
+        };
+
+        const selPropertyOutlineFeatures =
+          claimLinkSourceRef?.current?.getFeaturesAtCoordinate(coordinates) ?? [];
+        console.log("selPropertyOutlineFeatures", selPropertyOutlineFeatures)
+        if (selPropertyOutlineFeatures.length > 0) {
+          clickedOnFeatureTmp = true;
+          const propId = selPropertyOutlineFeatures?.[0]?.get("propertyid")
+
+          const clinkDetails = await getClinkData(propId)
+
+          console.log("clinkDetails", clinkDetails, propId)
+
+          const prop_name = clinkDetails?.[0]?.prop_name ?? "";
+          const owners = clinkDetails?.[0]?.owners ?? "";
+          let name1 = clinkDetails?.[0]?.name ?? "";
+          const stateProv = clinkDetails?.[0]?.state_prov ?? "";
+          const country = clinkDetails?.[0]?.country ?? "";
+          const area = clinkDetails?.[0]?.area ?? "";
+          // const selSynClaimLinkFeatures =
+          //   sync_claimLinkLayerSource?.getFeaturesAtCoordinate(evt.coordinate) ?? [];
+          const syncPropertyObject1 = {
+            prop_name,
+            owners,
+            name: name1,
+            stateProv,
+            country,
+            area,
+          };
+
+
+          dispatch(setclicksyncPropertyObject(syncPropertyObject1));
+
+        } else {
+        
+          dispatch(setclicksyncPropertyObject(undefined));
+        }
+
+
+
+
       }
       const claimFeatures =
         claimVectorImgSourceRef?.current?.getFeaturesAtCoordinate(
@@ -1866,8 +1938,8 @@ export const CompanyMap = () => {
             <Button
               onClick={() => setLyrs("m")}
               className={`${companyLyrs == "m"
-                  ? "bg-blue-900 text-white"
-                  : "bg-blue-700 text-white"
+                ? "bg-blue-900 text-white"
+                : "bg-blue-700 text-white"
                 } w-22`}
             >
               Map
@@ -1875,8 +1947,8 @@ export const CompanyMap = () => {
             <Button
               onClick={() => setLyrs("s")}
               className={`${companyLyrs == "s"
-                  ? "bg-blue-900 text-white"
-                  : "bg-blue-700 text-white"
+                ? "bg-blue-900 text-white"
+                : "bg-blue-700 text-white"
                 }  w-22 `}
             >
               Satellite
@@ -1884,8 +1956,8 @@ export const CompanyMap = () => {
             <Button
               onClick={() => setLyrs("p")}
               className={`${companyLyrs == "p"
-                  ? "bg-blue-900 text-white"
-                  : "bg-blue-700 text-white"
+                ? "bg-blue-900 text-white"
+                : "bg-blue-700 text-white"
                 }  w-22 `}
             >
               Terrain
@@ -1910,51 +1982,51 @@ export const CompanyMap = () => {
           </Button>
         </ButtonGroup>
         <Draggable>
-        <div
-          ref={setPopup}
-          style={{
-            textDecoration: "none",
-            position: "absolute",
-            top: "2px",
-            right: "8px",
-            backgroundColor: "white",
-            boxShadow: "0 1px 4px rgba(0,0,0,0.2)",
-            padding: "15px",
-            borderRadius: "10px",
-            border: "1px solid #cccccc",
-            minWidth: "280px",
-            color: "black",
-            // backgroundColor: "white",
-            // boxShadow: "0 1px 4px rgba(0,0,0,0.2)",
-            // padding: "15px",
-            // borderRadius: "10px",
-            // border: "1px solid #cccccc",
-            // minWidth: "280px",
-            // color: "black",
-          }}
-        >
-          <button
-            type="button"
-            onClick={(e) => {
-              setCoordinates(undefined);
-              e.target.blur();
-              return false;
-            }}
+          <div
+            ref={setPopup}
             style={{
               textDecoration: "none",
               position: "absolute",
               top: "2px",
               right: "8px",
+              backgroundColor: "white",
+              boxShadow: "0 1px 4px rgba(0,0,0,0.2)",
+              padding: "15px",
+              borderRadius: "10px",
+              border: "1px solid #cccccc",
+              minWidth: "280px",
+              color: "black",
+              // backgroundColor: "white",
+              // boxShadow: "0 1px 4px rgba(0,0,0,0.2)",
+              // padding: "15px",
+              // borderRadius: "10px",
+              // border: "1px solid #cccccc",
+              // minWidth: "280px",
+              // color: "black",
             }}
           >
-            ✖
-          </button>
-          <div id="popup-contentc">
-            {/* <p>Info:</p> */}
-            {clickDataLoaded && <CompanyMapClickPopup />}
+            <button
+              type="button"
+              onClick={(e) => {
+                setCoordinates(undefined);
+                e.target.blur();
+                return false;
+              }}
+              style={{
+                textDecoration: "none",
+                position: "absolute",
+                top: "2px",
+                right: "8px",
+              }}
+            >
+              ✖
+            </button>
+            <div id="popup-contentc">
+              {/* <p>Info:</p> */}
+              {clickDataLoaded && <CompanyMapClickPopup />}
+            </div>
           </div>
-        </div>
-          </Draggable>
+        </Draggable>
         <Map
           ref={mapRef}
           style={{
@@ -2052,7 +2124,7 @@ export const CompanyMap = () => {
             ref={syncPropVectorLayerRef}
             style={styleFunctionSyncProperties}
             minResolution={0}
-            maxResolution={companySyncPropLayerAlwaysVisible ? 40075016 : maxResolutionPropPoints  }
+            maxResolution={companySyncPropLayerAlwaysVisible ? 40075016 : maxResolutionPropPoints}
           >
             <olSourceVector ref={syncPropSourceRef}></olSourceVector>
           </olLayerVector>

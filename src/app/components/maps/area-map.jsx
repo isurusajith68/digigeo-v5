@@ -1591,6 +1591,7 @@ export const AreaMap = () => {
 
   //single click -
   useEffect(() => {
+    console.log("aaaaa",)
     let clickedOnFeatureTmp = false;
     const fetchData = async () => {
       let extentDim;
@@ -1746,7 +1747,76 @@ export const AreaMap = () => {
         };
         setsyncPropertyObject(syncPropertyObject1);
       } else {
-        dispatch(setclicksyncPropertyObject(undefined));
+
+        //if sync_prop  is not selected try claimlink prop outline
+        // 
+        const getClinkData = async (propid) => {
+          const url =
+            "https://atlas.ceyinfo.cloud/matlas/syncclaimlink_details/" +
+            propid;
+          //load data from api - changed to return array
+
+          let sponsors = await fetch(url, {
+            method: "GET", // *GET, POST, PUT, DELETE, etc.
+            mode: "cors", // no-cors, *cors, same-origin
+            cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+            credentials: "same-origin", // include, *same-origin, omit
+            headers: {
+              "Content-Type": "application/json",
+              // 'Content-Type': 'application/x-www-form-urlencoded',
+            },
+          })
+            .then((response) => response.json())
+            .then((res) => {
+              // let sponsors = "";
+              // res.data.forEach((element) => {
+              //   sponsors += element.sponsor + "/";
+              // });
+              return res.data;
+            });
+
+          // sponsors = sponsors.slice(0, -1);
+          // console.log("sponsors", sponsors);
+          return sponsors;
+        };
+
+        const selPropertyOutlineFeatures =
+          claimLinkSourceRef?.current?.getFeaturesAtCoordinate(coordinates) ?? [];
+        console.log("selPropertyOutlineFeatures", selPropertyOutlineFeatures)
+          if (selPropertyOutlineFeatures.length > 0) {
+          clickedOnFeatureTmp = true;
+            const propId = selPropertyOutlineFeatures?.[0]?.get("propertyid")
+            
+          const clinkDetails = await getClinkData(propId)
+
+          console.log("clinkDetails", clinkDetails, propId)
+
+          const prop_name = clinkDetails?.[0]?.prop_name ?? "";
+          const owners = clinkDetails?.[0]?.owners ?? "";
+          let name1 = clinkDetails?.[0]?.name ?? "";
+          const stateProv = clinkDetails?.[0]?.state_prov ?? "";
+          const country = clinkDetails?.[0]?.country ?? "";
+          const area = clinkDetails?.[0]?.area ?? "";
+          // const selSynClaimLinkFeatures =
+          //   sync_claimLinkLayerSource?.getFeaturesAtCoordinate(evt.coordinate) ?? [];
+          const syncPropertyObject1 = {
+            prop_name,
+            owners,
+            name: name1,
+            stateProv,
+            country,
+            area,
+          };
+          console.log("syncPropertyObject1",syncPropertyObject1,)
+          setsyncPropertyObject(syncPropertyObject1);
+        } else {
+          setsyncPropertyObject(undefined);
+          dispatch(setclicksyncPropertyObject(undefined));
+        }
+
+
+
+        
       }
       const claimFeatures =
         claimVectorImgSourceRef?.current?.getFeaturesAtCoordinate(
