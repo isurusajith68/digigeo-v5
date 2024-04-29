@@ -1,12 +1,12 @@
 "use client"
 
 import Image from "next/image";
-import { useEffect, useState,useRef,useMemo } from "react";
+import { useEffect, useState, useRef, useMemo, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import GeoJSON from "ol/format/GeoJSON";
 import { MdInfoOutline } from "react-icons/md";
 import { Circle as CircleStyle, Fill, Stroke, Style, Icon } from "ol/style";
-import { setamapNavigationExtent, setamapNavigationHighlightFProps, setareaFlyToLocation,setnavigatedFPropId } from "@/store/area-map/area-map-slice";
+import { setamapNavigationExtent, setamapNavigationHighlightFProps, setareaFlyToLocation, setnavigatedFPropId } from "@/store/area-map/area-map-slice";
 import { radioGroup } from "@nextui-org/react";
 import DialogComponent from './../../../utils/dialog/dialog';
 import AreaMapClickPopup from "../../maps/area-map-popup/area-map-click-popup";
@@ -20,8 +20,8 @@ const AreaFCompanyFProperties = ({ companyid }) => {
   const [showDlg, setshowDlg] = useState("n");
   const [fpropObj, setfpropObj] = useState();
   const [loadData, setloadData] = useState(false);
-  const  blocknoRef   = useRef(0)
-  const  pidRef   = useRef(0)
+  const blocknoRef = useRef(0)
+  const pidRef = useRef(0)
 
   const featuredPropertyFeatures = useSelector(
     (state) => state.areaMapReducer.featuredPropertyFeatures
@@ -30,27 +30,27 @@ const AreaFCompanyFProperties = ({ companyid }) => {
   const dispatch = useDispatch();
 
   const areaName = useSelector((state) => state.areaMapReducer.areaMiningArea);
-   
 
-  useEffect(()=>{
+
+  useEffect(() => {
     setunNamedFeatureObjects([]);
-    setloadData((t)=> !t)
-    
-  },[companyid])
+    setloadData((t) => !t)
+
+  }, [companyid])
 
   //set unnmaed props
   useEffect(() => {
-      //console.log("unNamedFeatureObjects2",unNamedFeatureObjects)
-    
+    //console.log("unNamedFeatureObjects2",unNamedFeatureObjects)
+    const unNamedPropsTmp = []
     if (featuredPropertyFeatures?.features) {
       const e = new GeoJSON().readFeatures(featuredPropertyFeatures);
       let b = 0;
       for (let index = 0; index < e.length; index++) {
         const element = e[index];
-          if (!element.get("propertyid")) {
-              pidRef.current = pidRef.current - 1;
-              element.set("propertyid",pidRef.current)
-            }
+        if (!element.get("propertyid")) {
+          pidRef.current = pidRef.current - 1;
+          element.set("propertyid", pidRef.current)
+        }
 
 
         if (!element.get("prop_name")) {
@@ -58,27 +58,28 @@ const AreaFCompanyFProperties = ({ companyid }) => {
             b++;
             element.set("prop_name_empty", "Block-" + b);
 
-          
+            unNamedPropsTmp.push(element)
 
-            setunNamedFeatureObjects((p) => [...p, element]);
+            //setunNamedFeatureObjects((p) => [...p, element]);
             // console.log("b",b)
           }
         }
       }
+      setunNamedFeatureObjects(unNamedPropsTmp);
 
       setfeaturesObjects(e);
     } else {
       console.log("lop2")
     }
 
- 
+
   }, [loadData]);
 
   //flyto
 
   const flytoHandler = (feature) => {
-    
-     
+
+
     const polygon = feature.getGeometry();
     let loc = [];
     if (polygon) {
@@ -86,7 +87,7 @@ const AreaFCompanyFProperties = ({ companyid }) => {
       loc = [(extent[0] + extent[2]) / 2, (extent[1] + extent[3]) / 2];
     }
     //flyTo
-    dispatch(setareaFlyToLocation( loc));
+    dispatch(setareaFlyToLocation(loc));
 
     //set style
     dispatch(setnavigatedFPropId(feature.get("id")));
@@ -100,7 +101,7 @@ const AreaFCompanyFProperties = ({ companyid }) => {
     //  const fSelected = e.find(f=> f.get("id") == feature.get("id") )
     //  console.log("fSelected",fSelected)
     //  fSelected?.setStyle(selectStyle);
-    
+
   };
 
   const flytoMultipleHandler = (features) => {
@@ -109,36 +110,36 @@ const AreaFCompanyFProperties = ({ companyid }) => {
     const coords = []
     for (const f of features) {
       const polygon = f.getGeometry();
-     
+
       if (polygon) {
         const c = polygon.getCoordinates();
         console.log("coords-c", c[0][0],)
-       coords.push(...c[0][0])
+        coords.push(...c[0][0])
         // c.forEach((i)=> coords.push(i[0]))
-         
+
       }
 
-      
-        
-      
+
+
+
     }
-    
+
 
     console.log("coords", coords,)
     const bounds = boundingExtent(coords)
     console.log("bounds", bounds,)
-  //   console.log("bounds",bounds,)
-  //  // const polygon = feature.getGeometry();
-  //   let loc = [];
-  //   if (bounds) {
-     
-  //     loc = getCenter(bounds);
-  //     console.log("loc",loc,)
-  //   }
+    //   console.log("bounds",bounds,)
+    //  // const polygon = feature.getGeometry();
+    //   let loc = [];
+    //   if (bounds) {
+
+    //     loc = getCenter(bounds);
+    //     console.log("loc",loc,)
+    //   }
     //flyTo
     // dispatch(setareaFlyToLocation(loc));
     dispatch(setamapNavigationExtent(bounds));
-    dispatch(setamapNavigationHighlightFProps(features.map(f=>f.get("id"))));
+    dispatch(setamapNavigationHighlightFProps(features.map(f => f.get("id"))));
 
     //set style
     //dispatch(setnavigatedFPropId(features[0].get("id")));
@@ -155,77 +156,77 @@ const AreaFCompanyFProperties = ({ companyid }) => {
 
   };
 
-  const showProperties =async (e,companyid,propertyid,prop_name,hotplayid) => {
-       
-           const getData = async (hotplayid) => {
-          const url =
-            "https://atlas.ceyinfo.cloud/matlas/getownersbyhotplayid/" +
-            hotplayid;
-          //load data from api - changed to return array
+  const showProperties = async (e, companyid, propertyid, prop_name, hotplayid) => {
 
-          let sponsors = await fetch(url, {
-            method: "GET", // *GET, POST, PUT, DELETE, etc.
-            mode: "cors", // no-cors, *cors, same-origin
-            cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-            credentials: "same-origin", // include, *same-origin, omit
-            headers: {
-              "Content-Type": "application/json",
-              // 'Content-Type': 'application/x-www-form-urlencoded',
-            },
-          })
-            .then((response) => response.json())
-            .then((res) => {
-              // let sponsors = "";
-              // res.data.forEach((element) => {
-              //   sponsors += element.sponsor + "/";
-              // });
-              return res.data;
-            });
+    const getData = async (hotplayid) => {
+      const url =
+        "https://atlas.ceyinfo.cloud/matlas/getownersbyhotplayid/" +
+        hotplayid;
+      //load data from api - changed to return array
 
-          // sponsors = sponsors.slice(0, -1);
-          // console.log("sponsors", sponsors);
-          return sponsors;
-        };
-        //console.log("hotplayid",hotplayid)
-        const dd = await getData(hotplayid) 
-        console.log("dd",dd)
-        const d= dd?.[0] 
+      let sponsors = await fetch(url, {
+        method: "GET", // *GET, POST, PUT, DELETE, etc.
+        mode: "cors", // no-cors, *cors, same-origin
+        cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+        credentials: "same-origin", // include, *same-origin, omit
+        headers: {
+          "Content-Type": "application/json",
+          // 'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      })
+        .then((response) => response.json())
+        .then((res) => {
+          // let sponsors = "";
+          // res.data.forEach((element) => {
+          //   sponsors += element.sponsor + "/";
+          // });
+          return res.data;
+        });
 
-        const sponsoredowners = d?.sponsor ?? "";
-        let commo_ref = d?.commo_ref ?? "";
-        let assets = d?.assets ?? "";
-        let resources = d?.resources ?? "";
-        let map_area = d?.map_area ?? "";
-        let owners = d?.owners ?? "";
-        let prop_exturl = d?.prop_exturl ?? "";
-        let sale_name = d?.sale_name ?? "";
-        let profile = d?.profile ?? "";
-        
-         
-        const fPropertyObject1 = {
-          sponsoredowners,
-          prop_name,
-          commo_ref,
-          assets,
-          resources,
-          map_area,
-          owners,
-          prop_exturl,
-          sale_name,
-          propertyid,
-          profile
-        };
+      // sponsors = sponsors.slice(0, -1);
+      // console.log("sponsors", sponsors);
+      return sponsors;
+    };
+    //console.log("hotplayid",hotplayid)
+    const dd = await getData(hotplayid)
+    console.log("dd", dd)
+    const d = dd?.[0]
 
-    
+    const sponsoredowners = d?.sponsor ?? "";
+    let commo_ref = d?.commo_ref ?? "";
+    let assets = d?.assets ?? "";
+    let resources = d?.resources ?? "";
+    let map_area = d?.map_area ?? "";
+    let owners = d?.owners ?? "";
+    let prop_exturl = d?.prop_exturl ?? "";
+    let sale_name = d?.sale_name ?? "";
+    let profile = d?.profile ?? "";
+
+
+    const fPropertyObject1 = {
+      sponsoredowners,
+      prop_name,
+      commo_ref,
+      assets,
+      resources,
+      map_area,
+      owners,
+      prop_exturl,
+      sale_name,
+      propertyid,
+      profile
+    };
+
+
     setfpropObj(fPropertyObject1)
     setshowDlg("y")
   }
 
   const dialogStateCallBack = () => {
-     setshowDlg("n");
+    setshowDlg("n");
   }
 
-   
+
   const getDomElements = useMemo(() => {
 
     const companyProps = featureObjects.filter(p => p.get("companyid") == companyid)
@@ -234,140 +235,33 @@ const AreaFCompanyFProperties = ({ companyid }) => {
 
 
     namedProps.sort((a, b) => { return a.get("prop_name").toUpperCase() > b.get("prop_name").toUpperCase() ? 1 : -1 })
-     
+
     function myCallback({ values_ }) {
       return values_.prop_name;
     }
     const groupByPropName = Object.groupBy(namedProps, myCallback);
-    
+
     //for (const companyName in groupByPropName) {
-    const r= Object.keys(groupByPropName).map((propName) => {
-      
+    const r = Object.keys(groupByPropName).map((propName) => {
+
       const fps = groupByPropName[propName]
       const fp = fps[0]
-    if (fps.length == 1) {
-     const fp = fps[0]
-      return (
-        <div
-          key={fp.get("propertyid")}
-          className="hover:bg-blue-200 odd:bg-slate-200  px-2 text-black"
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            width: "100%",
-          }}
-        >
-          <div className="flex">
-            <Image src="./sync-prop.svg" width={25} height={10} alt="prop" />
-            <div> {fp.get("prop_name") ?? "Block" + blocknoRef.current}</div>
-          </div>
-          <div className="flex gap-1">
-            <span className="">
-              <MdInfoOutline
-                className="cursor-pointer h-4 w-4 hover:scale-125 "
-                onClick={(e) =>
-                  showProperties(
-                    e,
-                    companyid,
-                    fp.get("propertyid"),
-                    fp.get("prop_name"),
-                    fp.get("id")
-                  )
-                }
-              //onClick={() => setIsOpenIn(true)}
-              // onClick={() => console.log("title", title)}
-              />
-            </span>
-
-            <Image
-              src="./navigation.svg"
-              width={15}
-              height={15}
-              alt="prop"
-              className=" cursor-pointer hover:scale-125 "
-              onClick={(e) => {
-                flytoHandler(fp);
-              }}
-            />
-          </div>
-        </div>
-      );
-    } else {
-      return (
-        <div
-          key={fp.get("propertyid")}
-          className="hover:bg-blue-200 odd:bg-slate-200  px-2 text-black"
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            width: "100%",
-          }}
-        >
-          <div className="flex">
-            <Image src="./sync-prop.svg" width={25} height={10} alt="prop" />
-            <div> {fp.get("prop_name") + "[" + fps.length +" polygons]" }</div>
-          </div>
-          <div className="flex gap-1">
-            <span className="">
-              <MdInfoOutline
-                className="cursor-pointer h-4 w-4 hover:scale-125 "
-                onClick={(e) =>
-                  showProperties(
-                    e,
-                    companyid,
-                    fp.get("propertyid"),
-                    fp.get("prop_name"),
-                    fp.get("id")
-                  )
-                }
-              //onClick={() => setIsOpenIn(true)}
-              // onClick={() => console.log("title", title)}
-              />
-            </span>
-
-            <Image
-              src="./navigation.svg"
-              width={15}
-              height={15}
-              alt="prop"
-              className=" cursor-pointer hover:scale-125 "
-              onClick={(e) => {
-                flytoMultipleHandler(fps);
-              }}
-            />
-          </div>
-        </div>
-        
-        )
-    }
-      
-  });
-     
-    // const ee= unNamedFeatureObjects.filter(r=> !r.get("propertyid"))
-
-    console.log("unNamedFeatureObjects", unNamedFeatureObjects)
-    
-    const unNamedProps = unNamedFeatureObjects.map((fp) => {
-        
+      if (fps.length == 1) {
+        const fp = fps[0]
         return (
           <div
             key={fp.get("propertyid")}
-            className="hover:bg-blue-200 odd:bg-slate-200    px-2"
+            className="hover:bg-blue-200 odd:bg-slate-200  px-2 text-black"
             style={{
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
               width: "100%",
             }}
-            onClick={(e) => {
-              flytoHandler(fp);
-            }}
           >
             <div className="flex">
               <Image src="./sync-prop.svg" width={25} height={10} alt="prop" />
-              <div> {fp.get("prop_name_empty")}</div>
+              <div> {fp.get("prop_name") ?? "Block" + blocknoRef.current}</div>
             </div>
             <div className="flex gap-1">
               <span className="">
@@ -382,21 +276,128 @@ const AreaFCompanyFProperties = ({ companyid }) => {
                       fp.get("id")
                     )
                   }
+                //onClick={() => setIsOpenIn(true)}
+                // onClick={() => console.log("title", title)}
                 />
               </span>
+
               <Image
                 src="./navigation.svg"
                 width={15}
                 height={15}
                 alt="prop"
-                className=" cursor-pointer hover:scale-125"
+                className=" cursor-pointer hover:scale-125 "
+                onClick={(e) => {
+                  flytoHandler(fp);
+                }}
               />
             </div>
           </div>
         );
-      
+      } else {
+        return (
+          <div
+            key={fp.get("propertyid")}
+            className="hover:bg-blue-200 odd:bg-slate-200  px-2 text-black"
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              width: "100%",
+            }}
+          >
+            <div className="flex">
+              <Image src="./sync-prop.svg" width={25} height={10} alt="prop" />
+              <div> {fp.get("prop_name") + "[" + fps.length + " polygons]"}</div>
+            </div>
+            <div className="flex gap-1">
+              <span className="">
+                <MdInfoOutline
+                  className="cursor-pointer h-4 w-4 hover:scale-125 "
+                  onClick={(e) =>
+                    showProperties(
+                      e,
+                      companyid,
+                      fp.get("propertyid"),
+                      fp.get("prop_name"),
+                      fp.get("id")
+                    )
+                  }
+                //onClick={() => setIsOpenIn(true)}
+                // onClick={() => console.log("title", title)}
+                />
+              </span>
+
+              <Image
+                src="./navigation.svg"
+                width={15}
+                height={15}
+                alt="prop"
+                className=" cursor-pointer hover:scale-125 "
+                onClick={(e) => {
+                  flytoMultipleHandler(fps);
+                }}
+              />
+            </div>
+          </div>
+
+        )
+      }
+
     });
-   
+
+    // const ee= unNamedFeatureObjects.filter(r=> !r.get("propertyid"))
+
+    console.log("unNamedFeatureObjects", unNamedFeatureObjects)
+
+    const unNamedProps = unNamedFeatureObjects.map((fp) => {
+
+      return (
+        <div
+          key={fp.get("propertyid")}
+          className="hover:bg-blue-200 odd:bg-slate-200    px-2"
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            width: "100%",
+          }}
+          onClick={(e) => {
+            flytoHandler(fp);
+          }}
+        >
+          <div className="flex">
+            <Image src="./sync-prop.svg" width={25} height={10} alt="prop" />
+            <div> {fp.get("prop_name_empty")}</div>
+          </div>
+          <div className="flex gap-1">
+            <span className="">
+              <MdInfoOutline
+                className="cursor-pointer h-4 w-4 hover:scale-125 "
+                onClick={(e) =>
+                  showProperties(
+                    e,
+                    companyid,
+                    fp.get("propertyid"),
+                    fp.get("prop_name"),
+                    fp.get("id")
+                  )
+                }
+              />
+            </span>
+            <Image
+              src="./navigation.svg"
+              width={15}
+              height={15}
+              alt="prop"
+              className=" cursor-pointer hover:scale-125"
+            />
+          </div>
+        </div>
+      );
+
+    });
+
     //heading un named
 
     const h = (
@@ -411,15 +412,15 @@ const AreaFCompanyFProperties = ({ companyid }) => {
         }}
       >
         <div className="flex">
-          {unNamedProps.length > 0 ?  <div>{"Unnamed Properties"}</div> : null}
+          {unNamedProps.length > 0 ? <div>{"Unnamed Properties"}</div> : null}
         </div>
       </div>
     );
 
-    return ([...r,h,...unNamedProps]);
+    return ([...r, h, ...unNamedProps]);
   }, [featureObjects]);
-  
-//const AreaMapClickPopup = ({ claimObj, fpropObj, assetObj, syncPropObj }) => { propertyInfo
+
+  //const AreaMapClickPopup = ({ claimObj, fpropObj, assetObj, syncPropObj }) => { propertyInfo
 
   return (
     <div
@@ -451,7 +452,7 @@ const AreaFCompanyFProperties = ({ companyid }) => {
           onClose={() => console.log("close")}
           onOk={() => console.log("ok")}
           showDialog={showDlg}
-          dialogStateCallBack ={dialogStateCallBack}
+          dialogStateCallBack={dialogStateCallBack}
         >
           <AreaMapClickPopup
             claimObj={{}}
