@@ -41,6 +41,8 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
   const [mapViewScale, setmapViewScale] = useState({});
   const [areaId, setareaId] = useState(0);
 
+  const areaInputRef = useRef(null)
+
   const selectedMap = useSelector(
     (state) => state.mapSelectorReducer.selectedMap
   );
@@ -251,6 +253,9 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
   //const animals = [{value:"qqq", label:"q1"},{value:"qqq2", label:"q2"},{value:"qqq3", label:"q3"}]
   //init use effect
   useEffect(() => {
+
+    areaInputRef.current?.focus();
+    
     // const f = async () => {
     //   const res = await fetch(
     //     `https://atlas.ceyinfo.cloud/matlas/countrylist`,
@@ -402,7 +407,7 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
                 inputValue={country}
                 defaultSelectedKey={country}
                 classNames={customClassNames}
-                inputProps={{ className: "dark:text-black text-black" }}
+                inputProps={{ className: "dark:text-black text-black", ref:areaInputRef }}
                 
               >
                 {countryList.map((countryObj) => (

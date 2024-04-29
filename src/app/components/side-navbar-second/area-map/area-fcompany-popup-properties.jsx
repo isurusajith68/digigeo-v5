@@ -307,7 +307,7 @@ const AreaFCompanyFProperties = ({ companyid }) => {
         >
           <div className="flex">
             <Image src="./sync-prop.svg" width={25} height={10} alt="prop" />
-            <div> {fp.get("prop_name") + "[" + fps.length +"]" }</div>
+            <div> {fp.get("prop_name") + "[" + fps.length +" polygons]" }</div>
           </div>
           <div className="flex gap-1">
             <span className="">
@@ -347,7 +347,7 @@ const AreaFCompanyFProperties = ({ companyid }) => {
      
     // const ee= unNamedFeatureObjects.filter(r=> !r.get("propertyid"))
 
-    // console.log("unNamedFeatureObjects", ee)
+    console.log("unNamedFeatureObjects", unNamedFeatureObjects)
     
     const unNamedProps = unNamedFeatureObjects.map((fp) => {
         
