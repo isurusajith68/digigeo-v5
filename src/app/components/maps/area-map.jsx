@@ -513,6 +513,8 @@ export const AreaMap = () => {
   const [center, setCenter] = useState("");
   const [zoom, setZoom] = useState("");
   const [prevSelAreaFeature, setprevSelAreaFeature] = useState();
+  const [prevSelFeaturedProps, setprevSelFeaturedProps] = useState([]);
+  // const [unselectFProps, setunselectFProps] = useState(0);
 
   const [clickDataLoaded, setclickDataLoaded] = useState(false);
 
@@ -574,36 +576,83 @@ export const AreaMap = () => {
   const [mapViewScales, setmapViewScales] = useState([]);
 
   // const pathname2 = usePathname()
-//highlight fprops
+  //highlight fprops
   useEffect(() => {
-    if (navigatedFPropertyRef.current) {
-      const fp = navigatedFPropertyRef.current.find(
-        (f) => f.get("id") == navigatedFPropId
-      );
+    if (navigatedFPropId != 0) {
+      if (fPropSourceRef.current) {
+        //set prev selected styles to null
+        for (const fid of prevSelFeaturedProps) {
 
-      const selectStyle = new Style({ zIndex: 1 });
-      selectStyle.setRenderer(areaMApPropertyVectorRendererFuncV2Highlight);
+          const fp = fPropSourceRef?.current?.getFeatures().find(f => f.get("id") == fid)
+          
+          fp?.setStyle(undefined)
+          mapRef.current.render()
+        }
+        setprevSelFeaturedProps([])
 
-      fp?.setStyle(selectStyle);
+
+
+        // prevSelFeaturedProps
+        const fp = fPropSourceRef.current.getFeatures().find(
+          (f) => f.get("id") == navigatedFPropId
+        );
+        if (fp) {
+         // setunselectFProps((p) => p + 1)
+         
+          const selectStyle = new Style({ zIndex: 1 });
+          selectStyle.setRenderer(areaMApPropertyVectorRendererFuncV2Highlight);
+
+          fp.setStyle(selectStyle);
+          mapRef.current.render()
+          setprevSelFeaturedProps([navigatedFPropId])
+
+        }
+      }
     }
   }, [navigatedFPropId]);
 
   useEffect(() => {
-    console.log("style fp set0",)
+    //unselect prev styles
+    for (const fid of prevSelFeaturedProps) {
+
+      const fp = fPropSourceRef?.current?.getFeatures().find(f => f.get("id") == fid)
+      
+      fp?.setStyle(undefined)
+    }
+    mapRef.current.render();
+    setprevSelFeaturedProps([])
+
     if (amapNavigationHighlightFProps.length > 0) {
-      console.log("style fp set1",)
+     
       for (const fpid of amapNavigationHighlightFProps) {
-       const fp = fPropSourceRef?.current?.getFeatures().find(f => f.get("id") == fpid)
+        const fp = fPropSourceRef?.current?.getFeatures().find(f => f.get("id") == fpid)
         if (fp) {
-          console.log("style fp set2",)
+         
           const selectStyle = new Style({ zIndex: 1 });
           selectStyle.setRenderer(areaMApPropertyVectorRendererFuncV2Highlight);
 
           fp?.setStyle(selectStyle);
         }
+
       }
+      setprevSelFeaturedProps(amapNavigationHighlightFProps)
+
     }
   }, [amapNavigationHighlightFProps]);
+
+  // useEffect(() => { //unse\lect prev styles
+  //   console.log("fp- unselectFProps", unselectFProps,)
+  //   if (unselectFProps) {
+  //     console.log("fp- prevSelFeaturedProps", prevSelFeaturedProps,)
+  //     for (const fid of prevSelFeaturedProps) {
+
+  //       const fp = fPropSourceRef?.current?.getFeatures().find(f => f.get("id") == fid)
+  //       console.log("fp - unselect ran", fp,)
+  //       fp?.setStyle(undefined)
+  //     }
+  //     setprevSelFeaturedProps([])
+  //   }
+  // }, [unselectFProps])
 
 
   useEffect(() => {
@@ -949,9 +998,9 @@ export const AreaMap = () => {
 
         }
       } else { //fixed zoom
-       
-          mapRef.current?.getView()?.setZoom(areaZoomLevel);
-        
+
+        mapRef.current?.getView()?.setZoom(areaZoomLevel);
+
       }
     }
   }, [syncPropertyFeatures]);
@@ -960,7 +1009,7 @@ export const AreaMap = () => {
     fPropSourceRef?.current?.clear();
     if (featuredPropertyFeatures?.features) {
       const e = new GeoJSON().readFeatures(featuredPropertyFeatures);
-      navigatedFPropertyRef.current = e;
+      // navigatedFPropertyRef.current = e;
       fPropSourceRef?.current?.addFeatures(e);
       fPropSourceLabelRef?.current?.addFeatures(e);
 
@@ -1030,14 +1079,14 @@ export const AreaMap = () => {
 
 
   useEffect(() => {
-     
-    if (  amapNavigationExtent.length>0) {
-      
+
+    if (amapNavigationExtent.length > 0) {
+
       mapRef.current?.getView()?.fit(amapNavigationExtent, {
-          padding: [100,100, 100, 100],
-          duration: 3000,
-        });
-      
+        padding: [100, 100, 100, 100],
+        duration: 3000,
+      });
+
 
     }
   }, [amapNavigationExtent])
@@ -1216,7 +1265,7 @@ export const AreaMap = () => {
         "";
     const s = new Style({
       text: new Text({
-        text: amapsyncPropLableVisible ? t.toString():"",
+        text: amapsyncPropLableVisible ? t.toString() : "",
         // text: feature.get("propertyid") ??"", prop_name, prop_alias
         offsetX: 0,
         offsetY: -10,
@@ -1425,16 +1474,16 @@ export const AreaMap = () => {
   // }
 
   const styleFunctionAreaBoundary = (feature, resolution) => {
-    
-    
-    
+
+
+
     let txtObjAreaName
     if (resolution < 3000) {
       txtObjAreaName = new Text({
         //       // textAlign: align == "" ? undefined : align,
         //       // textBaseline: baseline,
-        font:  "18px serif",
-        text: amapAreaLableVisible ? feature.get("area_name") :"",
+        font: "18px serif",
+        text: amapAreaLableVisible ? feature.get("area_name") : "",
         fill: new Fill({ color: "red" }),
         // stroke: new Stroke({ color: outlineColor, width: outlineWidth }),
         offsetX: 0,
@@ -1444,9 +1493,9 @@ export const AreaMap = () => {
         overflow: true,
         // rotation: rotation,
       })
-    }  
+    }
 
-   
+
 
 
     const s = new Style({
@@ -1533,7 +1582,7 @@ export const AreaMap = () => {
       //       // textAlign: align == "" ? undefined : align,
       //       // textBaseline: baseline,
       font: "10px serif",
-      text: amapClaimLableVisible ? claimno :"",
+      text: amapClaimLableVisible ? claimno : "",
       // fill: new Fill({ color: fillColor }),
       // stroke: new Stroke({ color: outlineColor, width: outlineWidth }),
       offsetX: 2,
@@ -1783,10 +1832,10 @@ export const AreaMap = () => {
         const selPropertyOutlineFeatures =
           claimLinkSourceRef?.current?.getFeaturesAtCoordinate(coordinates) ?? [];
         console.log("selPropertyOutlineFeatures", selPropertyOutlineFeatures)
-          if (selPropertyOutlineFeatures.length > 0) {
+        if (selPropertyOutlineFeatures.length > 0) {
           clickedOnFeatureTmp = true;
-            const propId = selPropertyOutlineFeatures?.[0]?.get("propertyid")
-            
+          const propId = selPropertyOutlineFeatures?.[0]?.get("propertyid")
+
           const clinkDetails = await getClinkData(propId)
 
           console.log("clinkDetails", clinkDetails, propId)
@@ -1807,7 +1856,7 @@ export const AreaMap = () => {
             country,
             area,
           };
-          console.log("syncPropertyObject1",syncPropertyObject1,)
+          console.log("syncPropertyObject1", syncPropertyObject1,)
           setsyncPropertyObject(syncPropertyObject1);
         } else {
           setsyncPropertyObject(undefined);
@@ -1816,7 +1865,7 @@ export const AreaMap = () => {
 
 
 
-        
+
       }
       const claimFeatures =
         claimVectorImgSourceRef?.current?.getFeaturesAtCoordinate(
@@ -1898,8 +1947,8 @@ export const AreaMap = () => {
         // const center  = getCenter(extent)
         // const topcenterxOffset = (extent[0] + extent[2]) / 2 - center[0]
         // const topcenteryOffset = extent[4]  - center[1]
-        
-        
+
+
 
         const s = new Style({
           stroke: new Stroke({
@@ -1915,7 +1964,7 @@ export const AreaMap = () => {
             // stroke: new Stroke({ color: outlineColor, width: outlineWidth }),
             offsetX: 0,
             offsetY: -20,
-            placement:"line",
+            placement: "line",
             // placement: placement,
             // maxAngle: maxAngle,
             // overflow: overflow,
@@ -2180,51 +2229,51 @@ export const AreaMap = () => {
           </Button>
         </ButtonGroup>
         <Draggable>
-        <div
-          ref={setPopup}
-          style={{
-            textDecoration: "none",
-            position: "absolute",
-            top: "2px",
-            right: "8px",
-            backgroundColor: "white",
-            boxShadow: "0 1px 4px rgba(0,0,0,0.2)",
-            padding: "15px",
-            borderRadius: "10px",
-            border: "1px solid #cccccc",
-            minWidth: "400px",
-            color: "black",
-          }}
-        >
-          <button
-            type="button"
-            onClick={(e) => {
-              setCoordinates(undefined);
-              e.target.blur();
-              return false;
-            }}
+          <div
+            ref={setPopup}
             style={{
               textDecoration: "none",
               position: "absolute",
               top: "2px",
               right: "8px",
+              backgroundColor: "white",
+              boxShadow: "0 1px 4px rgba(0,0,0,0.2)",
+              padding: "15px",
+              borderRadius: "10px",
+              border: "1px solid #cccccc",
+              minWidth: "400px",
+              color: "black",
             }}
           >
-            ✖
-          </button>
-          <div id="popup-contenta">
-            {/* <p>Info:</p> */}
-            {clickDataLoaded && (
-              <AreaMapClickPopup
-                claimObj={claimObject}
-                fpropObj={fPropertyObject}
-                assetObj={assetObject}
-                syncPropObj={syncPropertyObject}
-              />
-            )}
+            <button
+              type="button"
+              onClick={(e) => {
+                setCoordinates(undefined);
+                e.target.blur();
+                return false;
+              }}
+              style={{
+                textDecoration: "none",
+                position: "absolute",
+                top: "2px",
+                right: "8px",
+              }}
+            >
+              ✖
+            </button>
+            <div id="popup-contenta">
+              {/* <p>Info:</p> */}
+              {clickDataLoaded && (
+                <AreaMapClickPopup
+                  claimObj={claimObject}
+                  fpropObj={fPropertyObject}
+                  assetObj={assetObject}
+                  syncPropObj={syncPropertyObject}
+                />
+              )}
+            </div>
           </div>
-          </div>
-          </Draggable>
+        </Draggable>
         {/* <div  className="absolute top-0  z-50 w-full h-min-[500] bg-red-200"> 
         {GetTopAds()}
          

@@ -94,24 +94,14 @@ const HomeNavbar = () => {
           w-full
           h-[10vh]
           text-lg text-white
-          bg-blue-900 p-4 border border-gray-200 shadow-md
+          bg-black p-4  shadow-md
           dark:bg-black dark:border-gray-800
+          border-b-8  border-amber-300
         "
       >
         <div className="flex items-center gap-2">
           <div className="flex gap-4 justify-center">
-            <Link href="https://digigeodata.com" target="_blank" className="flex items-center">
-            <Image
-              src="/DigiGeoData_white.webp"
-              width={140}
-              height={55}
-              alt="logo DigiGeoData"
-            />
-
-            {/* <span className="pl-1 mx-auto text-xl font-black leading-none text-white dark:text-white select-none  flex items-center justify-center">
-              DigiGeo<span className="text-white">Maps</span>
-            </span> */}
-          </Link>
+          
             <Link href="https://northernminer.com" target="_blank" className="flex items-center">
             <Image
               src="/TNM_logo_large.webp"
@@ -126,8 +116,21 @@ const HomeNavbar = () => {
           </div>
           {/* <img src="/logo.png"></img> */}
         </div>
-        <div>{"Global Exploration Activities"}</div>
+        <div className="font-bold text-3xl">{"TNM MAPS"}</div>
 
+    <div className="flex">
+        <Link href="https://digigeodata.com" target="_blank" className="flex items-center">
+          <Image
+            src="/DigiGeoData_white.webp"
+            width={140}
+            height={55}
+            alt="logo DigiGeoData"
+          />
+
+          {/* <span className="pl-1 mx-auto text-xl font-black leading-none text-white dark:text-white select-none  flex items-center justify-center">
+              DigiGeo<span className="text-white">Maps</span>
+            </span> */}
+        </Link>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           id="menu-button"
@@ -209,7 +212,8 @@ const HomeNavbar = () => {
               <ThemeSwitcher />
             </li>
           </ul>
-        </div>
+          </div>
+          </div>
       </nav>
       {disclaimerStatus && (
         <DialogCommonComponent
