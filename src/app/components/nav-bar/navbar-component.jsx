@@ -92,7 +92,7 @@ const HomeNavbar = () => {
           items-center
           justify-between
           w-full
-          h-[10vh]
+          h-[12vh]
           text-lg text-white
           bg-black p-4  shadow-md
           dark:bg-black dark:border-gray-800
