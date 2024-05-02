@@ -36,12 +36,20 @@ const initialState = {
   cmapAssetLableVisible: true,
   cmapClaimLableVisible: true,
   cmapAreaLableVisible: true,
+  cmapNavigationExtent: [],
+  cmapNavigationHighlightFProps: [],
 };
 
 const companyMapSlice = createSlice({
   name: "CompanyMap",
   initialState,
   reducers: {
+    setcmapNavigationExtent: (state, action) => {
+      state.cmapNavigationExtent = action.payload;
+    },
+    setcmapNavigationHighlightFProps: (state, action) => {
+      state.cmapNavigationHighlightFProps = action.payload;
+    },
     setIsCompanySideNavOpen: (state, action) => {
       state.isCompanySideNavOpen = action.payload;
     },
@@ -155,6 +163,8 @@ const companyMapSlice = createSlice({
 });
 
 export const {
+  setcmapNavigationHighlightFProps,
+  setcmapNavigationExtent,
   setIsCompanySideNavOpen,
   setcompanyName,
   setcompanyId,

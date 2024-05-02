@@ -105,7 +105,7 @@ const AreaFCompanyFProperties = ({ companyid }) => {
   };
 
   const flytoMultipleHandler = (features) => {
-    console.log("features", features,)
+   
     // const coords = features.map((f) => f.values_.geometry.flatCoordinates) 
     const coords = []
     for (const f of features) {
@@ -113,7 +113,7 @@ const AreaFCompanyFProperties = ({ companyid }) => {
 
       if (polygon) {
         const c = polygon.getCoordinates();
-        console.log("coords-c", c[0][0],)
+      
         coords.push(...c[0][0])
         // c.forEach((i)=> coords.push(i[0]))
 
@@ -125,9 +125,9 @@ const AreaFCompanyFProperties = ({ companyid }) => {
     }
 
 
-    console.log("coords", coords,)
+  
     const bounds = boundingExtent(coords)
-    console.log("bounds", bounds,)
+ 
     //   console.log("bounds",bounds,)
     //  // const polygon = feature.getGeometry();
     //   let loc = [];
@@ -189,7 +189,7 @@ const AreaFCompanyFProperties = ({ companyid }) => {
     };
     //console.log("hotplayid",hotplayid)
     const dd = await getData(hotplayid)
-    console.log("dd", dd)
+   
     const d = dd?.[0]
 
     const sponsoredowners = d?.sponsor ?? "";
@@ -348,7 +348,7 @@ const AreaFCompanyFProperties = ({ companyid }) => {
 
     // const ee= unNamedFeatureObjects.filter(r=> !r.get("propertyid"))
 
-    console.log("unNamedFeatureObjects", unNamedFeatureObjects)
+
 
     const unNamedProps = unNamedFeatureObjects.map((fp) => {
 

@@ -525,7 +525,7 @@ export const AreaMap = () => {
   const selectedSynPropRef = useRef();
   const selectedSynOutLineRef = useRef();
   const selectedClaimRef = useRef();
-  const navigatedFPropertyRef = useRef();
+ 
 
   const dispatch = useDispatch();
 
@@ -583,7 +583,7 @@ export const AreaMap = () => {
         //set prev selected styles to null
         for (const fid of prevSelFeaturedProps) {
 
-          const fp = fPropSourceRef?.current?.getFeatures().find(f => f.get("id") == fid)
+          const fp = fPropSourceRef.current.getFeatures().find(f => f.get("id") == fid)
           
           fp?.setStyle(undefined)
           mapRef.current.render()
@@ -591,8 +591,7 @@ export const AreaMap = () => {
         setprevSelFeaturedProps([])
 
 
-
-        // prevSelFeaturedProps
+        //highlight
         const fp = fPropSourceRef.current.getFeatures().find(
           (f) => f.get("id") == navigatedFPropId
         );
@@ -1009,7 +1008,7 @@ export const AreaMap = () => {
     fPropSourceRef?.current?.clear();
     if (featuredPropertyFeatures?.features) {
       const e = new GeoJSON().readFeatures(featuredPropertyFeatures);
-      // navigatedFPropertyRef.current = e;
+    
       fPropSourceRef?.current?.addFeatures(e);
       fPropSourceLabelRef?.current?.addFeatures(e);
 

@@ -518,6 +518,7 @@ export const CompanyMap = () => {
   const [mapScale, setmapScale] = useState(0);
   const [lat, setlat] = useState(0);
   const [long, setlong] = useState(0);
+  const [prevSelFeaturedProps, setprevSelFeaturedProps] = useState([]);
 
   const mapRef = useRef();
   const mapViewRef = useRef();
@@ -562,22 +563,93 @@ export const CompanyMap = () => {
     (state) => state.companyMapReducer.companySyncPropLayerAlwaysVisible
   );
 
+  const cmapNavigationHighlightFProps = useSelector(
+    (state) => state.companyMapReducer.cmapNavigationHighlightFProps
+  );
+
+  const cmapNavigationExtent = useSelector(
+    (state) => state.companyMapReducer.cmapNavigationExtent
+  );
+
 
   const [coordinates, setCoordinates] = useState(undefined);
   const [popup, setPopup] = useState();
 
   useEffect(() => {
-    if (navigatedFPropertyRef.current) {
-      const fp = navigatedFPropertyRef.current.find(
-        (f) => f.get("id") == navigatedFPropId
-      );
+    if (navigatedFPropId != 0) {
+      if (fPropSourceRef.current) {
+        //set prev selected styles to null
+        for (const fid of prevSelFeaturedProps) {
 
-      const selectStyle = new Style({ zIndex: 1 });
-      selectStyle.setRenderer(areaMApPropertyVectorRendererFuncV2Highlight);
+          const fp = fPropSourceRef.current.getFeatures().find(f => f.get("id") == fid)
 
-      fp?.setStyle(selectStyle);
+          fp?.setStyle(undefined)
+          mapRef.current.render()
+        }
+        setprevSelFeaturedProps([])
+
+        //highlight
+        const fp = fPropSourceRef.current.getFeatures().find(
+          (f) => f.get("id") == navigatedFPropId
+        );
+
+        if (fp) {
+          // setunselectFProps((p) => p + 1)
+
+          const selectStyle = new Style({ zIndex: 1 });
+          selectStyle.setRenderer(areaMApPropertyVectorRendererFuncV2Highlight);
+
+          fp.setStyle(selectStyle);
+          mapRef.current.render()
+          setprevSelFeaturedProps([navigatedFPropId])
+
+        }
+      }
     }
   }, [navigatedFPropId]);
+
+  useEffect(() => {
+    //unselect prev styles
+    for (const fid of prevSelFeaturedProps) {
+
+      const fp = fPropSourceRef?.current?.getFeatures().find(f => f.get("id") == fid)
+
+      fp?.setStyle(undefined)
+    }
+    mapRef.current.render();
+    setprevSelFeaturedProps([])
+
+    if (cmapNavigationHighlightFProps.length > 0) {
+
+      for (const fpid of cmapNavigationHighlightFProps) {
+        const fp = fPropSourceRef?.current?.getFeatures().find(f => f.get("id") == fpid)
+        if (fp) {
+
+          const selectStyle = new Style({ zIndex: 1 });
+          selectStyle.setRenderer(areaMApPropertyVectorRendererFuncV2Highlight);
+
+          fp?.setStyle(selectStyle);
+        }
+
+      }
+      setprevSelFeaturedProps(cmapNavigationHighlightFProps)
+
+    }
+  }, [cmapNavigationHighlightFProps]);
+
+  useEffect(() => {
+
+    if (cmapNavigationExtent.length > 0) {
+
+      mapRef.current?.getView()?.fit(cmapNavigationExtent, {
+        padding: [100, 100, 100, 100],
+        duration: 3000,
+      });
+
+
+    }
+  }, [cmapNavigationExtent])
+
 
   const onSingleclick = useCallback((evt) => {
     const { coordinate } = evt;
@@ -886,7 +958,7 @@ export const CompanyMap = () => {
     if (featuredPropertyFeatures?.features) {
       const e = new GeoJSON().readFeatures(featuredPropertyFeatures);
 
-      navigatedFPropertyRef.current = e;
+      // navigatedFPropertyRef.current = e;
       fPropSourceRef?.current?.addFeatures(e);
       fPropSourceLabelRef?.current?.addFeatures(e);
     }
@@ -1727,7 +1799,7 @@ export const CompanyMap = () => {
           dispatch(setclicksyncPropertyObject(syncPropertyObject1));
 
         } else {
-        
+
           dispatch(setclicksyncPropertyObject(undefined));
         }
 

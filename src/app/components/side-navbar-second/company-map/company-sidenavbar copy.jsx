@@ -19,7 +19,7 @@ import {
   setUrlUpdate,
 } from "../../../../store/map-selector/map-selector-slice";
 import { useRouter, useSearchParams } from "next/navigation";
-import { MdInfoOutline, MdLocationOn } from "react-icons/md";
+import { MdLocationOn } from "react-icons/md";
 import AreaFilter from "../../filter-popups/area-filters";
 import {
   setAssetFeatures,
@@ -29,9 +29,6 @@ import {
   setcmapFpropLableVisible,
   setcompanyFpropLayerVisible,
   setsyncClaimLinkPropertyFeatures,
-  setcmapNavigationExtent,
-  setcmapNavigationHighlightFProps,
-
 } from "../../../../store/company-map/company-map-slice";
 import TreeView from "../../common-comp/treeview";
 import Accordion from "../../common-comp/accordion";
@@ -47,7 +44,7 @@ import CMapFCompanyAddlock from './company-fcompany-popup';
 import AccordionItemWithOutEye from "../../common-comp/accordion-without-eye";
 import { updateWindowsHistory } from "@/app/utils/helpers/window-history-replace";
 import AccordionItemWithEyeLabel from "../../common-comp/accordion-eye-label";
-import { boundingExtent } from 'ol/extent';
+
 
 const CompanySideNavbar = () => {
   let pathname = "";
@@ -186,13 +183,8 @@ const CompanySideNavbar = () => {
           element.set("prop_name", "Block-" + blockno)
           blockno++;
         }
-        function myCallback({ values_ }) {
-          return values_.prop_name;
-        }
-        const groupByPropName = Object.groupBy(namedProps, myCallback);
 
-
-        result.push({ map_area: area, namedProps: groupByPropName, unnamedProps })
+        result.push({ map_area: area, namedProps, unnamedProps })
 
 
       }
@@ -378,98 +370,6 @@ const CompanySideNavbar = () => {
   );
 
 
-
-  // const showProperties = async (e, companyid, propertyid, prop_name, hotplayid) => {
-
-  //   const getData = async (hotplayid) => {
-  //     const url =
-  //       "https://atlas.ceyinfo.cloud/matlas/getownersbyhotplayid/" +
-  //       hotplayid;
-  //     //load data from api - changed to return array
-
-  //     let sponsors = await fetch(url, {
-  //       method: "GET", // *GET, POST, PUT, DELETE, etc.
-  //       mode: "cors", // no-cors, *cors, same-origin
-  //       cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-  //       credentials: "same-origin", // include, *same-origin, omit
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         // 'Content-Type': 'application/x-www-form-urlencoded',
-  //       },
-  //     })
-  //       .then((response) => response.json())
-  //       .then((res) => {
-  //         // let sponsors = "";
-  //         // res.data.forEach((element) => {
-  //         //   sponsors += element.sponsor + "/";
-  //         // });
-  //         return res.data;
-  //       });
-
-  //     // sponsors = sponsors.slice(0, -1);
-  //     // console.log("sponsors", sponsors);
-  //     return sponsors;
-  //   };
-  //   //console.log("hotplayid",hotplayid)
-  //   const dd = await getData(hotplayid)
-  //   console.log("dd", dd)
-  //   const d = dd?.[0]
-
-  //   const sponsoredowners = d?.sponsor ?? "";
-  //   let commo_ref = d?.commo_ref ?? "";
-  //   let assets = d?.assets ?? "";
-  //   let resources = d?.resources ?? "";
-  //   let map_area = d?.map_area ?? "";
-  //   let owners = d?.owners ?? "";
-  //   let prop_exturl = d?.prop_exturl ?? "";
-  //   let sale_name = d?.sale_name ?? "";
-  //   let profile = d?.profile ?? "";
-
-
-  //   const fPropertyObject1 = {
-  //     sponsoredowners,
-  //     prop_name,
-  //     commo_ref,
-  //     assets,
-  //     resources,
-  //     map_area,
-  //     owners,
-  //     prop_exturl,
-  //     sale_name,
-  //     propertyid,
-  //     profile
-  //   };
-
-
-  //   setfpropObj(fPropertyObject1)
-  //   setshowDlg("y")
-  // }
-
-  const flytoMultipleHandler = (features) => {
-
-    // const coords = features.map((f) => f.values_.geometry.flatCoordinates) 
-    const coords = []
-    for (const f of features) {
-      const polygon = f.getGeometry();
-
-      if (polygon) {
-        const c = polygon.getCoordinates();
-
-        coords.push(...c[0][0])
-        // c.forEach((i)=> coords.push(i[0]))
-
-      }
-
-    }
-
-    const bounds = boundingExtent(coords)
-
- 
-    dispatch(setcmapNavigationExtent(bounds));
-    dispatch(setcmapNavigationHighlightFProps(features.map(f => f.get("id"))));
- 
-
-  };
   return (
     <section className="flex gap-6">
       <div className={`duration-500 flex w-auto`}>
@@ -525,90 +425,27 @@ const CompanySideNavbar = () => {
                       (area) =>
                         (<>
                           <div className="font-semibold">{area.map_area}</div>
-                          {/* {area.namedProps.map((i) => { */}
-                        {Object.keys(area.namedProps).map((propName) => {
-                          const fps = area.namedProps[propName]
-                          const fp = fps[0]
-                          if (fps.length == 1) {
-                            const fp = fps[0]
-                            return (
-                              <FeaturedPropertyDetailDiv
-                                key={fp.get("id")}
-                                title={fp.get("prop_name")}
-                                propertyid={fp.get("propertyid")}
-                              // onClick={() => console.log(featuredCompanies)}
-                              //imgRect.src = "data:image/svg+xml;utf8," + encodeURIComponent(hatch);
-                              >
-                                <Image
-                                  src={
-                                    "data:image/svg+xml;utf8," +
-                                    encodeURIComponent(fp.get("hatch"))
-                                  }
-                                  className={`w-4 h-4`}
-                                  width={4}
-                                  height={4}
-                                  alt="prop"
-                                />
-                              </FeaturedPropertyDetailDiv>
-                            )
-                          }
-                          else {
-                            return (
-                              <div
-                                key={fp.get("propertyid")}
-                                className="   text-xs pl-4 py-1 px-2 text-black border rounded-lg border-blue-200 hover:border-blue-100 hover:border-2 focus:outline-none"
-                                style={{
-                                  display: "flex",
-                                  justifyContent: "space-between",
-                                  alignItems: "center",
-                                  width: "100%",
-                                }}
-                              >
-                                <div className="flex gap-2">
+                          {area.namedProps.map((i) => {
+                              return (
+                                <FeaturedPropertyDetailDiv
+                                  key={i.get("id")}
+                                  title={i.get("prop_name")}
+                                  propertyid={i.get("propertyid")}
+                                // onClick={() => console.log(featuredCompanies)}
+                                //imgRect.src = "data:image/svg+xml;utf8," + encodeURIComponent(hatch);
+                                >
                                   <Image
                                     src={
                                       "data:image/svg+xml;utf8," +
-                                      encodeURIComponent(fp.get("hatch"))
+                                      encodeURIComponent(i.get("hatch"))
                                     }
                                     className={`w-4 h-4`}
                                     width={4}
                                     height={4}
                                     alt="prop"
                                   />
-                                  <div> {fp.get("prop_name") + "[" + fps.length + " polygons]"}</div>
-                                </div>
-                                <div className="flex gap-1">
-                                  {/* <span className="">
-                                    <MdInfoOutline
-                                      className="cursor-pointer h-4 w-4 hover:scale-125 "
-                                      onClick={(e) =>
-                                        showProperties(
-                                          e,
-                                          companyid,
-                                          fp.get("propertyid"),
-                                          fp.get("prop_name"),
-                                          fp.get("id")
-                                        )
-                                      }
-                                    
-                                    />
-                                  </span> */}
-
-                                  <Image
-                                    src="./navigation.svg"
-                                    width={15}
-                                    height={15}
-                                    alt="prop"
-                                    className=" cursor-pointer hover:scale-125 "
-                                    onClick={(e) => {
-                                      flytoMultipleHandler(fps);
-                                    }}
-                                  />
-                                </div>
-                              </div>
-
-                            )
-                          }
+                                </FeaturedPropertyDetailDiv>
+                              )
                             }
                           )
                           }
