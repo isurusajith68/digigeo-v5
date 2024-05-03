@@ -6,7 +6,7 @@ import { setpropertyMapFlyToLocation,setnavigatedFPropId } from "../../../../sto
 
 // import { setpropertyMapFlyToLocation } from "@/store/properties-map/properties-map-slice";
 
-const PropertyFCompanyFProperties = ({ companyid }) => {
+const XPropertyFCompanyFProperties = ({ companyid }) => {
 
   
 
@@ -43,7 +43,7 @@ const PropertyFCompanyFProperties = ({ companyid }) => {
     }, [companyid])
 
   useEffect(() => {
-    console.log("featuredPropertyFeatures",featuredPropertyFeatures)
+   
     if(featuredPropertyFeatures?.features){
       const e = new GeoJSON().readFeatures(featuredPropertyFeatures);
       
@@ -101,10 +101,38 @@ const PropertyFCompanyFProperties = ({ companyid }) => {
   };
 
   const domElements = useMemo(() => {
-   
+    const result = []
+    function myCallback({ values_ }) {
+      return values_.map_area;
+    }
+
+    const resultByArea = Object.groupBy(featureObjects, myCallback);
+    for (const area in resultByArea) {
+      //groupby name no-name
+      const namedProps = resultByArea[area].filter(p => p.get("prop_name"))
+      namedProps.sort((a, b) => { return a.get("prop_name").toUpperCase() > b.get("prop_name").toUpperCase() ? 1 : -1 })
+
+      const unnamedProps = resultByArea[area].filter(p => !p.get("prop_name"))
+      let blockno = 1
+      for (let index = 0; index < unnamedProps.length; index++) {
+        const element = unnamedProps[index];
+        element.set("prop_name", "Block-" + blockno)
+        blockno++;
+      }
+      
+
+
+      result.push({ map_area: area, namedProps: groupByPropName, unnamedProps })
+    }
+
+    //const namedProps = featureObjects.filter(p => p.get("prop_name"))
+  
+
+    //namedProps.sort((a, b) => { return a.get("prop_name").toUpperCase() > b.get("prop_name").toUpperCase() ? 1 : -1 })
+
     const r = (
-      mapAreas.map(area => {
-            console.log("mapAreas",mapAreas);
+      result.map(areaObj => {
+           
             let blockno = 0;
                     return (<>
                       <span key={area} className="bg-blue-600 text-white w-full pl-2 " > {area}</span>
@@ -201,4 +229,4 @@ const PropertyFCompanyFProperties = ({ companyid }) => {
   );
 };
 
-export default PropertyFCompanyFProperties;
+export default XPropertyFCompanyFProperties;

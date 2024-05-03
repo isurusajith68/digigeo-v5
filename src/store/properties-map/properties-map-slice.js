@@ -38,18 +38,26 @@ const initialState = {
   propertyAssetLayerAlwaysVisible: false,
   propertyCurrentScale: 5,
   propertyMapViewScales: {},
-  pmapsyncPropLableVisible:true,
-  pmapFpropLableVisible:true,
-  pmapAssetLableVisible:true,
-  pmapClaimLableVisible:true,
+  pmapsyncPropLableVisible: true,
+  pmapFpropLableVisible: true,
+  pmapAssetLableVisible: true,
+  pmapClaimLableVisible: true,
   pmapAreaLableVisible: true,
-  pmapSelectedPropertyIds :[],
+  pmapSelectedPropertyIds: [],
+  pmapNavigationExtent: [],
+  pmapNavigationHighlightFProps: [],
 };
 
 const propertiesMapSlice = createSlice({
   name: "PropertiesaMap",
   initialState,
   reducers: {
+    setpmapNavigationExtent: (state, action) => {
+      state.pmapNavigationExtent = action.payload;
+    },
+    setpmapNavigationHighlightFProps: (state, action) => {
+      state.pmapNavigationHighlightFProps = action.payload;
+    },
     setpmapSelectedPropertyIds: (state, action) => {
       state.pmapSelectedPropertyIds = action.payload;
     },
@@ -188,6 +196,8 @@ const propertiesMapSlice = createSlice({
 });
 
 export const {
+  setcmapNavigationHighlightFProps,
+  setcmapNavigationExtent,
   setIsPropertiesSideNavOpen,
   setpropertySearchQuery,
   setpropertyMapPropertyAssetIdCsv,

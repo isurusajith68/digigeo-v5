@@ -30,6 +30,9 @@ module.exports = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
+      colors: {
+        "navbar-border": "#B2A05C",
+      },
     },
   },
   plugins: [
@@ -37,7 +40,7 @@ module.exports = {
       themes: {
         light: {
           layout: {}, // light theme layout tokens
-          colors: {background: "#009000" }, // light theme colors
+          colors: { background: "#009000" }, // light theme colors
         },
         dark: {
           layout: {}, // dark theme layout tokens

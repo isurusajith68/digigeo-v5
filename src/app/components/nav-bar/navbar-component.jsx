@@ -1,10 +1,10 @@
 "use client";
 
- 
+
 import { Button } from "@nextui-org/react";
 import { usePathname, useRouter } from "next/navigation";
- 
-import { useEffect,useState } from "react";
+
+import { useEffect, useState } from "react";
 import { AiFillHome, AiFillQuestionCircle } from "react-icons/ai";
 import { MdEmail } from "react-icons/md";
 import { ThemeSwitcher } from "../theme-switcher";
@@ -16,16 +16,16 @@ import { MapViewMode } from "@/store/types";
 
 const HomeNavbar = () => {
 
-  
 
-  const [disclaimerStatus,setdisclaimerStatus] = useState(false)
-  const [helpDialogStatus,sethelpDialogStatus] = useState(false)
+
+  const [disclaimerStatus, setdisclaimerStatus] = useState(false)
+  const [helpDialogStatus, sethelpDialogStatus] = useState(false)
   //get pathname
   let pathname = "";
 
   try {
     pathname = window.location.href;
-  } catch (error) {}
+  } catch (error) { }
 
   if (pathname) {
     const r = pathname.indexOf("/", 9);
@@ -39,7 +39,7 @@ const HomeNavbar = () => {
   const router = useRouter();
   const mapLyrs = useSelector((state) => state.mapSelectorReducer.areaLyrs);
   const mapViewMode = useSelector((state) => state.mapSelectorReducer.mapViewMode);
-  
+
   useEffect(() => {
     const button = document.querySelector("#menu-button");
     const menu = document.querySelector("#menu");
@@ -76,14 +76,14 @@ const HomeNavbar = () => {
   const showDisclaimer = () => {
     console.log("PP1")
     setdisclaimerStatus(true)
-    
-    }
+
+  }
   const showHelp = () => {
     //InvestorMappingHelpFile.docx
     // router.push("/help/InvestorMappingHelpFile.docx.html")
     router.push("/help")
-      sethelpDialogStatus(true)
-    }
+    sethelpDialogStatus(true)
+  }
   return (
     <header className={`   ${mapViewMode == "HEADED" ? "block" : "hidden"} `}>
       <nav
@@ -96,131 +96,131 @@ const HomeNavbar = () => {
           text-lg text-white
           bg-black p-4  shadow-md
           dark:bg-black dark:border-gray-800
-          border-b-8  border-amber-300
+          border-b-8  border-navbar-border
         "
       >
         <div className="flex items-center gap-2">
           <div className="flex gap-4 justify-center">
-          
+
             <Link href="https://northernminer.com" target="_blank" className="flex items-center">
-            <Image
-              src="/TNM_logo_large.webp"
-              width={200}
-              height={35}
-              alt="log tnm"
-            />
-            {/* <span className="pl-1 mx-auto text-xl font-black leading-none text-white dark:text-white select-none  flex items-center justify-center">
+              <Image
+                src="/TNM_logo_large.webp"
+                width={200}
+                height={35}
+                alt="log tnm"
+              />
+              {/* <span className="pl-1 mx-auto text-xl font-black leading-none text-white dark:text-white select-none  flex items-center justify-center">
               DigiGeo<span className="text-white">Maps</span>
             </span> */}
-          </Link>
+            </Link>
           </div>
           {/* <img src="/logo.png"></img> */}
         </div>
         <div className="font-bold text-3xl">{"TNM MAPS"}</div>
 
-    <div className="flex">
-        <Link href="https://digigeodata.com" target="_blank" className="flex items-center">
-          <Image
-            src="/DigiGeoData_white.webp"
-            width={140}
-            height={55}
-            alt="logo DigiGeoData"
-          />
+        <div className="flex">
+          <Link href="https://digigeodata.com" target="_blank" className="flex items-center">
+            <Image
+              src="/DigiGeoData_powered_by_white.webp"
+              width={140}
+              height={55}
+              alt="logo DigiGeoData"
+            />
 
-          {/* <span className="pl-1 mx-auto text-xl font-black leading-none text-white dark:text-white select-none  flex items-center justify-center">
+            {/* <span className="pl-1 mx-auto text-xl font-black leading-none text-white dark:text-white select-none  flex items-center justify-center">
               DigiGeo<span className="text-white">Maps</span>
             </span> */}
-        </Link>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          id="menu-button"
-          className="h-6 w-6 cursor-pointer md:hidden block"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            d="M4 6h16M4 12h16M4 18h16"
-          />
-        </svg>
+          </Link>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            id="menu-button"
+            className="h-6 w-6 cursor-pointer md:hidden block"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M4 6h16M4 12h16M4 18h16"
+            />
+          </svg>
 
-        <div
-          className="hidden w-full md:flex md:items-center md:w-auto"
-          id="menu"
-        >
-          <ul
-            className="
+          <div
+            className="hidden w-full md:flex md:items-center md:w-auto"
+            id="menu"
+          >
+            <ul
+              className="
               pt-4
               text-base text-gray-700
               md:flex
               md:justify-between 
               md:pt-0
               flex gap-6"
-          >
-            <li>
-              <Button
-                isIconOnly
-                variant="light"
-                color="primary"
-                aria-label="Home"
-                onClick={() =>
-                  router.push(
-                    "/?t=area&sn=true&sn2=false&lyrs=m&z=3.25&c=-10694872.010699773,7434223.337137634"
-                  )
-                }
-              >
-                <Link href="https://digigeodata.com/digigeomaps-landing-page" target="_blank">
-                  <AiFillHome className="h-6 w-6 dark:text-white text-white" />
-                </Link>
-              </Button>
-            </li>
-            <li>
-              <Button
-                isIconOnly
-                variant="light"
-                color="primary"
-                aria-label="Like"
-                onClick={showHelp}
-              >
-                <AiFillQuestionCircle className="h-6 w-6 dark:text-white text-white" />
-              </Button>
-            </li>
-            <li>
-              <Button
-                isIconOnly
-                variant="light"
-                color="primary"
-                aria-label="Like"
-              >
-                <Link href="https://digigeodata.com/contact/" target="_blank">
-                  <MdEmail className="h-6 w-6 dark:text-white text-white" />
-                </Link>
-              </Button>
-            </li>
+            >
+              <li>
+                <Button
+                  isIconOnly
+                  variant="light"
+                  color="primary"
+                  aria-label="Home"
+                  onClick={() =>
+                    router.push(
+                      "/?t=area&sn=true&sn2=false&lyrs=m&z=3.25&c=-10694872.010699773,7434223.337137634"
+                    )
+                  }
+                >
+                  <Link href="https://digigeodata.com/digigeomaps-landing-page" target="_blank">
+                    <AiFillHome className="h-6 w-6 dark:text-white text-white" />
+                  </Link>
+                </Button>
+              </li>
+              <li>
+                <Button
+                  isIconOnly
+                  variant="light"
+                  color="primary"
+                  aria-label="Like"
+                  onClick={showHelp}
+                >
+                  <AiFillQuestionCircle className="h-6 w-6 dark:text-white text-white" />
+                </Button>
+              </li>
+              <li>
+                <Button
+                  isIconOnly
+                  variant="light"
+                  color="primary"
+                  aria-label="Like"
+                >
+                  <Link href="https://digigeodata.com/contact/" target="_blank">
+                    <MdEmail className="h-6 w-6 dark:text-white text-white" />
+                  </Link>
+                </Button>
+              </li>
 
-            <li>
-              <Button variant="light" color="primary" onClick={showDisclaimer}>
-                <span className="font-semibold dark:text-white text-white">
-                  Disclaimer
-                </span>
-              </Button>
-            </li>
-            <li>
-              <ThemeSwitcher />
-            </li>
-          </ul>
+              <li>
+                <Button variant="light" color="primary" onClick={showDisclaimer}>
+                  <span className="font-semibold dark:text-white text-white">
+                    Disclaimer
+                  </span>
+                </Button>
+              </li>
+              <li>
+                <ThemeSwitcher />
+              </li>
+            </ul>
           </div>
-          </div>
+        </div>
       </nav>
       {disclaimerStatus && (
         <DialogCommonComponent
           title={"Disclaimer"}
           onClose={setdisclaimerStatus}
           showDialog={disclaimerStatus}
-          onOk={() => {}}
+          onOk={() => { }}
         >
           <span>
             {" "}
