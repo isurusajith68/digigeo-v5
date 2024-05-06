@@ -1865,7 +1865,7 @@ export const CompanyMap = () => {
     }
   }, [mapViewRef.current]);
 
-  const copyRight = `©2024 DigiGeoData`
+  const copyRight = `©2024 The Northern Miner`
 
   const areaMapAssetVectorLayerStyleFunction = (feature, resolution) => {
 

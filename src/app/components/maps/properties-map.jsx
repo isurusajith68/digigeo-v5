@@ -1890,7 +1890,7 @@ export const PropertiesMap = () => {
     }
   }, [mapViewRef.current]);
 
-  const copyRight = `©2024 DigiGeoData`
+  const copyRight = `©2024 The Northern Miner`
 
   const commodityMap_tbl_syncProperty_commodity_VectorLayerStyleFunction =
     (feature, resolution) => {

@@ -1988,7 +1988,7 @@ export const AreaMap = () => {
 
 
 
-  const copyRight = `©2024 DigiGeoData`
+  const copyRight = `©2024 The Northern Miner`
 
   const amapAssetLableVisible = useSelector(
     (state) => state.areaMapReducer.amapAssetLableVisible

@@ -2115,7 +2115,7 @@ export const LandingMap = () => {
     dispatch(setIsLandingMapSideNavOpen(false));
   };
 
-  const copyRight = `©2024 DigiGeoData`
+  const copyRight = `©2024 The Northern Miner`
 
   const lmapsyncPropLableVisible = useSelector(
     (state) => state.landingMapReducer.lmapsyncPropLableVisible

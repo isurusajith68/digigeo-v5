@@ -148,7 +148,7 @@ const HomeNavbar = () => {
           </svg>
 
           <div
-            className="hidden w-full md:flex md:items-center md:w-auto"
+            className="ml-8 hidden w-full md:flex md:items-center md:w-auto"
             id="menu"
           >
             <ul
