@@ -8,11 +8,15 @@ import { MdInfoOutline } from "react-icons/md";
 import { Circle as CircleStyle, Fill, Stroke, Style, Icon } from "ol/style";
 import {
   setlandingMapFlyToLocation,
+  setlmapNavigationExtent,
+  setlmapNavigationHighlightFProps,
   setnavigatedFPropId,
 } from "@/store/landing-map/landing-map-slice";
 import DialogComponent from "../../../utils/dialog/dialog";
 import AreaMapClickPopup from "../../maps/area-map-popup/area-map-click-popup";
 import { Spinner } from "@nextui-org/react";
+import { boundingExtent } from 'ol/extent';
+
 
 const LmapFCompanyFProperties = ({ companyid }) => {
   const [featureObjects, setfeaturesObjects] = useState([]);
@@ -41,11 +45,11 @@ const LmapFCompanyFProperties = ({ companyid }) => {
   }, [companyid]);
 
   //set unnmaed props
-  useEffect(  () => {
+  useEffect(() => {
     console.log("unNamedFeatureObjects2", unNamedFeatureObjects);
-     let gj;
-    const getFeaturedProperties = async  () => {
-     
+    let gj;
+    const getFeaturedProperties = async () => {
+
       const f = async () => {
         const res = await fetch(
           `https://atlas.ceyinfo.cloud/matlas/view_hotplay_company/${companyid}`,
@@ -53,7 +57,7 @@ const LmapFCompanyFProperties = ({ companyid }) => {
         );
 
         const d = await res.json();
-          gj = {
+        gj = {
           type: "FeatureCollection",
           crs: {
             type: "name",
@@ -68,7 +72,7 @@ const LmapFCompanyFProperties = ({ companyid }) => {
           console.log("ff1-gj",)
           const e = new GeoJSON().readFeatures(gj);
           let b = 0;
-          const unNamedPs= []
+          const unNamedPs = []
           for (let index = 0; index < e.length; index++) {
             const element = e[index];
             if (!element.get("propertyid")) {
@@ -87,13 +91,13 @@ const LmapFCompanyFProperties = ({ companyid }) => {
             }
           }
           setunNamedFeatureObjects(unNamedPs);
-          
-          
+
+
           //sort
           // e.sort((a, b) => {
           //   a.get("prop_name")?.toUpperCase() > b.get("prop_name")?.toUpperCase() ? 1 : -1
           // })
-          console.log("ff1-esorted",e,)
+          console.log("ff1-esorted", e,)
           setdataLoaded(false)
           setfeaturesObjects(e);
         } else {
@@ -107,12 +111,12 @@ const LmapFCompanyFProperties = ({ companyid }) => {
       };
 
       await f();
-     
+
     };
 
-     getFeaturedProperties();
+    getFeaturedProperties();
 
-   
+
   }, [loadData]);
 
   //flyto
@@ -125,7 +129,7 @@ const LmapFCompanyFProperties = ({ companyid }) => {
       loc = [(extent[0] + extent[2]) / 2, (extent[1] + extent[3]) / 2];
     }
     //flyTo
-    console.log("ff1-loc",loc,)
+    console.log("ff1-loc", loc,)
     dispatch(setlandingMapFlyToLocation(loc));
 
     //set style
@@ -214,37 +218,87 @@ const LmapFCompanyFProperties = ({ companyid }) => {
     setshowDlg("n");
   };
 
+  const flytoMultipleHandler = (features) => {
+
+    // const coords = features.map((f) => f.values_.geometry.flatCoordinates) 
+    const coords = []
+    for (const f of features) {
+      const polygon = f.getGeometry();
+
+      if (polygon) {
+        const c = polygon.getCoordinates();
+
+        coords.push(...c[0][0])
+        // c.forEach((i)=> coords.push(i[0]))
+
+      }
+
+
+
+
+    }
+
+
+
+    const bounds = boundingExtent(coords)
+
+    //   console.log("bounds",bounds,)
+    //  // const polygon = feature.getGeometry();
+    //   let loc = [];
+    //   if (bounds) {
+
+    //     loc = getCenter(bounds);
+    //     console.log("loc",loc,)
+    //   }
+    //flyTo
+    // dispatch(setareaFlyToLocation(loc));
+    dispatch(setlmapNavigationExtent(bounds));
+    dispatch(setlmapNavigationHighlightFProps(features.map(f => f.get("id"))));
+
+    //set style
+    //dispatch(setnavigatedFPropId(features[0].get("id")));
+
+    //  console.log("kkk")
+    //  const selectStyle = new Style({ zIndex: 1 });
+    // selectStyle.setRenderer(areaMApPropertyVectorRendererFuncV2Highlight);
+
+    //  const e = new GeoJSON().readFeatures(featuredPropertyFeatures);
+
+    //  const fSelected = e.find(f=> f.get("id") == feature.get("id") )
+    //  console.log("fSelected",fSelected)
+    //  fSelected?.setStyle(selectStyle);
+
+  };
+
+
   const getDomElements = useMemo(() => {
 
     //sort
     // e.sort((a, b) => {
     //   a.get("prop_name")?.toUpperCase() > b.get("prop_name")?.toUpperCase() ? 1 : -1
     // })
-  //  const unnamedProperties = featureObjects.filter(fp => !fp.get("prop_name"))   
-    const namedProperties = featureObjects.filter(fp => fp.get("prop_name"))   
+    //  const unnamedProperties = featureObjects.filter(fp => !fp.get("prop_name"))   
+    const namedProperties = featureObjects.filter(fp => fp.get("prop_name"))
 
-    console.log("ff1-namedProperties",namedProperties,)
+
+    //console.log("ff1-namedProperties",namedProperties,)
 
     namedProperties.sort((a, b) => {
-     return a.get("prop_name")?.toUpperCase() < b.get("prop_name")?.toUpperCase() ? -1 : 1
+      return a.get("prop_name")?.toUpperCase() < b.get("prop_name")?.toUpperCase() ? -1 : 1
     })
 
+    function myCallback({ values_ }) {
+      return values_.prop_name;
+    }
+    const groupByPropName = Object.groupBy(namedProperties, myCallback);
 
 
-    const r = namedProperties.map((fp) => {
-      // if (!fp.get("propertyid")) {
-      //   pidRef.current = pidRef.current - 1;
-      // }
-      //sort
-   
-      // if (companyid == fp.get("companyid") && fp.get("prop_name")) {
-        // if (!fp.get("prop_name")) {
-        //   console.log("blocknoRef1", blocknoRef.current);
-        //   blocknoRef.current = blocknoRef.current + 1;
-        //   console.log("blocknoRef2", blocknoRef.current);
-        // }
+    //const r = namedProperties.map((fp) => {
 
-        // console.log("companyid",companyid,"pname",fp.properties )
+    const r = Object.keys(groupByPropName).map((propName) => {
+      const fps = groupByPropName[propName]
+      const fp = fps?.[0]
+      if (fps.length == 1) {
         return (
           <div
             key={fp.get("propertyid")}
@@ -291,13 +345,59 @@ const LmapFCompanyFProperties = ({ companyid }) => {
             </div>
           </div>
         );
-      // }
+      } else {
+        return (
+          <div
+            key={fp.get("propertyid")}
+            className="hover:bg-blue-200 odd:bg-slate-200  px-2 text-black"
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              width: "100%",
+            }}
+          >
+            <div className="flex">
+              <Image src="./sync-prop.svg" width={25} height={10} alt="prop" />
+              <div> {fp.get("prop_name") + "[" + fps.length + "]Polygons"}</div>
+            </div>
+            <div className="flex gap-1">
+              <span className="">
+                <MdInfoOutline
+                  className="cursor-pointer h-4 w-4 hover:scale-125 "
+                  onClick={(e) =>
+                    showProperties(
+                      e,
+                      companyid,
+                      fp.get("propertyid"),
+                      fp.get("prop_name"),
+                      fp.get("id")
+                    )
+                  }
+                //onClick={() => setIsOpenIn(true)}
+                // onClick={() => console.log("title", title)}
+                />
+              </span>
+
+              <Image
+                src="./navigation.svg"
+                width={15}
+                height={15}
+                alt="prop"
+                className=" cursor-pointer hover:scale-125 "
+                onClick={(e) => {
+                  flytoMultipleHandler(fps);
+                }}
+              />
+            </div>
+          </div>)
+      }
     });
 
     // const ee = unNamedFeatureObjects.filter((r) => !r.get("prop_name"));
 
     // console.log("ff1-unNamedFeatureObjects", ee);
-    console.log("ff1-2unNamedFeatureObjects2", unNamedFeatureObjects);
+    // console.log("ff1-2unNamedFeatureObjects2", unNamedFeatureObjects);
 
     const unNamedProps = unNamedFeatureObjects.map((fp) => {
       return (
@@ -379,8 +479,8 @@ const LmapFCompanyFProperties = ({ companyid }) => {
         alignItems: "center",
       }}
     >
-      <div  className="font-bold dark:text-white text-black">{areaName}</div>
-      <div   className="flex justify-center bg-blue-600 text-white w-full font-medium">{"Featured Properties"}</div>
+      <div className="font-bold dark:text-white text-black">{areaName}</div>
+      <div className="flex justify-center bg-blue-600 text-white w-full font-medium">{"Featured Properties"}</div>
       <div
         className="bg-slate-100"
         style={{
@@ -409,7 +509,7 @@ const LmapFCompanyFProperties = ({ companyid }) => {
           ></AreaMapClickPopup>
         </DialogComponent>
         {!dataLoaded && <Spinner size="lg" />}
-         
+
         {getDomElements}
       </div>
     </div>

@@ -37,12 +37,20 @@ const initialState = {
   lmapAssetLableVisible: true,
   lmapClaimLableVisible: true,
   lmapAreaLableVisible: true,
+  lmapNavigationExtent: [],
+  lmapNavigationHighlightFProps: [],
 };
 
 const landingMapMapSlice = createSlice({
   name: "LandingMap",
   initialState,
   reducers: {
+    setlmapNavigationExtent: (state, action) => {
+      state.lmapNavigationExtent = action.payload;
+    },
+    setlmapNavigationHighlightFProps: (state, action) => {
+      state.lmapNavigationHighlightFProps = action.payload;
+    },
     setIsLandingMapSideNavOpen: (state, action) => {
       state.isLandingMapSideNavOpen = action.payload;
     },
@@ -157,6 +165,8 @@ const landingMapMapSlice = createSlice({
 });
 
 export const {
+  setlmapNavigationHighlightFProps,
+  setlmapNavigationExtent,
   setlmapsyncPropLableVisible,
   setlmapFpropLableVisible,
   setlmapAssetLableVisible,

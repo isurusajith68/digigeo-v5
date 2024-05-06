@@ -521,6 +521,7 @@ export const LandingMap = () => {
   const [fPropRenderCount, setfPropRenderCount] = useState(0);
 
   const [clickDataLoaded, setclickDataLoaded] = useState(false);
+  const [prevSelFeaturedProps, setprevSelFeaturedProps] = useState([]);
 
   const mapRef = useRef();
   const mapViewRef = useRef();
@@ -529,7 +530,7 @@ export const LandingMap = () => {
   const selectedSynPropRef = useRef();
   const selectedSynOutLineRef = useRef();
   const selectedClaimRef = useRef();
-  const navigatedFPropertyRef = useRef();
+
 
   const dispatch = useDispatch();
 
@@ -572,7 +573,7 @@ export const LandingMap = () => {
     useState(300);
   const [curcenteredareaid, setcurcenteredareaid] = useState(0);
 
- 
+
   const syncPropVectorLayerRef = useRef(null);
   const fPropSourceRef = useRef(null);
   const fPropVectorLayerRef = useRef(null);
@@ -597,6 +598,27 @@ export const LandingMap = () => {
   const lmapFpropLableVisible = useSelector(
     (state) => state.landingMapReducer.lmapFpropLableVisible
   );
+
+  const lmapNavigationHighlightFProps = useSelector(
+    (state) => state.landingMapReducer.lmapNavigationHighlightFProps
+  );
+
+  const lmapNavigationExtent = useSelector(
+    (state) => state.landingMapReducer.lmapNavigationExtent
+  );
+
+  useEffect(() => {
+
+    if (lmapNavigationExtent.length > 0) {
+
+      mapRef.current?.getView()?.fit(lmapNavigationExtent, {
+        padding: [100, 100, 100, 100],
+        duration: 3000,
+      });
+
+
+    }
+  }, [lmapNavigationExtent])
 
   // useEffect(() => {
   //   console.log("maxResolutionFProp", maxResolutionFProp);
@@ -690,7 +712,7 @@ export const LandingMap = () => {
             fPropSourceLabelRef?.current?.clear();
             fPropSourceRef.current.addFeatures(features);
             fPropSourceLabelRef.current.addFeatures(features);
-            setfPropRenderCount((p)=> p+1)
+            setfPropRenderCount((p) => p + 1)
             console.log("qq2-loader-ext", extent)
             //console.log("bbsync uni tbl01_claims   features count", features.count);
           }
@@ -728,17 +750,70 @@ export const LandingMap = () => {
         }
       });
   }, []);
-  //  useEffect(()=>{
-  //   if(navigatedFPropertyRef.current){
-  //   const fp = navigatedFPropertyRef.current.find(f=>f.get("id")==navigatedFPropId)
+  useEffect(() => {
+    if (navigatedFPropId != 0) {
+      if (fPropSourceRef.current) {
 
-  //    const selectStyle = new Style({ zIndex: 1 });
-  //   selectStyle.setRenderer(areaMApPropertyVectorRendererFuncV2Highlight);
+        //set prev selected styles to null
+        for (const fid of prevSelFeaturedProps) {
 
-  //    fp?.setStyle(selectStyle);
-  //   }
+          const fp = fPropSourceRef.current.getFeatures().find(f => f.get("id") == fid)
 
-  //  },[navigatedFPropId])
+          fp?.setStyle(undefined)
+          mapRef.current.render()
+        }
+        setprevSelFeaturedProps([])
+
+        //highlight
+        const fp = fPropSourceRef.current.getFeatures().find(
+          (f) => f.get("id") == navigatedFPropId
+        );
+        if (fp) {
+          // setunselectFProps((p) => p + 1)
+
+          const selectStyle = new Style({ zIndex: 1 });
+          selectStyle.setRenderer(areaMApPropertyVectorRendererFuncV2Highlight);
+
+          fp.setStyle(selectStyle);
+          mapRef.current.render()
+          setprevSelFeaturedProps([navigatedFPropId])
+
+        }
+      }
+    }
+  }, [navigatedFPropId])
+
+
+  useEffect(() => {
+    //unselect prev styles
+    for (const fid of prevSelFeaturedProps) {
+
+      const fp = fPropSourceRef?.current?.getFeatures().find(f => f.get("id") == fid)
+
+      fp?.setStyle(undefined)
+    }
+    mapRef.current.render();
+    setprevSelFeaturedProps([])
+
+    if (lmapNavigationHighlightFProps.length > 0) {
+
+      for (const fpid of lmapNavigationHighlightFProps) {
+        const fp = fPropSourceRef?.current?.getFeatures().find(f => f.get("id") == fpid)
+        if (fp) {
+
+          const selectStyle = new Style({ zIndex: 1 });
+          selectStyle.setRenderer(areaMApPropertyVectorRendererFuncV2Highlight);
+
+          fp?.setStyle(selectStyle);
+        }
+
+      }
+      setprevSelFeaturedProps(lmapNavigationHighlightFProps)
+
+    }
+  }, [lmapNavigationHighlightFProps]);
+
+
 
   useEffect(() => {
     dispatch(setclickassetObject(assetObject));
@@ -955,16 +1030,15 @@ export const LandingMap = () => {
     // setmapScale(scale.toLocaleString( ));
     setmapScale(scale.toLocaleString());
     dispatch(setlandingCurrentScale(scale));
-    setfPropRenderCount((p)=> p+1)
+    setfPropRenderCount((p) => p + 1)
     //mapRef.current.render()
   }, []);
 
 
   useEffect(() => {
- 
-    if (fPropVectorLayerRef?.current?.isVisible())
-    {
-      console.log("qq2-scale-uef-", )
+
+    if (fPropVectorLayerRef?.current?.isVisible()) {
+      console.log("qq2-scale-uef-",)
       //fPropSourceRef.current.refresh()
       // if (fPropSourceRef?.current?.getFeatures().length > 0) {
       //   console.log("setIsLandingMapSideNavOpen(true",)
@@ -996,11 +1070,11 @@ export const LandingMap = () => {
     } else {
       dispatch(setIsLandingMapSideNavOpen(false));
     }
-    
+
   }, [fPropRenderCount])
 
   const xonViewChange0 = useCallback((e) => {
-   
+
     const scale = mapRatioScale({ map: mapRef.current });
     console.log("qq2-0lmap-scale", scale)
     // setmapScale(scale.toLocaleString( ));
@@ -1024,22 +1098,22 @@ export const LandingMap = () => {
           map_area: f.get("map_area"),
         };
       });
-      console.log("qq2-1lmap-",  vfObjs.length,)
+      console.log("qq2-1lmap-", vfObjs.length,)
       dispatch(setFPropertyFeatures(vfObjs));
 
       if (vfObjs?.length > 0) {
         // console.log("setIsLandingMapSideNavOpen(true",)
-        console.log("qq2-1.1-lmap-dispatch-sn",  )
+        console.log("qq2-1.1-lmap-dispatch-sn",)
         dispatch(setIsLandingMapSideNavOpen(true));
       } else {
-        console.log("qq2-1.2-lmap-dispatch-sn",  )
+        console.log("qq2-1.2-lmap-dispatch-sn",)
         dispatch(setIsLandingMapSideNavOpen(false));
       }
     } else {
       dispatch(setIsLandingMapSideNavOpen(false));
     }
     //mapRef.current.render()
-  }, [ ]);
+  }, []);
 
   useEffect(() => {
     if (mapViewRef.current) {
@@ -1048,7 +1122,7 @@ export const LandingMap = () => {
       //setmapunits
       const unit = mapRef.current.getView().getProjection().getUnits();
       setmapUnits(unit);
-     // console.log("qq2-9-view",)
+      // console.log("qq2-9-view",)
     }
   }, [mapViewRef.current]);
 
@@ -1147,14 +1221,14 @@ export const LandingMap = () => {
       allSyncPropSourceRef?.current?.addFeatures(e);
       setsyncPropsLoaded(true);
     }
- 
+
   }, [syncPropertyFeatures]);
 
   // useEffect(() => {
   //   fPropSourceRef?.current?.clear();
   //   if (featuredPropertyFeatures?.features) {
   //     const e = new GeoJSON().readFeatures(featuredPropertyFeatures);
-  //     navigatedFPropertyRef.current = e;
+
   //     fPropSourceRef?.current?.addFeatures(e);
   //     fPropSourceLabelRef?.current?.addFeatures(e);
   //   }
@@ -1905,7 +1979,7 @@ export const LandingMap = () => {
       const selSyncPropFeatures =
         allSyncPropSourceRef?.current?.getFeaturesInExtent(ext) ?? [];
 
-      
+
 
       // console.log("selSyncPropFeatures?.[0]", selSyncPropFeatures?.[0]);
       if (selSyncPropFeatures.length > 0) {
@@ -1967,8 +2041,8 @@ export const LandingMap = () => {
           const propId = selPropertyOutlineFeatures?.[0]?.get("propertyid")
           const clinkDetails = await getClinkData(propId)
 
-         // console.log("clinkDetails", clinkDetails, propId)
-          
+          // console.log("clinkDetails", clinkDetails, propId)
+
           const prop_name = clinkDetails?.[0]?.prop_name ?? "";
           const owners = clinkDetails?.[0]?.owners ?? "";
           let name1 = clinkDetails?.[0]?.name ?? "";
@@ -1990,9 +2064,9 @@ export const LandingMap = () => {
           setsyncPropertyObject(undefined);
           dispatch(setclicksyncPropertyObject(undefined));
         }
-        
 
-     
+
+
       }
       const claimFeatures =
         claimVectorImgSourceRef?.current?.getFeaturesAtCoordinate(
@@ -2353,51 +2427,51 @@ export const LandingMap = () => {
           </Button>
         </ButtonGroup>
         <Draggable>
-        <div
-          ref={setPopup}
-          style={{
-            textDecoration: "none",
-            position: "absolute",
-            top: "2px",
-            right: "8px",
-            backgroundColor: "white",
-            boxShadow: "0 1px 4px rgba(0,0,0,0.2)",
-            padding: "15px",
-            borderRadius: "10px",
-            border: "1px solid #cccccc",
-            minWidth: "400px",
-            color: "black",
-          }}
-        >
-          <button
-            type="button"
-            onClick={(e) => {
-              setCoordinates(undefined);
-              e.target.blur();
-              return false;
-            }}
+          <div
+            ref={setPopup}
             style={{
               textDecoration: "none",
               position: "absolute",
               top: "2px",
               right: "8px",
+              backgroundColor: "white",
+              boxShadow: "0 1px 4px rgba(0,0,0,0.2)",
+              padding: "15px",
+              borderRadius: "10px",
+              border: "1px solid #cccccc",
+              minWidth: "400px",
+              color: "black",
             }}
           >
-            ✖
-          </button>
-          <div id="popup-contenta">
-            {/* <p>Info:</p> */}
-            {clickDataLoaded && (
-              <LandingMapClickPopup
-                claimObj={claimObject}
-                fpropObj={fPropertyObject}
-                assetObj={assetObject}
-                syncPropObj={syncPropertyObject}
-              />
-            )}
+            <button
+              type="button"
+              onClick={(e) => {
+                setCoordinates(undefined);
+                e.target.blur();
+                return false;
+              }}
+              style={{
+                textDecoration: "none",
+                position: "absolute",
+                top: "2px",
+                right: "8px",
+              }}
+            >
+              ✖
+            </button>
+            <div id="popup-contenta">
+              {/* <p>Info:</p> */}
+              {clickDataLoaded && (
+                <LandingMapClickPopup
+                  claimObj={claimObject}
+                  fpropObj={fPropertyObject}
+                  assetObj={assetObject}
+                  syncPropObj={syncPropertyObject}
+                />
+              )}
+            </div>
           </div>
-          </div>
-          </Draggable>
+        </Draggable>
         {/* <div className="absolute top-0  z-50 w-full   bg-red-200">
           {GetTopAds()}
 

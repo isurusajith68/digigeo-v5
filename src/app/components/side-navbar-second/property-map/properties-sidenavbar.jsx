@@ -62,6 +62,8 @@ const PropertiesSideNavbar = () => {
     }
   }
 
+
+
   const selectedMap = useSelector(
     (state) => state.mapSelectorReducer.selectedMap
   );
@@ -98,6 +100,7 @@ const PropertiesSideNavbar = () => {
   const [featuredCompanies, setFeaturedCompanies] = useState([]);
   const [selectedAssetTypes, setselectedAssetTypes] = useState("");
   const [selectedCommodities, setselectedCommodities] = useState("");
+  const [featuredCompaniesLocal, setFeaturedCompaniesLocal] = useState([]);
 
   //searchParam Redux
 
@@ -416,6 +419,42 @@ const PropertiesSideNavbar = () => {
     (state) => state.propertiesMapReducer.pmapFpropLableVisible
   );
 
+  useEffect(() => {
+    const result = []
+   // console.log("featuredCompanies",featuredCompanies,)
+    function myCallback({ map_area }) {
+      return map_area;
+    }
+
+    const resultByArea = Object.groupBy(featuredCompanies, myCallback);
+
+    // for (const area in resultByArea) {
+    //   //groupby name no-name
+    //   const namedProps = resultByArea[area].filter(p => p.get("prop_name"))
+    //   namedProps.sort((a, b) => { return a.get("prop_name").toUpperCase() > b.get("prop_name").toUpperCase() ? 1 : -1 })
+
+    //   const unnamedProps = resultByArea[area].filter(p => !p.get("prop_name"))
+    //   let blockno = 1
+    //   for (let index = 0; index < unnamedProps.length; index++) {
+    //     const element = unnamedProps[index];
+    //     element.set("prop_name", "Block-" + blockno)
+    //     blockno++;
+    //   }
+    //   function myCallback({ values_ }) {
+    //     return values_.prop_name;
+    //   }
+    //   const groupByPropName = Object.groupBy(namedProps, myCallback);
+
+
+    //   result.push({ map_area: area, namedProps: groupByPropName, unnamedProps })
+
+      
+    // }
+
+    setFeaturedCompaniesLocal(resultByArea)
+    
+  }, [featuredCompanies])
+
   return (
     <section className="flex gap-6">
       <div className={`duration-500 flex w-auto`}>
@@ -497,20 +536,30 @@ const PropertiesSideNavbar = () => {
 
                 >
                   <div className="flex flex-col gap-1 overflow-y-auto max-h-[40vh]">
-                    {featuredCompanies?.map((i) => (
-                      <PropertyFeaturedCompanyDetailDiv
-                        key={i.id}
-                        title={i.company2}
-                        companyid={i.companyid}
-                      // onClick={() => console.log(featuredCompanies)}
-                      >
-                        <div
-                          className={`w-4 h-4`}
-                          style={{ backgroundColor: `${i.colour}` }}
-                        ></div>
-                      </PropertyFeaturedCompanyDetailDiv>
-                    ))}
-                  </div>
+                    {Object.keys(featuredCompaniesLocal).map((areaName) => {
+                      const fc = featuredCompaniesLocal[areaName]
+                      return (<div  key={areaName}>
+                        <div className="text-xs font-medium">{areaName}</div>
+                        {fc.map((i) => (
+                          <PropertyFeaturedCompanyDetailDiv
+                            key={i.id}
+                            title={i.company2}
+                            companyid={i.companyid}
+                          // onClick={() => console.log(featuredCompanies)}
+                          >
+                            <div
+                              className={`w-4 h-4`}
+                              style={{ backgroundColor: `${i.colour}` }}
+                            ></div>
+                          </PropertyFeaturedCompanyDetailDiv>))}
+                      
+                        
+
+
+                      </div>)
+                    })
+                    }
+                    </div>
                 </AccordionItemWithEyeLabel>
                 <AccordionItemWithOutEye title="All Properties">
                   <div className="overflow-y-auto max-h-[25vh]">

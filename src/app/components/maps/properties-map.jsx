@@ -348,6 +348,8 @@ export const PropertiesMap = () => {
   const [center, setCenter] = useState("");
   const [zoom, setZoom] = useState("");
   const [claimObject, setclaimObject] = useState(undefined);
+  const [prevSelFeaturedProps, setprevSelFeaturedProps] = useState([]);
+
 
   const [clickDataLoaded, setclickDataLoaded] = useState(false);
   const [clickedOnFeature, setclickedOnFeature] = useState(false);
@@ -361,7 +363,7 @@ export const PropertiesMap = () => {
   const selectedSynPropRef = useRef();
   const selectedSynOutLineRef = useRef();
   const selectedClaimRef = useRef();
-  const navigatedFPropertyRef = useRef();
+  // const navigatedFPropertyRef = useRef();
 
   const dispatch = useDispatch();
 
@@ -376,6 +378,16 @@ export const PropertiesMap = () => {
   const propertyFlyToLocation = useSelector(
     (state) => state.propertiesMapReducer.propertyMapFlyToLocation
   );
+
+  const pmapNavigationHighlightFProps = useSelector(
+    (state) => state.propertiesMapReducer.pmapNavigationHighlightFProps
+  );
+
+  const pmapNavigationExtent = useSelector(
+    (state) => state.propertiesMapReducer.pmapNavigationExtent
+  );
+
+
 
   const [coordinates, setCoordinates] = useState(undefined);
   const [popup, setPopup] = useState();
@@ -395,18 +407,91 @@ export const PropertiesMap = () => {
 
 
   useEffect(() => {
-    if (navigatedFPropertyRef.current) {
-      const fp = navigatedFPropertyRef.current.find(
-        (f) => f.get("id") == navigatedFPropId
-      );
+    if (navigatedFPropId != 0) {
+      if (fPropSourceRef.current) {
 
-      console.log("kkk");
-      const selectStyle = new Style({ zIndex: 1 });
-      selectStyle.setRenderer(areaMApPropertyVectorRendererFuncV2Highlight);
+        //set prev selected styles to null
+        for (const fid of prevSelFeaturedProps) {
 
-      fp?.setStyle(selectStyle);
+          const fp = fPropSourceRef.current.getFeatures().find(f => f.get("id") == fid)
+
+          fp?.setStyle(undefined)
+          mapRef.current.render()
+        }
+        setprevSelFeaturedProps([])
+
+        //highlight
+        const fp = fPropSourceRef.current.getFeatures().find(
+          (f) => f.get("id") == navigatedFPropId
+        );
+        if (fp) {
+          // setunselectFProps((p) => p + 1)
+
+          const selectStyle = new Style({ zIndex: 1 });
+          selectStyle.setRenderer(areaMApPropertyVectorRendererFuncV2Highlight);
+
+          fp.setStyle(selectStyle);
+          mapRef.current.render()
+          setprevSelFeaturedProps([navigatedFPropId])
+
+        }
+
+
+        // const fp = navigatedFPropertyRef.current.find(
+        //   (f) => f.get("id") == navigatedFPropId
+        // );
+
+        // console.log("kkk");
+        // const selectStyle = new Style({ zIndex: 1 });
+        // selectStyle.setRenderer(areaMApPropertyVectorRendererFuncV2Highlight);
+
+        // fp?.setStyle(selectStyle);
+      }
     }
   }, [navigatedFPropId]);
+
+  useEffect(() => {
+    //unselect prev styles
+    for (const fid of prevSelFeaturedProps) {
+
+      const fp = fPropSourceRef?.current?.getFeatures().find(f => f.get("id") == fid)
+
+      fp?.setStyle(undefined)
+    }
+    mapRef.current.render();
+    setprevSelFeaturedProps([])
+
+    if (pmapNavigationHighlightFProps.length > 0) {
+
+      for (const fpid of pmapNavigationHighlightFProps) {
+        const fp = fPropSourceRef?.current?.getFeatures().find(f => f.get("id") == fpid)
+        if (fp) {
+
+          const selectStyle = new Style({ zIndex: 1 });
+          selectStyle.setRenderer(areaMApPropertyVectorRendererFuncV2Highlight);
+
+          fp?.setStyle(selectStyle);
+        }
+
+      }
+      setprevSelFeaturedProps(pmapNavigationHighlightFProps)
+
+    }
+  }, [pmapNavigationHighlightFProps]);
+
+  useEffect(() => {
+
+    if (pmapNavigationExtent.length > 0) {
+
+      mapRef.current?.getView()?.fit(pmapNavigationExtent, {
+        padding: [100, 100, 100, 100],
+        duration: 3000,
+      });
+
+
+    }
+  }, [pmapNavigationExtent])
+
 
   const onSingleclick = useCallback((evt) => {
     const { coordinate } = evt;
@@ -713,7 +798,7 @@ export const PropertiesMap = () => {
     if (featuredPropertyFeatures?.features) {
       // fPropSourceRef?.current?.clear();
       const e = new GeoJSON().readFeatures(featuredPropertyFeatures);
-      navigatedFPropertyRef.current = e;
+      //navigatedFPropertyRef.current = e;
       fPropSourceRef?.current?.addFeatures(e);
       fPropSourceLabelRef?.current?.addFeatures(e);
     }
@@ -2194,8 +2279,8 @@ export const PropertiesMap = () => {
             <Button
               onClick={() => setLyrs("m")}
               className={`${propertiesLyrs == "m"
-                  ? "bg-blue-900 text-white"
-                  : "bg-blue-700 text-white"
+                ? "bg-blue-900 text-white"
+                : "bg-blue-700 text-white"
                 }  w-22`}
             >
               Map
@@ -2203,8 +2288,8 @@ export const PropertiesMap = () => {
             <Button
               onClick={() => setLyrs("s")}
               className={`${propertiesLyrs == "s"
-                  ? "bg-blue-900 text-white"
-                  : "bg-blue-700 text-white"
+                ? "bg-blue-900 text-white"
+                : "bg-blue-700 text-white"
                 }  w-22`}
             >
               Satellite
@@ -2212,8 +2297,8 @@ export const PropertiesMap = () => {
             <Button
               onClick={() => setLyrs("p")}
               className={`${propertiesLyrs == "p"
-                  ? "bg-blue-900 text-white"
-                  : "bg-blue-700 text-white"
+                ? "bg-blue-900 text-white"
+                : "bg-blue-700 text-white"
                 }  w-22`}
             >
               Terrain
