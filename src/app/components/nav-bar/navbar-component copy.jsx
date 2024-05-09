@@ -14,7 +14,9 @@ import Image from 'next/image'
 import DialogCommonComponent from "../../utils/dialog/dialog-common";
 import { MapViewMode } from "@/store/types";
 
-const HomeNavbar = () => {
+const HomeNavbarv0 = () => {
+
+
 
   const [disclaimerStatus, setdisclaimerStatus] = useState(false)
   const [helpDialogStatus, sethelpDialogStatus] = useState(false)
@@ -252,4 +254,4 @@ const HomeNavbar = () => {
   );
 };
 
-export default HomeNavbar;
+export default HomeNavbarv0;

@@ -6,7 +6,7 @@ import { AreaCompanyNode } from './area-company-treenode';
 import AreaPropertyNode from './area-peoperty-tree-node';
 import GeoJSON from 'ol/format/GeoJSON';
 
-const AreaTreeView = ({ syncPropFeatues }) => {
+const AreaTreeView = ({ syncPropFeatues, treeViewHeight }) => {
 
   const [treeViewData, setTreeViewData] = useState();
 
@@ -131,7 +131,7 @@ const AreaTreeView = ({ syncPropFeatues }) => {
   return (
     // <TreeView data={treeViewData} />
 
-    <div className="bg-white">
+    <div className={`bg-white overflow-y-auto max-h-[${treeViewHeight}vh]`}>
       {/* <div className="max-h-[150px]"> */}
       {treeViewData?.map((node) => (
 
