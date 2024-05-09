@@ -146,7 +146,7 @@ export const LandingPage = () => {
 
   return (
     <div className="w-full flex bg-white   h-[90vh]">
-      <div className={`${isSideNavOpen ? "z-40 h-full" : "fixed top-15 left-0 z-40"}    ${mapViewMode == "HEADED" ? "block" : "hidden"}`}>
+      <div className={`${isSideNavOpen ? "z-10 h-full" : "fixed top-15 left-0 z-10"}    ${mapViewMode == "HEADED" ? "block" : "hidden"}`}>
         <SideNavbar />
       </div>
       <div className="z-0">
