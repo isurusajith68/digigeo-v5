@@ -2099,6 +2099,7 @@ export const LandingMap = () => {
     const scale = mapRatioScale({ map: mapRef.current });
     setmapScale(scale.toLocaleString());
   };
+
   const onClickViewMinusZoom = () => {
     const curZoom = mapViewRef.current.getZoom();
     mapViewRef.current.setZoom(curZoom - 1);
@@ -2413,7 +2414,7 @@ export const LandingMap = () => {
 
         <ButtonGroup
           variant="faded"
-          className="fixed right-[5vw] bottom-1 z-50 "
+          className="absolute right-[5vw] bottom-1 z-50 hidden md:block "
           color="primary"
         >
           <Button className={`w-36 bg-blue-700 text-white`}>

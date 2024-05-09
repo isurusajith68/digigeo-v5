@@ -31,15 +31,16 @@ import { setIsPropertiesSideNavOpen } from "../../../store/properties-map/proper
 import { setIsCompanySideNavOpen } from "../../../store/company-map/company-map-slice";
 import { fetchmapViewScales } from "@/store/map-view-settings/map-view-setting-slice";
 import { MapViewMode } from "@/store/types";
+import { useMediaQuery } from 'react-responsive'
 
 
- 
+
 
 export const LandingPage = () => {
   let pathname = "";
   try {
     pathname = window.location.href;
-  } catch (error) {}
+  } catch (error) { }
 
   const isSideNavOpen = useSelector(
     (state) => state.mapSelectorReducer.isSideNavOpen
@@ -56,21 +57,29 @@ export const LandingPage = () => {
   const areaName = searchParams.get("ma");
   const areaCountry = searchParams.get("co");
   const areaid = searchParams.get("aid");
-  const mapViewMode = searchParams.get("mvm") ?? "HEADED"   ;
+  const mapViewMode = searchParams.get("mvm") ?? "HEADED";
   // const mapViewMode = searchParams.get("mvm") ?? MapViewMode.HEADLESS;
+
+  const isDesktopOrLaptop = useMediaQuery({
+    query: '(min-width: 1224px)'
+  })
+  const isBigScreen = useMediaQuery({ query: '(min-width: 1824px)' })
+  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 1224px)' })
+  const isPortrait = useMediaQuery({ query: '(orientation: portrait)' })
+  const isRetina = useMediaQuery({ query: '(min-resolution: 2dppx)' })
 
 
   useEffect(() => {
-     
-    updateRedux();
+
+    updateMapSelectorStore();
     dispatch(fetchmapViewScales());
-    console.log("mapViewMode",mapViewMode,)
+
   }, []);
 
-  const updateRedux = async () => {
-    console.log("yy-update redux-init")
+  const updateMapSelectorStore = async () => {
+    console.log("mapType",mapType,)
     if (mapType) {
-       console.log("yy-update redux-init-areaid",areaid)
+
       dispatch(setareaSelectedAreaId(areaid));
       dispatch(setAreaZoomMode("custom"));
       dispatch(setSelectedMap(mapType));
@@ -125,6 +134,17 @@ export const LandingPage = () => {
           break;
 
         default:
+          console.log("isTabletOrMobile",isTabletOrMobile,)
+          if (isTabletOrMobile) {
+            dispatch(
+              setIsSideNavOpen(String(isNavOpen).toLowerCase() === "false")
+            );
+            dispatch(
+              setIsPropertiesSideNavOpen(
+                String(isSecondNavOpen).toLowerCase() === "false"
+              )
+            );
+          } else {
             dispatch(
               setIsSideNavOpen(String(isNavOpen).toLowerCase() === "true")
             );
@@ -133,14 +153,27 @@ export const LandingPage = () => {
                 String(isSecondNavOpen).toLowerCase() === "true"
               )
             );
-            dispatch(setPropertiesLyrs(mapLyrs));
-            dispatch(setPropertiesZoomLevel(mapZoom));
-            const tmpMapCenter4 = mapCenter.split(",").map(Number);
-            dispatch(setPropertiesInitialCenter(tmpMapCenter4));
+          }
+
+          dispatch(setPropertiesLyrs(mapLyrs));
+          dispatch(setPropertiesZoomLevel(mapZoom));
+          const tmpMapCenter4 = mapCenter.split(",").map(Number);
+          dispatch(setPropertiesInitialCenter(tmpMapCenter4));
           break;
       }
       // const newUrl = `${window.location.pathname}?t=${mapType}&sn=${isNavOpen}&sn2=${isSecondNavOpen}&lyrs=${mapLyrs}&z=${mapZoom}&c=${mapCenter}`;
       // window.history.replaceState({}, "", newUrl);
+    } else {
+      if (isTabletOrMobile) {
+        dispatch(
+          setIsSideNavOpen(String(isNavOpen).toLowerCase() === "false")
+        );
+        dispatch(
+          setIsPropertiesSideNavOpen(
+            String(isSecondNavOpen).toLowerCase() === "false"
+          )
+        );
+      }
     }
   };
 

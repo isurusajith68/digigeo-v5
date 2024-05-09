@@ -78,9 +78,9 @@ const HomeNavbar = () => {
     dropCommonStyle + "bg-white text-xs p-4 border border-gray-100 shadow-md";
 
   const showDisclaimer = () => {
-    console.log("PP1")
+     
     setdisclaimerStatus(true)
-
+    
   }
   const showHelp = () => {
     //InvestorMappingHelpFile.docx
