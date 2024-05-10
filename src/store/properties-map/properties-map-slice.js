@@ -196,8 +196,8 @@ const propertiesMapSlice = createSlice({
 });
 
 export const {
-  setcmapNavigationHighlightFProps,
-  setcmapNavigationExtent,
+  setpmapNavigationHighlightFProps,
+  setpmapNavigationExtent,
   setIsPropertiesSideNavOpen,
   setpropertySearchQuery,
   setpropertyMapPropertyAssetIdCsv,

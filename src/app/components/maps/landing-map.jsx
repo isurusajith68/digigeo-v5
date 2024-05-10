@@ -72,6 +72,7 @@ import { updateWindowsHistoryLmap } from "@/app/utils/helpers/window-history-rep
 import GetTopAds from "../advertisements/get-top-ads";
 import GetRightAds from "../advertisements/get-right-ads";
 import Draggable from "react-draggable";
+import { SlLayers } from "react-icons/sl";
 
 const fill = new Fill();
 const stroke = new Stroke({
@@ -2355,6 +2356,13 @@ export const LandingMap = () => {
                 onClick={onClickViewMinusZoom}
               />
             </Button>
+            <Button isIconOnly variant="bordered" className="bg-blue-900">
+              <SlLayers
+                className={`text-white cursor-pointer h-6 w-6`}
+                onClick={onClickViewMinusZoom}
+              />
+            </Button>
+           
             {/* {!isLandingMapSideNavOpen && isSideNavOpen ? (
               <Button
                 variant="bordered"
@@ -2366,7 +2374,7 @@ export const LandingMap = () => {
             ) : null} */}
           </div>
         </div>
-        <div className="flex items-end absolute left-0 bottom-1 z-50  " >
+        <div className="flex items-center justify-around absolute left-0 bottom-1 z-50 w-full " >
           <ButtonGroup
             variant="faded"
 
@@ -2410,23 +2418,23 @@ export const LandingMap = () => {
           </Button> */}
           </ButtonGroup>
           <div><p>{copyRight}</p></div>
+          <ButtonGroup
+            variant="faded"
+            className="    hidden md:block "
+            // className="absolute right-[5vw] bottom-1 z-50 hidden md:block "
+            color="primary"
+          >
+            <Button className={`w-36 bg-blue-700 text-white`}>
+              {`Scale:${mapScale}`}
+            </Button>
+            <Button className={`w-36 bg-blue-700 text-white`}>
+              {`Lat:${lat}`}
+            </Button>
+            <Button className={`w-36 bg-blue-700 text-white`}>
+              {`Long:${long}`}
+            </Button>
+          </ButtonGroup>
         </div>
-
-        <ButtonGroup
-          variant="faded"
-          className="absolute right-[5vw] bottom-1 z-50 hidden md:block "
-          color="primary"
-        >
-          <Button className={`w-36 bg-blue-700 text-white`}>
-            {`Scale:${mapScale}`}
-          </Button>
-          <Button className={`w-36 bg-blue-700 text-white`}>
-            {`Lat:${lat}`}
-          </Button>
-          <Button className={`w-36 bg-blue-700 text-white`}>
-            {`Long:${long}`}
-          </Button>
-        </ButtonGroup>
         <Draggable>
           <div
             ref={setPopup}
