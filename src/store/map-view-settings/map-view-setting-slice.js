@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
- 
+
 const initialState = {
   loading: false,
   mapViewScales: [],
@@ -17,7 +17,7 @@ export const fetchmapViewScales = createAsyncThunk(
       }
     );
     const d = await res.json();
-  //  console.log("mapViewScales1", d.data);
+    //  console.log("mapViewScales1", d.data);
     return d.data;
 
     // return axios
@@ -27,29 +27,23 @@ export const fetchmapViewScales = createAsyncThunk(
 );
 
 const mapViewScaleSlice = createSlice({
-  name: 'mapViewScale',
+  name: "mapViewScale",
   initialState,
-  extraReducers: builder => {
-    builder.addCase(fetchmapViewScales.pending, state => {
-      state.loading = true
-    })
+  extraReducers: (builder) => {
+    builder.addCase(fetchmapViewScales.pending, (state) => {
+      state.loading = true;
+    });
     builder.addCase(fetchmapViewScales.fulfilled, (state, action) => {
-      state.loading = false
-      state.mapViewScales = action.payload
-      state.error = ''
-    })
+      state.loading = false;
+      state.mapViewScales = action.payload;
+      state.error = "";
+    });
     builder.addCase(fetchmapViewScales.rejected, (state, action) => {
-      state.loading = false
-      state.mapViewScales = []
-      state.error = action.error.message
-    })
-  }
-})
+      state.loading = false;
+      state.mapViewScales = [];
+      state.error = action.error.message;
+    });
+  },
+});
 
 export default mapViewScaleSlice.reducer;
-
-
- 
-
- 
- 

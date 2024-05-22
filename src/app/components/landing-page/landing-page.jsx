@@ -17,7 +17,7 @@ import {
   setPropertiesLyrs,
   setPropertiesZoomLevel,
   setSelectedMap,
-  setmapViewMode
+  setmapViewMode,
 } from "../../../store/map-selector/map-selector-slice";
 import {
   setAreaCountry,
@@ -31,9 +31,6 @@ import { setIsPropertiesSideNavOpen } from "../../../store/properties-map/proper
 import { setIsCompanySideNavOpen } from "../../../store/company-map/company-map-slice";
 import { fetchmapViewScales } from "@/store/map-view-settings/map-view-setting-slice";
 import { MapViewMode } from "@/store/types";
-
-
- 
 
 export const LandingPage = () => {
   let pathname = "";
@@ -56,21 +53,19 @@ export const LandingPage = () => {
   const areaName = searchParams.get("ma");
   const areaCountry = searchParams.get("co");
   const areaid = searchParams.get("aid");
-  const mapViewMode = searchParams.get("mvm") ?? "HEADED"   ;
+  const mapViewMode = searchParams.get("mvm") ?? "HEADED";
   // const mapViewMode = searchParams.get("mvm") ?? MapViewMode.HEADLESS;
 
-
   useEffect(() => {
-     
     updateRedux();
     dispatch(fetchmapViewScales());
-    console.log("mapViewMode",mapViewMode,)
+    console.log("mapViewMode", mapViewMode);
   }, []);
 
   const updateRedux = async () => {
-    console.log("yy-update redux-init")
+    console.log("yy-update redux-init");
     if (mapType) {
-       console.log("yy-update redux-init-areaid",areaid)
+      console.log("yy-update redux-init-areaid", areaid);
       dispatch(setareaSelectedAreaId(areaid));
       dispatch(setAreaZoomMode("custom"));
       dispatch(setSelectedMap(mapType));
@@ -125,18 +120,18 @@ export const LandingPage = () => {
           break;
 
         default:
-            dispatch(
-              setIsSideNavOpen(String(isNavOpen).toLowerCase() === "true")
-            );
-            dispatch(
-              setIsPropertiesSideNavOpen(
-                String(isSecondNavOpen).toLowerCase() === "true"
-              )
-            );
-            dispatch(setPropertiesLyrs(mapLyrs));
-            dispatch(setPropertiesZoomLevel(mapZoom));
-            const tmpMapCenter4 = mapCenter.split(",").map(Number);
-            dispatch(setPropertiesInitialCenter(tmpMapCenter4));
+          dispatch(
+            setIsSideNavOpen(String(isNavOpen).toLowerCase() === "true")
+          );
+          dispatch(
+            setIsPropertiesSideNavOpen(
+              String(isSecondNavOpen).toLowerCase() === "true"
+            )
+          );
+          dispatch(setPropertiesLyrs(mapLyrs));
+          dispatch(setPropertiesZoomLevel(mapZoom));
+          const tmpMapCenter4 = mapCenter.split(",").map(Number);
+          dispatch(setPropertiesInitialCenter(tmpMapCenter4));
           break;
       }
       // const newUrl = `${window.location.pathname}?t=${mapType}&sn=${isNavOpen}&sn2=${isSecondNavOpen}&lyrs=${mapLyrs}&z=${mapZoom}&c=${mapCenter}`;
@@ -146,7 +141,11 @@ export const LandingPage = () => {
 
   return (
     <div className="w-full flex bg-white   h-[90vh]">
-      <div className={`${isSideNavOpen ? "z-40 h-full" : "fixed top-15 left-0 z-40"}    ${mapViewMode == "HEADED" ? "block" : "hidden"}`}>
+      <div
+        className={`${
+          isSideNavOpen ? "z-40 h-full" : "fixed top-15 left-0 z-40"
+        }    ${mapViewMode == "HEADED" ? "block" : "hidden"}`}
+      >
         <SideNavbar />
       </div>
       <div className="z-0">

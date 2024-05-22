@@ -101,8 +101,8 @@ const AreaMapButton = ({ onClick }) => {
               : "  bg-amber-200 w-full"
           } text-sm sm:text-sm hover:bg-blue-900 hover:text-white py-2 transition duration-150 ease-in`}
         >
-          <MdLocationOn className="h-6 w-6 ml-2" />
-          <span className="uppercase ml-2 font-semibold">
+          <MdLocationOn className="h-6 w-6 ml-2 text-black" />
+          <span className="uppercase ml-2 font-semibold text-black">
             Exploration areas
           </span>
         </button>
@@ -130,7 +130,6 @@ const AreaMapButton = ({ onClick }) => {
             : "hidden"
         } `}
       >
-        
         <Chip
           color="default"
           variant="light"
@@ -140,7 +139,7 @@ const AreaMapButton = ({ onClick }) => {
         >
           Reset
         </Chip>
-       
+
         <Chip
           color="primary"
           variant="bordered"

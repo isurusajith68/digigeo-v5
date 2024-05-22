@@ -569,8 +569,7 @@ export const LandingMap = () => {
   const [maxResolutionFProp, setmaxResolutionFProp] = useState(300);
   const [maxResolutionClaims, setmaxResolutionClaims] = useState(300);
   const [maxResolutionAssets, setmaxResolutionAssets] = useState(300);
-  const [maxResolutionSyncOutlines, setmaxResolutionSyncOutlines] =
-    useState(300);
+  const [maxResolutionSyncOutlines, setmaxResolutionSyncOutlines] =useState(300);
   const [curcenteredareaid, setcurcenteredareaid] = useState(0);
 
 
@@ -630,7 +629,7 @@ export const LandingMap = () => {
       const url =
         `https://atlas.ceyinfo.cloud/matlas/syncclaimlink_byextent` +
         `/${extent.join("/")}`;
-      // console.log("url", url);
+      console.log("url", url);
       fetch(url, {
         method: "GET", // *GET, POST, PUT, DELETE, etc.
         mode: "cors", // no-cors, *cors, same-origin
@@ -677,6 +676,7 @@ export const LandingMap = () => {
         },
         features: d.data[0].json_build_object.features,
       };
+      console.log(gj)
       setsyncPropertyFeatures(gj);
     };
     f(10662, 0).catch(console.error);
@@ -724,6 +724,8 @@ export const LandingMap = () => {
     const url =
       `https://atlas.ceyinfo.cloud/matlas/assets_byextent` +
       `/${extent.join("/")}`;
+
+      console.log(url)
     // console.log("url", url);
     fetch(url, {
       method: "GET", // *GET, POST, PUT, DELETE, etc.
@@ -2318,9 +2320,6 @@ export const LandingMap = () => {
 
     return st;
   };
-
-
-
 
   return (
     <div className="flex   ">

@@ -29,7 +29,7 @@ import PropertyFilterPropertyItemBrowser from "./property-filter-property-item-b
 
 import { Badge, Avatar } from "@nextui-org/react";
 
-import { CheckIcon } from "../icons/checkicon";
+import { CheckIcon } from "../icons/checkicon.jsx";
 import { Input } from "@nextui-org/react";
 import PropertyFilterAssetItemBrowser from "./property-filter-asset-item-browser";
 import { updateWindowsHistory } from "@/app/utils/helpers/window-history-replace";
