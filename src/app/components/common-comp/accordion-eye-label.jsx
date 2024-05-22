@@ -19,7 +19,7 @@ const AccordionItemWithEyeLabel = ({ title, children, onClick, eyeState, labelSt
   };
 
   return (
-    <div className="grow-[2]">
+    <div className=" ">
       <div
         // style={{ alignItems: "center" }}
         className="relative items-center flex pl-4 border rounded-lg border-blue-700 focus:outline-none bg-blue-900 text-white text-sm sm:text-sm  w-full transition duration-150 ease-in"
@@ -31,7 +31,7 @@ const AccordionItemWithEyeLabel = ({ title, children, onClick, eyeState, labelSt
           </span>
           <span>
             {labelState && (<MdOutlineLabel onClick={() => setLabelState(false)} className=" cursor-pointer hover:scale-125" />)}
-            {!labelState && <MdOutlineLabelOff onClick={() => setLabelState(true)}  className=" cursor-pointer hover:scale-125" />}
+            {!labelState && <MdOutlineLabelOff onClick={() => setLabelState(true)} className=" cursor-pointer hover:scale-125" />}
           </span>
           <span className="">
             {eyeState && (

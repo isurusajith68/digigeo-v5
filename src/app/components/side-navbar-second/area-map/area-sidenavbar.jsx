@@ -1,7 +1,7 @@
 "use client";
 
 import { Button, Input } from "@nextui-org/react";
-import   { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   AiFillAppstore,
   AiFillMinusSquare,
@@ -26,8 +26,8 @@ import {
   setFPropertyFeatures,
   setIsAreaSideNavOpen,
   setSyncPropertyFeatures,
-   setamapFpropLableVisible,
-   setareaFpropLayerVisible,
+  setamapFpropLableVisible,
+  setareaFpropLayerVisible,
   setsyncClaimLinkPropertyFeatures,
 } from "../../../../store/area-map/area-map-slice";
 import TreeView from "../../common-comp/treeview";
@@ -48,7 +48,7 @@ const AreaSideNavbar = () => {
   const router = useRouter();
   try {
     pathname = window.location.href;
-  } catch (error) {}
+  } catch (error) { }
 
   if (pathname) {
     const r = pathname.indexOf("/", 9);
@@ -56,11 +56,18 @@ const AreaSideNavbar = () => {
       pathname = pathname.substring(0, r);
     }
   }
-
+  const defFcHeight = 40;
+  const defTreeHeight = 30
   const [isSecondSideOpen, setIsSecondSideOpen] = useState(false);
   const [treeViewData, settreeViewData] = useState();
+  const [fcCount, setfcCount] = useState(0);
+  const [fcHeight, setfcHeight] = useState(defFcHeight);
+  const [treeViewCount, settreeViewCount] = useState(0);
+  const [treeViewHeight, settreeViewHeight] = useState(defTreeHeight);
 
-    const selectedMap = useSelector(
+  const fullSideBarHeight = 80;
+
+  const selectedMap = useSelector(
     (state) => state.mapSelectorReducer.selectedMap
   );
 
@@ -84,12 +91,12 @@ const AreaSideNavbar = () => {
   const areaName = useSelector((state) => state.areaMapReducer.areaMiningArea);
   const areaCountry = useSelector((state) => state.areaMapReducer.areaCountry);
 
-  
+
   const syncPropertyFeatures = useSelector(
     (state) => state.areaMapReducer.syncPropertyFeatures
   );
 
-  const [featuredCompanies, setFeaturedCompanies] = useState([]);
+  const [featuredCompanies, setFeaturedCompanies] = useState();
   //areal load
   useEffect(() => {
     if (areaName) {
@@ -103,8 +110,8 @@ const AreaSideNavbar = () => {
       setFeaturedCompanies([]);
       dispatch(setSyncPropertyFeatures({}));
       dispatch(setFPropertyFeatures({}));
-       dispatch(setAssetFeatures({}));
-        dispatch(setsyncClaimLinkPropertyFeatures({}));
+      dispatch(setAssetFeatures({}));
+      dispatch(setsyncClaimLinkPropertyFeatures({}));
     }
   }, [areaName]);
 
@@ -117,19 +124,20 @@ const AreaSideNavbar = () => {
       newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=false&lyrs=${areaLyrs}&z=${areaZoomLevel}&c=${areaInitialCenter}&co=${areaCountry}&ma=${areaName}`;
     }
     // window.history.replaceState({}, "", newUrl);
-     updateWindowsHistory(newUrl);
+    updateWindowsHistory(newUrl);
     dispatch(setIsAreaSideNavOpen(false));
   };
   const getFeaturedCompanyDetails = async () => {
     const f = async () => {
-      console.log("areaName",areaName,)
+      console.log("areaName", areaName,)
       const res = await fetch(
         `https://atlas.ceyinfo.cloud/matlas/hotplayfcompanylist/${areaName}`,
         { cache: "no-store" }
       );
       const d = await res.json();
       // console.log("fps", d);
-      
+
+
       setFeaturedCompanies(d.data);
       // d.data[0].json_build_object.features.map((i) =>
       //   console.log("i", i.properties.colour)
@@ -138,16 +146,41 @@ const AreaSideNavbar = () => {
 
     f().catch(console.error);
   };
-  
-      const getClaimLinkPropertiesGeometry = async () => {
+
+  useEffect(() => {
+
+    if (featuredCompanies && syncPropertyFeatures?.features) {
+      console.log("defFcHeight11", featuredCompanies?.length, syncPropertyFeatures?.features?.length)
+      if (featuredCompanies.length == 0) {
+        if (syncPropertyFeatures.features.length > 0) {
+          settreeViewHeight(defFcHeight + defTreeHeight)
+         
+        } else {
+          settreeViewHeight(defTreeHeight)
+          setfcHeight(defFcHeight)
+        }
+
+      } else {
+        if (syncPropertyFeatures.features.length == 0) {
+          setfcHeight(defFcHeight + defTreeHeight)
+          settreeViewHeight(0)
+        } else {
+          settreeViewHeight(defTreeHeight)
+          setfcHeight(defFcHeight)
+        }
+      }
+    }
+  }, [featuredCompanies, syncPropertyFeatures])
+
+  const getClaimLinkPropertiesGeometry = async () => {
     const f = async () => {
       const res = await fetch(
         `https://atlas.ceyinfo.cloud/matlas/tbl_sync_claimlink/${areaName}`,
         { cache: "no-store" }
       );
-     const d = await res.json();
+      const d = await res.json();
       // console.log("fps", d);
-       
+
       const gj = {
         type: "FeatureCollection",
         crs: {
@@ -164,14 +197,14 @@ const AreaSideNavbar = () => {
     f().catch(console.error);
   };
   const getFeaturedCompanyGeometry = async () => {
-        //view_hotplay_table_with_sponsor_prop
+    //view_hotplay_table_with_sponsor_prop
     const f = async () => {
       const res = await fetch(
         `https://atlas.ceyinfo.cloud/matlas/view_hotplay_table_with_sponsor/${areaName}`,
         { cache: "no-store" }
       );
-     const d = await res.json();
-     
+      const d = await res.json();
+
       const gj = {
         type: "FeatureCollection",
         crs: {
@@ -183,7 +216,8 @@ const AreaSideNavbar = () => {
         features: d.data[0].json_build_object.features,
       };
 
-     // const e =   new GeoJSON().readFeatures(gj)
+
+      // const e =   new GeoJSON().readFeatures(gj)
 
       dispatch(setFPropertyFeatures(gj));
     };
@@ -251,20 +285,20 @@ const AreaSideNavbar = () => {
     f().catch(console.error);
   };
 
-    const areaFpropLayerVisible = useSelector(
+  const areaFpropLayerVisible = useSelector(
     (state) => state.areaMapReducer.areaFpropLayerVisible
   );
 
-    const setareaFpropLayerVisibility = (e) => {
-     console.log("setareaFpropLayerVisibility")
-      dispatch(setareaFpropLayerVisible(!areaFpropLayerVisible));
+  const setareaFpropLayerVisibility = (e) => {
+    console.log("setareaFpropLayerVisibility")
+    dispatch(setareaFpropLayerVisible(!areaFpropLayerVisible));
   }
 
-    const popupFcompanyId = useSelector(
-      (state) => state.areaMapReducer.popupFcompanyId
-    );
+  const popupFcompanyId = useSelector(
+    (state) => state.areaMapReducer.popupFcompanyId
+  );
 
-  
+
   const setFpropLableVisibility = (state) => {
     dispatch(setamapFpropLableVisible(state));
   };
@@ -277,21 +311,19 @@ const AreaSideNavbar = () => {
       <div className={` flex `}>
         <div
           className={`
-          ${
-            isAreaSideNavOpen && isSideNavOpen
+          ${isAreaSideNavOpen && isSideNavOpen
               ? "bg-white dark:bg-black border-2 rounded-md border-blue-700"
               : ""
-          } 
+            } 
             
           ${isAreaSideNavOpen && isSideNavOpen ? "w-80 sm:w-72 mr-2" : "w-0"} 
           duration-500`}
         >
           <div
-            className={`${
-              isAreaSideNavOpen && isSideNavOpen
-                ? "py-0.1 flex flex-col  "
-                : "hidden"
-            }`}
+            className={`${isAreaSideNavOpen && isSideNavOpen
+              ? "py-0.1 flex flex-col  "
+              : "hidden"
+              }`}
           >
             <div className="ml-2 mr-2 mt-1 mb-1 flex items-center justify-center border-b-2 relative dark:text-white text-black">
               <div className="flex flex-col">
@@ -309,48 +341,54 @@ const AreaSideNavbar = () => {
             </div>
           </div>
           {/* <div className="mt-4 flex flex-col justify-between gap-4 relative"> */}
-            {/* <TreeView data={treeData} /> */}
+          {/* <TreeView data={treeData} /> */}
 
-            {/* <Accordion> */}
-              <div className="flex flex-col gap-2 justify-between ">
-            <AccordionItemWithEyeLabel
-                  title="Featured Companies"
-                  onClick={setareaFpropLayerVisibility}
-              eyeState={areaFpropLayerVisible}
-              labelState={amapFpropLableVisible}
-              setLabelState={setFpropLableVisibility}
-                >
-                  <div className="flex flex-col gap-1 overflow-y-auto grow max-h-[50vh]">
-                    {/* <div className="flex flex-col gap-1 overflow-y-auto max-h-[40vh]"> */}
-                    {featuredCompanies.map((i) => (
-                      <FeaturedCompanyDetailDiv
-                        key={i.colour}
-                        title={i.company2}
-                        companyid={i.companyid}
-                        // onClick={() => console.log(featuredCompanies)}
-                      >
-                        <div
-                          className={`w-4 h-4`}
-                          style={{ backgroundColor: `${i.colour}` }}
-                        ></div>
-                      </FeaturedCompanyDetailDiv>
-                    ))}
-                  </div>
-            </AccordionItemWithEyeLabel>
-                <AccordionItemWithOutEye title="All Companies">
-                  <div className="overflow-y-auto grow max-h-[62vh]">
-                    {/* <div className="overflow-y-auto max-h-[25vh]"> */}
-                    <AreaTreeView syncPropFeatues={syncPropertyFeatures} />
-                  </div>
-                </AccordionItemWithOutEye>
-              </div>
-            {/* </Accordion> */}
+          {/* <Accordion> */}
+          <div className={`flex flex-col gap-2 overflow-y-hidden  justify-between max-h-[${fullSideBarHeight}vh]`}>
+            <div className="grow">
+              <AccordionItemWithEyeLabel
+                title="Featured Companies"
+                onClick={setareaFpropLayerVisibility}
+                eyeState={areaFpropLayerVisible}
+                labelState={amapFpropLableVisible}
+                setLabelState={setFpropLableVisibility}
+              >
+                {/* <div className={`flex flex-col gap-1 overflow-y-auto max-h-[30vh]`}> */}
+                <div className={`flex flex-col gap-1 overflow-y-auto max-h-[${fcHeight}vh]`}>
+                  {/* <div className="flex flex-col gap-1 overflow-y-auto max-h-[40vh]"> */}
+                  {featuredCompanies?.map((i) => (
+                    <FeaturedCompanyDetailDiv
+                      key={i.colour}
+                      title={i.company2}
+                      companyid={i.companyid}
+                    // onClick={() => console.log(featuredCompanies)}
+                    >
+                      <div
+                        className={`w-4 h-4`}
+                        style={{ backgroundColor: `${i.colour}` }}
+                      ></div>
+                    </FeaturedCompanyDetailDiv>
+                  ))}
+                </div>
+              </AccordionItemWithEyeLabel>
+            </div>
+            <div className={`grow`}>
+              <AccordionItemWithOutEye title="All Companies">
+
+                {/* <div className="overflow-y-auto max-h-[25vh]"> */}
+                <AreaTreeView syncPropFeatues={syncPropertyFeatures} treeViewHeight={treeViewHeight} />
+
+              </AccordionItemWithOutEye>
+            </div>
+          </div>
+          {/* </Accordion> */}
           {/* </div> */}
         </div>
-      </div>
-       
-        {popupFcompanyId > 0 && <AreaFCompanyPopup />}
-     
+      </div >
+
+      {popupFcompanyId > 0 && <AreaFCompanyPopup />
+      }
+
     </>
   );
 };
